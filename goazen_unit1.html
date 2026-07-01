@@ -178,6 +178,18 @@
   .footer-note{margin-top:1.5rem;padding:.9rem 1.1rem;background:var(--bg-card);border:.5px solid var(--border);border-radius:10px;font-size:.8rem;color:var(--ink-mid);line-height:1.6}
   .footer-note strong{color:var(--ink);font-weight:500}
   .feedback-link{color:var(--accent);text-decoration:underline;cursor:pointer}
+  /* dialect layer */
+  .dia-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-card,var(--bg-card));border:.5px solid var(--border);border-radius:10px;padding:.5rem .8rem;margin-bottom:1rem;font-size:.8rem;color:var(--ink-mid)}
+  .dia-switch{width:42px;height:24px;border-radius:99px;background:var(--border);border:none;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s}
+  .dia-switch.on{background:var(--accent)}
+  .dia-switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+  .dia-switch.on::after{transform:translateX(18px)}
+  .dia-tag{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.03em;padding:2px 9px;border-radius:99px;background:var(--c-gram-bg);color:var(--ink-mid);border:.5px solid var(--border);display:inline-flex;align-items:center;gap:4px}
+  .dia-flag{font-size:.5rem;text-transform:uppercase;letter-spacing:.06em;opacity:.7}
+  .dia-reveal{font-family:'DM Mono',monospace;font-size:.6rem;padding:1px 8px;border-radius:99px;background:var(--c-gram-bg);color:var(--ink-mid);border:.5px solid var(--border);cursor:pointer;white-space:nowrap}
+  .dia-reveal.open{background:var(--accent-pale);color:var(--accent);border-color:var(--accent)}
+  .dia-val{font-family:'Lora',serif;font-style:italic;color:var(--accent);font-size:.9rem}
+  .dia-note{margin-top:.5rem;font-size:.72rem;color:var(--ink-light);font-style:italic}
 </style>
 </head>
 <body>
@@ -237,6 +249,7 @@
       <button class="pill" onclick="toolTab(2,this)"><span class="pn">03</span>EN/ES/EU</button>
     </div>
     <div class="subpanel active" id="tool-0">
+      <div class="dia-toggle-row"><span>Dialect notes <span style="color:var(--ink-light)">· show Bizkaian forms</span></span><button class="dia-switch" id="dia-switch-tool" onclick="toggleDialect()" aria-label="Toggle dialect notes"></button></div>
       <div class="izan-stage">
         <div class="izan-prompt">tap a person — watch <em>izan</em> agree</div>
         <div class="person-row" id="person-row"></div>
@@ -256,6 +269,7 @@
       <button class="dec-opt" id="fcdir-recognise" onclick="setFcDir('recognise')">Basque → EN</button>
     </div>
     <div class="fc-sectionbar" id="fc-sectionbar"></div>
+    <div class="dia-toggle-row"><span>Dialect notes <span style="color:var(--ink-light)">· Bizkaian / Gipuzkoan variants</span></span><button class="dia-switch" id="dia-switch-fc" onclick="toggleDialect()" aria-label="Toggle dialect notes"></button></div>
     <div class="fc-stage"><div class="fc-card" id="fc-card" onclick="flipCard()">
       <div class="fc-face fc-front"><div class="fc-status" id="fc-status-front"></div><div id="fc-front-text"></div><div class="fc-tap" id="fc-tap-hint">recall, then tap to check</div></div>
       <div class="fc-face fc-back"><div class="fc-status" id="fc-status-back"></div><div id="fc-back-text"></div><div class="fc-hook" id="fc-hook"></div></div>
@@ -296,14 +310,14 @@
 const VOCAB=[
  {bq:"kaixo",en:"hi, hello",s:"GR",hk:"hook",hook:"\u201ckai-SHO\u201d — x is always \u201csh\u201d in Basque"},
  {bq:"egun on",en:"good morning",s:"GR",hk:"logic",hook:"egun (day) + on (good) = \u201cgood day\u201d"},
- {bq:"arratsalde on",en:"good afternoon",s:"GR",hk:"logic",hook:"arratsalde (afternoon) + on (good)"},
+ {bq:"arratsalde on",en:"good afternoon",s:"GR",hk:"logic",hook:"arratsalde (afternoon) + on (good)",dia:"Biz · arrasti on"},
  {bq:"gabon",en:"good evening, good night",s:"GR",hk:"logic",hook:"gau (night) + on (good)"},
- {bq:"agur",en:"goodbye",s:"GR",hk:"",hook:""},
+ {bq:"agur",en:"goodbye",s:"GR",hk:"",hook:"",dia:"Biz · aio (informal)"},
  {bq:"gero arte",en:"see you later",s:"GR",hk:"logic",hook:"gero (later) + arte (until)"},
  {bq:"ikusi arte",en:"see you (lit. until [I] see)",s:"GR",hk:"logic",hook:"ikusi (see) + arte (until)"},
  {bq:"bihar arte",en:"see you tomorrow",s:"GR",hk:"logic",hook:"bihar (tomorrow) + arte (until)"},
  {bq:"ongi etorri",en:"welcome",s:"GR",hk:"logic",hook:"ongi (well) + etorri (come)"},
- {bq:"zer moduz?",en:"how are you?",s:"GR",hk:"hook",hook:"\u201cmoduz\u201d \u2248 Spanish \u201cqu\u00e9 modo\u201d / mood"},
+ {bq:"zer moduz?",en:"how are you?",s:"GR",hk:"hook",hook:"\u201cmoduz\u201d \u2248 Spanish \u201cqu\u00e9 modo\u201d / mood",dia:"Biz · zelan zagoz?"},
  {bq:"ondo",en:"well, fine",s:"GR",hk:"",hook:""},
  {bq:"oso ondo",en:"very well",s:"GR",hk:"logic",hook:"oso (very) + ondo (well)"},
  {bq:"hala-hola",en:"so-so",s:"GR",hk:"hook",hook:"sing-song \u201chala-hola\u201d = wobbly, so-so"},
@@ -321,7 +335,7 @@ const VOCAB=[
  {bq:"ni",en:"I",s:"BA",hk:"",hook:""},
  {bq:"zu",en:"you (one person)",s:"BA",hk:"",hook:""},
  {bq:"hau",en:"this; this is",s:"BA",hk:"",hook:""},
- {bq:"naiz",en:"I am",s:"BA",hk:"logic",hook:"ni + naiz = I am"},
+ {bq:"naiz",en:"I am",s:"BA",hk:"logic",hook:"ni + naiz = I am",dia:"Biz · naz"},
  {bq:"zara",en:"you are",s:"BA",hk:"logic",hook:"zu + zara = you are"},
  {bq:"da",en:"(he/she/it) is",s:"BA",hk:"",hook:""},
  {bq:"bai",en:"yes",s:"BA",hk:"",hook:""},
@@ -357,13 +371,14 @@ const PHASES=[
 <div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>izan — to be</h2></div>
 <div class="prose"><p>The most important verb in any language. In Basque it changes shape for each person — and the good news is there are only six forms to learn.</p></div>
 <table class="gt"><thead><tr><th>person</th><th>izan</th><th>meaning</th></tr></thead><tbody>
-<tr><td>ni</td><td>naiz</td><td>I am</td></tr>
+<tr><td>ni</td><td>naiz <span class="dia-cell" style="display:none"><span class="dia-reveal" onclick="revealDia(this)">Biz</span><span class="dia-val" style="display:none"> naz</span></span></td><td>I am</td></tr>
 <tr><td>zu</td><td>zara</td><td>you are (one person)</td></tr>
 <tr><td>hura / hau / hori</td><td>da</td><td>he/she/it is; this/that is</td></tr>
 <tr><td>gu</td><td>gara</td><td>we are</td></tr>
-<tr><td>zuek</td><td>zarete</td><td>you are (more than one)</td></tr>
+<tr><td>zuek</td><td>zarete <span class="dia-cell" style="display:none"><span class="dia-reveal" onclick="revealDia(this)">Biz</span><span class="dia-val" style="display:none"> zarie</span></span></td><td>you are (more than one)</td></tr>
 <tr><td>haiek</td><td>dira</td><td>they are</td></tr>
 </tbody></table>
+<div class="dia-cell dia-note" style="display:none">Dialect notes are on — tap a <b>Biz</b> chip to see the Bizkaian form. Turn them off in Vocabulary or Grammar tools.</div>
 <div class="callout"><strong>You can drop the person word.</strong> Because <b class="bq">naiz</b> already means "I am", Basques usually say just <b class="bq">Maddi naiz</b> — "Maddi I-am". The pronoun <b class="bq">ni</b> is added only for emphasis. Open the <strong>izan builder</strong> tool to feel this.</div>
 <div class="es-note"><span class="tag">ES</span>Spanish splits "to be" into <em>ser</em> and <em>estar</em>. Basque also has two ("izan" for identity, "egon" for location/state — that's Unit 4). For now, <b class="bq">izan</b> = who/what someone is.</div>
 <div class="ex" id="ex-p2">
@@ -454,10 +469,17 @@ const PHASES=[
 
 /* ====== STORAGE ====== */
 const STORE_KEY='goazen_u1';
-let mem={hooks:{},status:{},best:{match:null,speed:null},phasesDone:{},fcDir:'produce'};
+let mem={hooks:{},status:{},best:{match:null,speed:null},phasesDone:{},fcDir:'produce',showDialect:false};
 function loadStore(){try{const r=localStorage.getItem(STORE_KEY);if(r)mem=Object.assign(mem,JSON.parse(r));}catch(e){}}
 function saveStore(){try{localStorage.setItem(STORE_KEY,JSON.stringify(mem));}catch(e){}}
 loadStore();
+
+/* ====== DIALECT LAYER ====== */
+function syncDiaSwitches(){['dia-switch-fc','dia-switch-tool'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',!!mem.showDialect);});}
+function toggleDialect(){mem.showDialect=!mem.showDialect;saveStore();syncDiaSwitches();if(curScreen==='flashcards')renderFlash();if(curScreen==='tools')renderIzan();if(curScreen==='phase')applyDialectVisibility();}
+function applyDialectVisibility(){document.querySelectorAll('.dia-cell').forEach(el=>{el.style.display=mem.showDialect?'':'none';});document.querySelectorAll('.dia-val').forEach(el=>{el.style.display='none';});document.querySelectorAll('.dia-reveal').forEach(el=>el.classList.remove('open'));}
+function revealDia(btn){const val=btn.parentElement.querySelector('.dia-val');const open=val.style.display==='none';val.style.display=open?'inline':'none';btn.classList.toggle('open',open);}
+
 
 /* ====== NAV ====== */
 const titles={home:'<em>Goazen</em> · Basque',unit:'Unit 1',phases:'Lessons',phase:'Lesson',vocab:'Vocabulary',tools:'Grammar tools',flashcards:'Flashcards',match:'Match-up',speed:'Speed recall',backup:'Backup'};
@@ -470,7 +492,8 @@ function nav(s){
   document.getElementById('appbar').classList.toggle('has-back',s!=='home');
   curScreen=s;window.scrollTo(0,0);
   if(s==='phases')renderPhasesList();
-  if(s==='flashcards'){document.getElementById('fcdir-produce').classList.toggle('active',fcDir==='produce');document.getElementById('fcdir-recognise').classList.toggle('active',fcDir==='recognise');renderFlash();}
+  if(s==='flashcards'){document.getElementById('fcdir-produce').classList.toggle('active',fcDir==='produce');document.getElementById('fcdir-recognise').classList.toggle('active',fcDir==='recognise');syncDiaSwitches();renderFlash();}
+  if(s==='tools')syncDiaSwitches();
   if(s==='home')updateHomeProgress();
   if(s==='vocab')updateFcProgText();
 }
@@ -479,7 +502,7 @@ function goBack(){nav(backMap[curScreen]||'home');}
 /* ====== PHASES ====== */
 let curPhase=0;
 function renderPhasesList(){const wrap=document.getElementById('phases-list');wrap.innerHTML='';PHASES.forEach(p=>{const done=mem.phasesDone[p.id];const row=document.createElement('div');row.className='phase-row'+(done?' done':'');row.innerHTML=`<div class="phase-num">${p.id+1}</div><div class="phase-body"><h4>${p.title}</h4><p>${p.blurb}</p></div><div class="phase-check">✓</div>`;row.onclick=()=>openPhase(p.id);wrap.appendChild(row);});}
-function openPhase(id){curPhase=id;const p=PHASES[id];const c=document.getElementById('phase-content');let nextBtn=id<PHASES.length-1?`<button class="pn-btn primary" onclick="markAndNext(${id})">Done — next ›</button>`:`<button class="pn-btn primary" onclick="markAndNext(${id})">Finish unit ✓</button>`;let prevBtn=id>0?`<button class="pn-btn" onclick="openPhase(${id-1})">‹ Prev</button>`:`<button class="pn-btn" onclick="nav('phases')">All phases</button>`;c.innerHTML=p.html+`<div class="phase-nav">${prevBtn}${nextBtn}</div>`;nav('phase');}
+function openPhase(id){curPhase=id;const p=PHASES[id];const c=document.getElementById('phase-content');let nextBtn=id<PHASES.length-1?`<button class="pn-btn primary" onclick="markAndNext(${id})">Done — next ›</button>`:`<button class="pn-btn primary" onclick="markAndNext(${id})">Finish unit ✓</button>`;let prevBtn=id>0?`<button class="pn-btn" onclick="openPhase(${id-1})">‹ Prev</button>`:`<button class="pn-btn" onclick="nav('phases')">All phases</button>`;c.innerHTML=p.html+`<div class="phase-nav">${prevBtn}${nextBtn}</div>`;nav('phase');applyDialectVisibility();}
 function markAndNext(id){mem.phasesDone[id]=true;saveStore();if(id<PHASES.length-1)openPhase(id+1);else nav('phases');}
 
 /* ====== EXERCISES ====== */
@@ -494,16 +517,16 @@ function updateFcProgText(){let known=0;VOCAB.forEach(v=>{if(mem.status[v.bq+'|'
 
 /* ====== TOOL: izan builder ====== */
 const izanData=[
- {p:'ni',v:'naiz',en:'I am',es:'(yo) soy',ex:'Maddi'},
+ {p:'ni',v:'naiz',en:'I am',es:'(yo) soy',ex:'Maddi',biz:'naz'},
  {p:'zu',v:'zara',en:'you are',es:'(tú) eres',ex:'Jon'},
  {p:'hau',v:'da',en:'this is / he-she-it is',es:'es / esto es',ex:'laguna'},
  {p:'gu',v:'gara',en:'we are',es:'(nosotros) somos',ex:'euskaldunak'},
- {p:'zuek',v:'zarete',en:'you are (plural)',es:'(vosotros) sois',ex:'lagunak'},
+ {p:'zuek',v:'zarete',en:'you are (plural)',es:'(vosotros) sois',ex:'lagunak',biz:'zarie'},
  {p:'haiek',v:'dira',en:'they are',es:'(ellos) son',ex:'Maddi eta Jon'}
 ];
 let izanSel=0;
 function renderPersonRow(){const wrap=document.getElementById('person-row');wrap.innerHTML='';izanData.forEach((d,i)=>{const b=document.createElement('button');b.className='person-chip'+(i===izanSel?' active':'');b.textContent=d.p;b.onclick=()=>{izanSel=i;renderPersonRow();renderIzan();};wrap.appendChild(b);});}
-function renderIzan(){const d=izanData[izanSel];document.getElementById('izan-sentence').innerHTML='<span class="w-person">'+d.p+'</span> <span class="w-verb">'+d.v+'</span>';document.getElementById('izan-en').textContent='“'+d.en+'”';document.getElementById('izan-es').textContent=d.es;}
+function renderIzan(){const d=izanData[izanSel];document.getElementById('izan-sentence').innerHTML='<span class="w-person">'+d.p+'</span> <span class="w-verb">'+d.v+'</span>';document.getElementById('izan-en').textContent='“'+d.en+'”';document.getElementById('izan-es').textContent=d.es;var note=document.getElementById('izan-dia');if(!note){note=document.createElement('div');note.id='izan-dia';note.className='dia-note';document.getElementById('izan-es').after(note);}note.innerHTML=(mem.showDialect&&d.biz)?'<span class="dia-tag"><span class="dia-flag">Biz</span>'+d.p+' '+d.biz+'</span>':'';}
 
 /* ====== TOOL: anatomy ====== */
 const roleLabel={root:'root / noun',person:'person (I/you…)',verb:'verb — izan',demon:'demonstrative',article:'article',gram:'particle'};
@@ -534,7 +557,7 @@ let fcSection='GR',fcIndex=0,fcList=[],fcDir=(mem.fcDir||'produce');
 function setFcDir(dir){fcDir=dir;mem.fcDir=dir;saveStore();document.getElementById('fcdir-produce').classList.toggle('active',dir==='produce');document.getElementById('fcdir-recognise').classList.toggle('active',dir==='recognise');renderFlash();}
 function renderSectionBar(){const bar=document.getElementById('fc-sectionbar');bar.innerHTML='';SECTIONS.forEach(s=>{const b=document.createElement('button');b.className='fc-secbtn'+(s===fcSection?' active':'');b.textContent=SECNAMES[s];b.onclick=()=>{fcSection=s;fcIndex=0;renderFlash();};bar.appendChild(b);});}
 function cardKey(v){return v.bq+'|'+v.s;}
-function renderFlash(){renderSectionBar();fcList=VOCAB.filter(v=>v.s===fcSection);if(fcIndex>=fcList.length)fcIndex=0;const card=document.getElementById('fc-card');card.classList.remove('flipped');const v=fcList[fcIndex];const ft=document.getElementById('fc-front-text'),bt=document.getElementById('fc-back-text');if(fcDir==='produce'){ft.className='fc-en';ft.textContent=v.en;bt.className='fc-word';bt.textContent=v.bq;document.getElementById('fc-tap-hint').textContent='recall the Basque, then tap to check';}else{ft.className='fc-word';ft.textContent=v.bq;bt.className='fc-en';bt.textContent=v.en;document.getElementById('fc-tap-hint').textContent='recall the meaning, then tap to check';}const userHook=mem.hooks[cardKey(v)];let h='';if(v.hk){const tc={link:'tag-link',logic:'tag-logic',hook:'tag-hook'}[v.hk];const tt={link:'real link',logic:'logic',hook:'memory aid'}[v.hk];h+='<div><span class="hook-tag '+tc+'">'+tt+'</span>'+v.hook+'</div>';}if(userHook)h+='<div style="margin-top:.5rem"><span class="hook-tag tag-mine">yours</span>'+userHook+'</div>';document.getElementById('fc-hook').innerHTML=h;document.getElementById('hook-edit').value=userHook||'';const st=mem.status[cardKey(v)];const sh=st==='known'?'<span class="st-known">known</span>':(st==='learning'?'<span class="st-learning">learning</span>':'');document.getElementById('fc-status-front').innerHTML=sh;document.getElementById('fc-status-back').innerHTML=sh;document.getElementById('fc-counter').textContent=(fcIndex+1)+' / '+fcList.length;updateFcProgText();}
+function renderFlash(){renderSectionBar();fcList=VOCAB.filter(v=>v.s===fcSection);if(fcIndex>=fcList.length)fcIndex=0;const card=document.getElementById('fc-card');card.classList.remove('flipped');const v=fcList[fcIndex];const ft=document.getElementById('fc-front-text'),bt=document.getElementById('fc-back-text');if(fcDir==='produce'){ft.className='fc-en';ft.textContent=v.en;bt.className='fc-word';bt.textContent=v.bq;document.getElementById('fc-tap-hint').textContent='recall the Basque, then tap to check';}else{ft.className='fc-word';ft.textContent=v.bq;bt.className='fc-en';bt.textContent=v.en;document.getElementById('fc-tap-hint').textContent='recall the meaning, then tap to check';}const userHook=mem.hooks[cardKey(v)];let h='';if(v.hk){const tc={link:'tag-link',logic:'tag-logic',hook:'tag-hook'}[v.hk];const tt={link:'real link',logic:'logic',hook:'memory aid'}[v.hk];h+='<div><span class="hook-tag '+tc+'">'+tt+'</span>'+v.hook+'</div>';}if(userHook)h+='<div style="margin-top:.5rem"><span class="hook-tag tag-mine">yours</span>'+userHook+'</div>';if(mem.showDialect&&v.dia){h+='<div style="margin-top:.6rem"><span class="dia-tag"><span class="dia-flag">dialect</span>'+v.dia+'</span></div>';}document.getElementById('fc-hook').innerHTML=h;document.getElementById('hook-edit').value=userHook||'';const st=mem.status[cardKey(v)];const sh=st==='known'?'<span class="st-known">known</span>':(st==='learning'?'<span class="st-learning">learning</span>':'');document.getElementById('fc-status-front').innerHTML=sh;document.getElementById('fc-status-back').innerHTML=sh;document.getElementById('fc-counter').textContent=(fcIndex+1)+' / '+fcList.length;updateFcProgText();}
 function flipCard(){document.getElementById('fc-card').classList.toggle('flipped');}
 function nextCard(){fcIndex=(fcIndex+1)%fcList.length;renderFlash();}
 function prevCard(){fcIndex=(fcIndex-1+fcList.length)%fcList.length;renderFlash();}
@@ -556,8 +579,8 @@ function finishSpeed(){document.getElementById('sp-word').style.display='none';d
 
 /* ====== BACKUP ====== */
 function exportData(){const blob=new Blob([JSON.stringify(mem,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='goazen-backup.json';a.click();URL.revokeObjectURL(url);document.getElementById('backup-msg').textContent='Backup downloaded.';}
-function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);mem=Object.assign({hooks:{},status:{},best:{match:null,speed:null},phasesDone:{},fcDir:'produce'},d);saveStore();document.getElementById('backup-msg').textContent='Backup restored.';updateHomeProgress();}catch(err){const m=document.getElementById('backup-msg');m.style.color='var(--c-doer)';m.textContent='Could not read that file.';}};r.readAsText(f);}
-function resetAll(){if(confirm('Erase all saved progress and hooks on this device?')){mem={hooks:{},status:{},best:{match:null,speed:null},phasesDone:{},fcDir:'produce'};saveStore();document.getElementById('backup-msg').textContent='All progress cleared.';updateHomeProgress();}}
+function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);mem=Object.assign({hooks:{},status:{},best:{match:null,speed:null},phasesDone:{},fcDir:'produce',showDialect:false},d);saveStore();document.getElementById('backup-msg').textContent='Backup restored.';updateHomeProgress();}catch(err){const m=document.getElementById('backup-msg');m.style.color='var(--c-doer)';m.textContent='Could not read that file.';}};r.readAsText(f);}
+function resetAll(){if(confirm('Erase all saved progress and hooks on this device?')){mem={hooks:{},status:{},best:{match:null,speed:null},phasesDone:{},fcDir:'produce',showDialect:false};saveStore();document.getElementById('backup-msg').textContent='All progress cleared.';updateHomeProgress();}}
 
 /* ====== INIT ====== */
 renderPersonRow();renderIzan();renderAnatomy();renderCards();updateHomeProgress();
