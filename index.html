@@ -610,6 +610,298 @@ const UNITS=[
  ],
  dialect:false
 }
+,
+/* ==================== UNIT 6 ==================== */
+{
+ id:6, code:"Unit 6", title:"Nire familia", en:"My family",
+ theme:"Family · possessives · the verb ukan (to have)",
+ secNames:{FA:"Family",PO:"Possessives",HV:"ukan (to have)"},
+ vocab:[
+  {bq:"familia",en:"family",s:"FA",hk:"link",hook:"= familia"},
+  {bq:"ama",en:"mother",s:"FA",hk:"",hook:""},
+  {bq:"aita",en:"father",s:"FA",hk:"",hook:""},
+  {bq:"gurasoak",en:"parents",s:"FA",hk:"",hook:""},
+  {bq:"anaia",en:"brother",s:"FA",hk:"hook",hook:"a man's brother (see culture note)"},
+  {bq:"arreba",en:"sister (of a man)",s:"FA",hk:"",hook:""},
+  {bq:"ahizpa",en:"sister (of a woman)",s:"FA",hk:"",hook:""},
+  {bq:"neba",en:"brother (of a woman)",s:"FA",hk:"",hook:""},
+  {bq:"seme",en:"son",s:"FA",hk:"",hook:""},
+  {bq:"alaba",en:"daughter",s:"FA",hk:"",hook:""},
+  {bq:"seme-alabak",en:"children (sons & daughters)",s:"FA",hk:"logic",hook:"seme + alaba"},
+  {bq:"aitona",en:"grandfather",s:"FA",hk:"logic",hook:"aita (father) + -ona"},
+  {bq:"amona",en:"grandmother",s:"FA",hk:"logic",hook:"ama (mother) + -ona"},
+  {bq:"osaba",en:"uncle",s:"FA",hk:"",hook:""},
+  {bq:"izeba",en:"aunt",s:"FA",hk:"",hook:""},
+  {bq:"lehengusua",en:"cousin",s:"FA",hk:"",hook:""},
+  {bq:"senarra",en:"husband",s:"FA",hk:"",hook:""},
+  {bq:"emaztea",en:"wife",s:"FA",hk:"",hook:""},
+  {bq:"nire",en:"my",s:"PO",hk:"",hook:""},
+  {bq:"zure",en:"your",s:"PO",hk:"",hook:""},
+  {bq:"bere",en:"his, her",s:"PO",hk:"",hook:""},
+  {bq:"gure",en:"our",s:"PO",hk:"",hook:""},
+  {bq:"zuen",en:"your (plural)",s:"PO",hk:"",hook:""},
+  {bq:"haien",en:"their",s:"PO",hk:"",hook:""},
+  {bq:"dut",en:"I have (it)",s:"HV",hk:"logic",hook:"ukan: nik + dut"},
+  {bq:"duzu",en:"you have (it)",s:"HV",hk:"logic",hook:"ukan: zuk + duzu"},
+  {bq:"du",en:"(he/she) has (it)",s:"HV",hk:"",hook:""},
+  {bq:"dugu",en:"we have (it)",s:"HV",hk:"logic",hook:"ukan: guk + dugu"},
+  {bq:"duzue",en:"you (pl) have (it)",s:"HV",hk:"",hook:""},
+  {bq:"dute",en:"they have (it)",s:"HV",hk:"",hook:""},
+  {bq:"anaia bat dut",en:"I have a brother",s:"HV",hk:"",hook:""},
+  {bq:"zenbat?",en:"how many?",s:"HV",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"ukan — to have",prompt:"tap a person — see 'have' agree",
+  note:"ukan is the workhorse verb for \u201chave\u201d — and later, the helper for most other verbs. With one thing owned: dut, duzu, du, dugu, duzue, dute. The doer takes -k (nik, zuk\u2026), which you'll meet properly in Unit 12.",
+  rows:[
+   {trig:"nik",form:"dut",en:"I have (it)",es:"(yo) tengo"},
+   {trig:"zuk",form:"duzu",en:"you have (it)",es:"(tú) tienes"},
+   {trig:"hark",form:"du",en:"he/she has (it)",es:"tiene"},
+   {trig:"guk",form:"dugu",en:"we have (it)",es:"(nosotros) tenemos"},
+   {trig:"zuek",form:"duzue",en:"you (pl) have (it)",es:"(vosotros) tenéis"},
+   {trig:"haiek",form:"dute",en:"they have (it)",es:"(ellos) tienen"}
+  ]},
+ anatomy:[
+  {en:"I have a brother.",toks:[{t:"Anaia",fn:"root",bq:"anaia",note:"\u201cbrother\u201d — the thing had."},{sp:1},{t:"bat",fn:"quant",bq:"bat",note:"\u201ca / one\u201d — follows the noun."},{sp:1},{t:"dut",fn:"verb",bq:"dut",note:"\u201cI have it\u201d — ukan. One word carries \u201cI\u2026 it\u201d."}]},
+  {en:"This is my mother.",toks:[{t:"Hau",fn:"demon",bq:"hau",note:"\u201cthis\u201d."},{sp:1},{t:"nire",fn:"person",bq:"nire",note:"\u201cmy\u201d — possessive, before the noun."},{sp:1},{t:"ama",fn:"root",bq:"ama",note:"\u201cmother\u201d."},{t:"",fn:"",bq:"",note:""},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis\u201d — izan (identity)."}]},
+  {en:"How many children do you have?",toks:[{t:"Zenbat",fn:"gram",bq:"zenbat",note:"\u201chow many\u201d."},{sp:1},{t:"seme-alaba",fn:"root",bq:"seme-alaba",note:"\u201cchildren\u201d — stays singular after zenbat."},{sp:1},{t:"dituzu",fn:"verb",bq:"dituzu",note:"\u201cdo you have (them)\u201d — plural-object form of ukan."}]}
+ ],
+ contrast:[
+  {concept:"\u201cto have\u201d",rows:[["EN","en","\u201cI have\u201d"],["ES","es","\u201ctengo\u201d"],["EU","eu","<span class='eu-word'>dut</span> — \u201cI\u2026 it\u201d in one word"]],note:"The Basque verb bakes in both the doer and the thing had."},
+  {concept:"possessive",rows:[["EN","en","\u201cmy mother\u201d"],["ES","es","\u201cmi madre\u201d"],["EU","eu","<span class='eu-word'>nire ama</span>"]],note:"Possessive before the noun, like both English and Spanish."},
+  {concept:"sister",rows:[["EN","en","\u201csister\u201d — one word"],["ES","es","\u201chermana\u201d — one word"],["EU","eu","<span class='eu-word'>arreba</span> / <span class='eu-word'>ahizpa</span>"]],note:"Basque picks the word by the SPEAKER's gender — a man's sister vs a woman's sister."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 7 ==================== */
+{
+ id:7, code:"Unit 7", title:"Non bizi zara?", en:"Where do you live?",
+ theme:"Home & town · in / to / from (the place cases)",
+ secNames:{HO:"The home",MO:"Coming & going",CA:"in / to / from"},
+ vocab:[
+  {bq:"etxea",en:"house, home",s:"HO",hk:"",hook:""},
+  {bq:"pisua",en:"flat, apartment",s:"HO",hk:"link",hook:"\u2248 piso"},
+  {bq:"gela",en:"room",s:"HO",hk:"",hook:""},
+  {bq:"logela",en:"bedroom",s:"HO",hk:"logic",hook:"lo (sleep) + gela (room)"},
+  {bq:"sukaldea",en:"kitchen",s:"HO",hk:"",hook:""},
+  {bq:"egongela",en:"living room",s:"HO",hk:"logic",hook:"egon (be) + gela"},
+  {bq:"komuna",en:"bathroom, toilet",s:"HO",hk:"",hook:""},
+  {bq:"lorategia",en:"garden",s:"HO",hk:"logic",hook:"lore (flower) + -tegi"},
+  {bq:"herria",en:"town, village",s:"HO",hk:"",hook:""},
+  {bq:"auzoa",en:"neighbourhood",s:"HO",hk:"",hook:""},
+  {bq:"bizi naiz",en:"I live",s:"MO",hk:"logic",hook:"bizi (life) + naiz"},
+  {bq:"bizi zara",en:"you live",s:"MO",hk:"",hook:""},
+  {bq:"non bizi zara?",en:"where do you live?",s:"MO",hk:"",hook:""},
+  {bq:"noa",en:"I go, I'm going",s:"MO",hk:"logic",hook:"joan: ni + noa"},
+  {bq:"zoaz",en:"you go",s:"MO",hk:"logic",hook:"joan: zu + zoaz"},
+  {bq:"doa",en:"(he/she) goes",s:"MO",hk:"",hook:""},
+  {bq:"nora?",en:"where to?",s:"MO",hk:"logic",hook:"nor + -a (to where)"},
+  {bq:"nondik?",en:"where from?",s:"MO",hk:"logic",hook:"non + -dik (from where)"},
+  {bq:"etxean",en:"at home (in the house)",s:"CA",hk:"logic",hook:"etxe + -an (in/at)"},
+  {bq:"etxera",en:"home, to the house",s:"CA",hk:"logic",hook:"etxe + -ra (to)"},
+  {bq:"etxetik",en:"from home",s:"CA",hk:"logic",hook:"etxe + -tik (from)"},
+  {bq:"Bilbon",en:"in Bilbao",s:"CA",hk:"",hook:""},
+  {bq:"Bilbora",en:"to Bilbao",s:"CA",hk:"logic",hook:"Bilbo + -ra"},
+  {bq:"Bilbotik",en:"from Bilbao",s:"CA",hk:"logic",hook:"Bilbo + -tik"},
+  {bq:"tabernara",en:"to the bar",s:"CA",hk:"logic",hook:"taberna + -ra"},
+  {bq:"tabernatik",en:"from the bar",s:"CA",hk:"logic",hook:"taberna + -tik"},
+  {bq:"-n",en:"in / at (inessive)",s:"CA",hk:"",hook:""},
+  {bq:"-ra",en:"to (allative)",s:"CA",hk:"",hook:""},
+  {bq:"-tik",en:"from (ablative)",s:"CA",hk:"",hook:""},
+  {bq:"hemen bizi naiz",en:"I live here",s:"CA",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"in / to / from",prompt:"tap a direction — watch the ending change",
+  note:"Three little endings do the work of English \u201cin, to, from\u201d — all glued onto the place. The place here is taberna (the bar): stay (-n), go towards (-ra), come away (-tik).",
+  rows:[
+   {trig:"in / at",form:"tabernan",en:"in the bar",es:"en el bar"},
+   {trig:"to",form:"tabernara",en:"to the bar",es:"al bar"},
+   {trig:"from",form:"tabernatik",en:"from the bar",es:"del bar"}
+  ]},
+ anatomy:[
+  {en:"I live in Zarautz.",toks:[{t:"Zarautz",fn:"root",bq:"Zarautz",note:"the place."},{t:"en",fn:"describe",bq:"-en",note:"\u201cin/at\u201d — the inessive on a proper name."},{sp:1},{t:"bizi",fn:"root",bq:"bizi",note:"\u201clive\u201d."},{sp:1},{t:"naiz",fn:"verb",bq:"naiz",note:"\u201cI am\u201d — bizi izan = to live."}]},
+  {en:"I'm going to Bilbao.",toks:[{t:"Bilbo",fn:"root",bq:"Bilbo",note:"the place."},{t:"ra",fn:"describe",bq:"-ra",note:"\u201cto\u201d — the allative, direction towards."},{sp:1},{t:"noa",fn:"verb",bq:"noa",note:"\u201cI go\u201d — joan."}]},
+  {en:"From home to the bar.",toks:[{t:"Etxe",fn:"root",bq:"etxe",note:"\u201chome\u201d."},{t:"tik",fn:"describe",bq:"-tik",note:"\u201cfrom\u201d — the ablative."},{sp:1},{t:"taberna",fn:"root",bq:"taberna",note:"\u201cbar\u201d."},{t:"ra",fn:"describe",bq:"-ra",note:"\u201cto\u201d."}]}
+ ],
+ contrast:[
+  {concept:"\u201cto a place\u201d",rows:[["EN","en","\u201cto Bilbao\u201d"],["ES","es","\u201ca Bilbao\u201d"],["EU","eu","<span class='eu-word'>Bilbora</span> — -ra"]],note:"Direction \u201cto\u201d is a suffix, -ra."},
+  {concept:"\u201cfrom a place\u201d",rows:[["EN","en","\u201cfrom Bilbao\u201d"],["ES","es","\u201cde Bilbao\u201d"],["EU","eu","<span class='eu-word'>Bilbotik</span> — -tik"]],note:"\u201cFrom\u201d is -tik."},
+  {concept:"a set of three",rows:[["EN","en","in / to / from"],["ES","es","en / a / de"],["EU","eu","<span class='eu-word'>-n / -ra / -tik</span>"]],note:"One tidy trio — learn them together."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 8 ==================== */
+{
+ id:8, code:"Unit 8", title:"Zer ordutan?", en:"At what time?",
+ theme:"Telling the time · daily routine · the habitual present",
+ secNames:{TI:"Time",RO:"Daily routine",HP:"Habitual present"},
+ vocab:[
+  {bq:"zer ordu da?",en:"what time is it?",s:"TI",hk:"",hook:""},
+  {bq:"ordu bata da",en:"it's one o'clock",s:"TI",hk:"",hook:""},
+  {bq:"ordu biak dira",en:"it's two o'clock",s:"TI",hk:"hook",hook:"2+ takes plural: \u201cthe twos are\u201d"},
+  {bq:"hirurak dira",en:"it's three o'clock",s:"TI",hk:"",hook:""},
+  {bq:"eta erdi",en:"half past",s:"TI",hk:"logic",hook:"eta (and) + erdi (half)"},
+  {bq:"eta laurden",en:"quarter past",s:"TI",hk:"logic",hook:"eta + laurden (quarter)"},
+  {bq:"laurden gutxi",en:"quarter to",s:"TI",hk:"logic",hook:"laurden (quarter) + gutxi (less)"},
+  {bq:"ordua",en:"hour, o'clock, time",s:"TI",hk:"",hook:""},
+  {bq:"goizean",en:"in the morning",s:"TI",hk:"logic",hook:"goiz (morning) + -ean"},
+  {bq:"arratsaldean",en:"in the afternoon",s:"TI",hk:"logic",hook:"arratsalde + -an"},
+  {bq:"gauean",en:"at night",s:"TI",hk:"logic",hook:"gau (night) + -ean"},
+  {bq:"esnatu",en:"to wake up",s:"RO",hk:"",hook:""},
+  {bq:"jaiki",en:"to get up",s:"RO",hk:"",hook:""},
+  {bq:"gosaldu",en:"to have breakfast",s:"RO",hk:"",hook:""},
+  {bq:"lan egin",en:"to work",s:"RO",hk:"logic",hook:"lan (work) + egin (do)"},
+  {bq:"bazkaldu",en:"to have lunch",s:"RO",hk:"",hook:""},
+  {bq:"afaldu",en:"to have dinner",s:"RO",hk:"",hook:""},
+  {bq:"lo egin",en:"to sleep",s:"RO",hk:"logic",hook:"lo (sleep) + egin (do)"},
+  {bq:"etxera itzuli",en:"to go back home",s:"RO",hk:"",hook:""},
+  {bq:"jaten dut",en:"I eat",s:"HP",hk:"logic",hook:"jan \u2192 jaten + dut"},
+  {bq:"edaten dut",en:"I drink",s:"HP",hk:"logic",hook:"edan \u2192 edaten + dut"},
+  {bq:"esnatzen naiz",en:"I wake up",s:"HP",hk:"logic",hook:"esnatu \u2192 esnatzen + naiz"},
+  {bq:"lan egiten dut",en:"I work",s:"HP",hk:"logic",hook:"lan egin \u2192 egiten + dut"},
+  {bq:"zer ordutan?",en:"at what time?",s:"HP",hk:"logic",hook:"ordu + -tan (at)"},
+  {bq:"zazpietan",en:"at seven",s:"HP",hk:"logic",hook:"zazpi + -etan"},
+  {bq:"beti",en:"always",s:"HP",hk:"",hook:""},
+  {bq:"batzuetan",en:"sometimes",s:"HP",hk:"",hook:""},
+  {bq:"inoiz ez",en:"never",s:"HP",hk:"logic",hook:"inoiz (ever) + ez (not)"},
+  {bq:"gero",en:"then, later",s:"HP",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"The habitual present",prompt:"tap a person — 'I eat, you eat…'",
+  note:"To say what you do regularly, take the verb, add -tzen/-ten, then the helper. For \u201ceat\u201d (jan): jaten + the ukan helper. The helper changes for the person; the -tzen part stays put.",
+  rows:[
+   {trig:"nik",form:"jaten dut",en:"I eat",es:"(yo) como"},
+   {trig:"zuk",form:"jaten duzu",en:"you eat",es:"(tú) comes"},
+   {trig:"hark",form:"jaten du",en:"he/she eats",es:"come"},
+   {trig:"guk",form:"jaten dugu",en:"we eat",es:"(nosotros) comemos"},
+   {trig:"zuek",form:"jaten duzue",en:"you (pl) eat",es:"(vosotros) coméis"},
+   {trig:"haiek",form:"jaten dute",en:"they eat",es:"(ellos) comen"}
+  ]},
+ anatomy:[
+  {en:"What time do you get up?",toks:[{t:"Zer",fn:"gram",bq:"zer",note:"\u201cwhat\u201d."},{sp:1},{t:"ordu",fn:"root",bq:"ordu",note:"\u201chour\u201d."},{t:"tan",fn:"describe",bq:"-tan",note:"\u201cat (what time)\u201d."},{sp:1},{t:"jaikitzen",fn:"root",bq:"jaikitzen",note:"\u201cgetting up\u201d — the -tzen habitual form."},{sp:1},{t:"zara",fn:"verb",bq:"zara",note:"\u201cyou are\u201d — jaiki is intransitive, so izan helps."}]},
+  {en:"I eat at two.",toks:[{t:"Ordu biak",fn:"quant",bq:"ordu biak",note:"\u201ctwo o'clock\u201d."},{t:"etan",fn:"describe",bq:"-etan",note:"\u201cat\u201d (with the hours)."},{sp:1},{t:"jaten",fn:"root",bq:"jaten",note:"\u201ceating\u201d — habitual."},{sp:1},{t:"dut",fn:"verb",bq:"dut",note:"\u201cI\u2026 it\u201d — ukan helper (jan is transitive)."}]},
+  {en:"I always work.",toks:[{t:"Beti",fn:"gram",bq:"beti",note:"\u201calways\u201d."},{sp:1},{t:"lan",fn:"root",bq:"lan",note:"\u201cwork\u201d."},{sp:1},{t:"egiten",fn:"root",bq:"egiten",note:"\u201cdoing\u201d — habitual of egin."},{sp:1},{t:"dut",fn:"verb",bq:"dut",note:"\u201cI do it\u201d."}]}
+ ],
+ contrast:[
+  {concept:"\u201cI eat\u201d (habit)",rows:[["EN","en","\u201cI eat\u201d — one word"],["ES","es","\u201ccomo\u201d — one word"],["EU","eu","<span class='eu-word'>jaten dut</span> — two parts"]],note:"Basque splits it: the -tzen form + a helper verb."},
+  {concept:"o'clock uses plural",rows:[["EN","en","\u201cit is two\u201d"],["ES","es","\u201cson las dos\u201d — plural!"],["EU","eu","<span class='eu-word'>ordu biak dira</span> — plural"]],note:"Like Spanish, Basque treats hours 2+ as plural."},
+  {concept:"\u201cat (a time)\u201d",rows:[["EN","en","\u201cat seven\u201d"],["ES","es","\u201ca las siete\u201d"],["EU","eu","<span class='eu-word'>zazpietan</span> — -etan"]],note:"\u201cAt\u201d a clock time is the suffix -etan."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 9 ==================== */
+{
+ id:9, code:"Unit 9", title:"Gustatzen zait", en:"I like it",
+ theme:"Likes & dislikes · hobbies · the me/you/them pattern",
+ secNames:{LI:"Liking",HB:"Hobbies",OP:"Opinions"},
+ vocab:[
+  {bq:"gustatzen zait",en:"I like it",s:"LI",hk:"logic",hook:"it is pleasing TO ME (zait)"},
+  {bq:"gustatzen zaizu",en:"you like it",s:"LI",hk:"logic",hook:"pleasing to you (zaizu)"},
+  {bq:"gustatzen zaio",en:"he/she likes it",s:"LI",hk:"logic",hook:"pleasing to him/her (zaio)"},
+  {bq:"gustatzen zaizkit",en:"I like them (plural)",s:"LI",hk:"logic",hook:"zaizki- = plural liked thing"},
+  {bq:"ez zait gustatzen",en:"I don't like it",s:"LI",hk:"logic",hook:"ez + zait + gustatzen"},
+  {bq:"asko gustatzen zait",en:"I like it a lot",s:"LI",hk:"logic",hook:"asko (a lot) + gustatzen zait"},
+  {bq:"gorroto dut",en:"I hate it",s:"LI",hk:"",hook:""},
+  {bq:"nahiago dut",en:"I prefer",s:"LI",hk:"logic",hook:"nahi (want) + -ago (more)"},
+  {bq:"zer gustatzen zaizu?",en:"what do you like?",s:"LI",hk:"",hook:""},
+  {bq:"musika",en:"music",s:"HB",hk:"link",hook:"= música"},
+  {bq:"musika entzun",en:"to listen to music",s:"HB",hk:"logic",hook:"musika + entzun (listen)"},
+  {bq:"irakurri",en:"to read",s:"HB",hk:"",hook:""},
+  {bq:"kirola",en:"sport",s:"HB",hk:"",hook:""},
+  {bq:"kirola egin",en:"to do sport",s:"HB",hk:"logic",hook:"kirol + egin"},
+  {bq:"dantza egin",en:"to dance",s:"HB",hk:"logic",hook:"dantza + egin"},
+  {bq:"margotu",en:"to paint",s:"HB",hk:"",hook:""},
+  {bq:"sukaldatu",en:"to cook",s:"HB",hk:"logic",hook:"sukalde (kitchen) + -atu"},
+  {bq:"bidaiatu",en:"to travel",s:"HB",hk:"link",hook:"\u2248 viajar"},
+  {bq:"surf egin",en:"to surf",s:"HB",hk:"logic",hook:"surf + egin"},
+  {bq:"zinema",en:"cinema",s:"HB",hk:"link",hook:"= cine"},
+  {bq:"jaialdia",en:"festival",s:"HB",hk:"logic",hook:"jai (festival) + -aldi"},
+  {bq:"ardo naturala",en:"natural wine",s:"HB",hk:"logic",hook:"ardo (wine) + naturala"},
+  {bq:"asko",en:"a lot, very much",s:"OP",hk:"",hook:""},
+  {bq:"pixka bat",en:"a little",s:"OP",hk:"",hook:""},
+  {bq:"batere ez",en:"not at all",s:"OP",hk:"",hook:""},
+  {bq:"oso ondo",en:"very well / great",s:"OP",hk:"",hook:""},
+  {bq:"ederra",en:"lovely, beautiful",s:"OP",hk:"",hook:""},
+  {bq:"aspergarria",en:"boring",s:"OP",hk:"logic",hook:"asper (bore) + -garri"},
+  {bq:"interesgarria",en:"interesting",s:"OP",hk:"logic",hook:"interes + -garri"},
+  {bq:"ados",en:"agreed, OK",s:"OP",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"gustatu — liking",prompt:"tap a person — 'it pleases me / you…'",
+  note:"Basque \u201clike\u201d works exactly like Spanish me gusta: the thing does the pleasing, and a little word says who's pleased. zait (to me), zaizu (to you), zaio (to him/her). If you like several things, it becomes zaizki-.",
+  rows:[
+   {trig:"to me",form:"gustatzen zait",en:"I like it",es:"me gusta"},
+   {trig:"to you",form:"gustatzen zaizu",en:"you like it",es:"te gusta"},
+   {trig:"to him/her",form:"gustatzen zaio",en:"he/she likes it",es:"le gusta"},
+   {trig:"to us",form:"gustatzen zaigu",en:"we like it",es:"nos gusta"},
+   {trig:"to them",form:"gustatzen zaie",en:"they like it",es:"les gusta"},
+   {trig:"to me (things)",form:"gustatzen zaizkit",en:"I like them",es:"me gustan"}
+  ]},
+ anatomy:[
+  {en:"I like music.",toks:[{t:"Musika",fn:"root",bq:"musika",note:"\u201cmusic\u201d — the thing doing the pleasing (the subject!)."},{sp:1},{t:"gustatzen",fn:"root",bq:"gustatzen",note:"\u201cpleasing\u201d."},{sp:1},{t:"zait",fn:"verb",bq:"zait",note:"\u201cto me\u201d — the little word saying who likes it."}]},
+  {en:"I don't like it.",toks:[{t:"Ez",fn:"gram",bq:"ez",note:"\u201cnot\u201d."},{sp:1},{t:"zait",fn:"verb",bq:"zait",note:"\u201cto me\u201d — moves before the verb in negatives."},{sp:1},{t:"gustatzen",fn:"root",bq:"gustatzen",note:"\u201cpleasing\u201d."}]},
+  {en:"I like books.",toks:[{t:"Liburuak",fn:"root",bq:"liburuak",note:"\u201cbooks\u201d — plural, so the verb goes plural too."},{sp:1},{t:"gustatzen",fn:"root",bq:"gustatzen",note:"\u201cpleasing\u201d."},{sp:1},{t:"zaizkit",fn:"verb",bq:"zaizkit",note:"\u201cto me (them)\u201d — plural liked thing = zaizki-."}]}
+ ],
+ contrast:[
+  {concept:"\u201cI like X\u201d",rows:[["EN","en","\u201cI like music\u201d — I'm the subject"],["ES","es","\u201cme gusta\u201d — music is subject"],["EU","eu","<span class='eu-word'>musika gustatzen zait</span>"]],note:"Basque matches Spanish exactly: the thing pleases you."},
+  {concept:"liking several",rows:[["EN","en","\u201cI like books\u201d"],["ES","es","\u201cme gustan\u201d — plural verb"],["EU","eu","<span class='eu-word'>zaizkit</span> — plural"]],note:"Like Spanish, the verb agrees with the liked thing's number."},
+  {concept:"\u201cI prefer\u201d",rows:[["EN","en","\u201cI prefer\u201d"],["ES","es","\u201cprefiero\u201d"],["EU","eu","<span class='eu-word'>nahiago dut</span> — \u201cwant-more\u201d"]],note:"nahi (want) + -ago (the \u201c-er\u201d ending)."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 10 ==================== */
+{
+ id:10, code:"Unit 10", title:"Koloreak", en:"Colours",
+ theme:"Colours · describing things · adjectives after the noun",
+ secNames:{KO:"Colours",DE:"Describing",NB:"Numbers to 100"},
+ vocab:[
+  {bq:"kolorea",en:"colour",s:"KO",hk:"link",hook:"= color"},
+  {bq:"gorria",en:"red",s:"KO",hk:"",hook:""},
+  {bq:"urdina",en:"blue",s:"KO",hk:"",hook:""},
+  {bq:"berdea",en:"green",s:"KO",hk:"link",hook:"\u2248 verde"},
+  {bq:"horia",en:"yellow",s:"KO",hk:"",hook:""},
+  {bq:"beltza",en:"black",s:"KO",hk:"",hook:""},
+  {bq:"zuria",en:"white",s:"KO",hk:"",hook:""},
+  {bq:"marroia",en:"brown",s:"KO",hk:"link",hook:"\u2248 marrón"},
+  {bq:"grisa",en:"grey",s:"KO",hk:"link",hook:"\u2248 gris"},
+  {bq:"laranja",en:"orange",s:"KO",hk:"link",hook:"= naranja (also \u201corange\u201d fruit)"},
+  {bq:"arrosa",en:"pink",s:"KO",hk:"link",hook:"\u2248 rosa"},
+  {bq:"morea",en:"purple",s:"KO",hk:"",hook:""},
+  {bq:"handia",en:"big",s:"DE",hk:"",hook:""},
+  {bq:"txikia",en:"small",s:"DE",hk:"",hook:""},
+  {bq:"berria",en:"new",s:"DE",hk:"",hook:""},
+  {bq:"zaharra",en:"old",s:"DE",hk:"",hook:""},
+  {bq:"ona",en:"good",s:"DE",hk:"",hook:""},
+  {bq:"txarra",en:"bad",s:"DE",hk:"",hook:""},
+  {bq:"polita",en:"pretty, nice",s:"DE",hk:"",hook:""},
+  {bq:"itsusia",en:"ugly",s:"DE",hk:"",hook:""},
+  {bq:"garestia",en:"expensive",s:"DE",hk:"",hook:""},
+  {bq:"merkea",en:"cheap",s:"DE",hk:"",hook:""},
+  {bq:"nolakoa da?",en:"what's it like?",s:"DE",hk:"logic",hook:"nola (how) + -koa"},
+  {bq:"hogeita hamar",en:"thirty",s:"NB",hk:"logic",hook:"20 + 10"},
+  {bq:"berrogei",en:"forty",s:"NB",hk:"logic",hook:"2 × 20"},
+  {bq:"berrogeita hamar",en:"fifty",s:"NB",hk:"logic",hook:"(2×20) + 10"},
+  {bq:"hirurogei",en:"sixty",s:"NB",hk:"logic",hook:"3 × 20"},
+  {bq:"laurogei",en:"eighty",s:"NB",hk:"logic",hook:"4 × 20"},
+  {bq:"ehun",en:"a hundred",s:"NB",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"Adjectives follow the noun",prompt:"tap a describer — see where it goes",
+  note:"In Basque the adjective comes AFTER the noun, and the article -a sits on the adjective, not the noun: etxe (house) + gorri (red) \u2192 etxe gorria = \u201ca red house\u201d. The noun stays bare; the ending rides on the describer.",
+  rows:[
+   {trig:"red",form:"etxe gorria",en:"a red house",es:"una casa roja"},
+   {trig:"big",form:"etxe handia",en:"a big house",es:"una casa grande"},
+   {trig:"new",form:"etxe berria",en:"a new house",es:"una casa nueva"},
+   {trig:"white",form:"etxe zuria",en:"a white house",es:"una casa blanca"},
+   {trig:"old",form:"etxe zaharra",en:"an old house",es:"una casa vieja"}
+  ]},
+ anatomy:[
+  {en:"a red house",toks:[{t:"etxe",fn:"root",bq:"etxe",note:"\u201chouse\u201d — the noun stays bare (no article yet)."},{sp:1},{t:"gorri",fn:"root",bq:"gorri",note:"\u201cred\u201d — the adjective, AFTER the noun."},{t:"a",fn:"article",bq:"-a",note:"\u201ca/the\u201d — the article rides on the adjective, not the noun."}]},
+  {en:"The car is new.",toks:[{t:"Kotxea",fn:"root",bq:"kotxea",note:"\u201cthe car\u201d."},{sp:1},{t:"berria",fn:"root",bq:"berria",note:"\u201cnew\u201d — with its own article when standing after \u201cis\u201d."},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis\u201d."}]},
+  {en:"What's it like?",toks:[{t:"Nola",fn:"gram",bq:"nola",note:"\u201chow\u201d."},{t:"koa",fn:"describe",bq:"-koa",note:"\u201cwhat kind of\u201d — nolakoa."},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis it\u201d."}]}
+ ],
+ contrast:[
+  {concept:"adjective order",rows:[["EN","en","\u201cred house\u201d — before"],["ES","es","\u201ccasa roja\u201d — after"],["EU","eu","<span class='eu-word'>etxe gorria</span> — after"]],note:"Basque agrees with Spanish: the colour follows the noun."},
+  {concept:"where the article goes",rows:[["EN","en","\u201cthe red house\u201d"],["ES","es","\u201cla casa roja\u201d"],["EU","eu","etxe gorri<span class='eu-word'>a</span> — on the adjective"]],note:"The article -a lands on the LAST word of the phrase."},
+  {concept:"colours as loanwords",rows:[["EN","en","grey, brown, pink"],["ES","es","gris, marrón, rosa"],["EU","eu","<span class='eu-word'>grisa, marroia, arrosa</span>"]],note:"Several colours are shared with Spanish — an easy win."}
+ ],
+ dialect:false
+}
 ];
 
 /* ============ PHASES per unit (original content) ============ */
@@ -888,6 +1180,216 @@ const PHASES_BY_UNIT={
 <div class="ex-item"><div class="ex-q"><span class="num">3</span>there are (two bars) — the verb</div><input class="ex-input" data-a="badaude"><div class="ex-fb"></div></div>
 <div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
 <div class="callout"><strong>Kultura — the txikiteo.</strong> Moving bar to bar with small drinks and pintxos, counting your rounds, is a Donostia ritual. <b class="bq">Zorionak</b> — you've finished Level 1!</div>`}
+]
+,
+6:[
+ {title:"Dialogue — Meet the family",blurb:"Ane shows Tom a family photo.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Nire familia — My family</h2></div>
+<div class="prose"><p>Over coffee, Ane shows Tom a photo on her phone.</p></div>
+<div class="dlg">
+<div><span class="who">Ane</span><span class="l-bq">Begira, hau nire familia da.</span></div><span class="l-en">Look, this is my family.</span>
+<div><span class="who">Tom</span><span class="l-bq">Nor da hau?</span></div><span class="l-en">Who's this?</span>
+<div><span class="who">Ane</span><span class="l-bq">Hori nire ama da, eta hau nire aita.</span></div><span class="l-en">That's my mother, and this is my father.</span>
+<div><span class="who">Tom</span><span class="l-bq">Anaia-arrebarik baduzu?</span></div><span class="l-en">Do you have any siblings?</span>
+<div><span class="who">Ane</span><span class="l-bq">Bai, anaia bat eta arreba bat ditut. Eta zuk?</span></div><span class="l-en">Yes, I have a brother and a sister. And you?</span>
+<div><span class="who">Tom</span><span class="l-bq">Nik ez dut anaiarik. Alaba bat dut.</span></div><span class="l-en">I don't have any brothers. I have a daughter.</span>
+</div>
+<div class="callout"><strong>Kultura — a Basque quirk worth knowing.</strong> The word for \u201csister\u201d depends on the speaker's gender: a man calls his sister <b class="bq">arreba</b>, a woman calls hers <b class="bq">ahizpa</b>. Likewise a woman's brother can be <b class="bq">neba</b>. Ask your reviewer how their own family uses these.</div>`},
+ {title:"The verb ukan — to have",blurb:"dut, duzu, du… your first transitive verb.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>ukan — to have</h2></div>
+<div class="prose"><p>This is the second great verb. It means \u201chave\u201d, and later it becomes the helper for most action verbs. With one thing owned:</p></div>
+<table class="gt"><thead><tr><th>doer</th><th>ukan</th><th>meaning</th></tr></thead><tbody>
+<tr><td>nik</td><td>dut</td><td>I have (it)</td></tr><tr><td>zuk</td><td>duzu</td><td>you have (it)</td></tr>
+<tr><td>hark</td><td>du</td><td>he/she has (it)</td></tr><tr><td>guk</td><td>dugu</td><td>we have (it)</td></tr>
+<tr><td>zuek</td><td>duzue</td><td>you (pl) have (it)</td></tr><tr><td>haiek</td><td>dute</td><td>they have (it)</td></tr>
+</tbody></table>
+<div class="callout">Notice the doer takes <b class="bq">-k</b>: <b class="bq">nik, zuk, hark</b>. That little <b class="bq">-k</b> is the famous Basque \u201cergative\u201d — you'll meet it head-on in Unit 12. For now, just learn the pairs. Try the <strong>ukan builder</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>Spanish \u201ctengo\u201d is one word; Basque <b class="bq">dut</b> is too, but it also encodes the <em>thing</em> had — change the object to plural and the verb changes (<b class="bq">ditut</b> = I have them).</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · the right form of ukan</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>I have a brother. (Anaia bat ___)</div><input class="ex-input" data-a="dut"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>Do you have a sister? (Arreba bat ___?)</div><input class="ex-input" data-a="duzu"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>She has a daughter. (Alaba bat ___)</div><input class="ex-input" data-a="du"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">4</span>They have a house. (Etxe bat ___)</div><input class="ex-input" data-a="dute"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"My, your, our — possessives",blurb:"nire, zure, bere, gure…",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Norenak</div><h2>Whose is it?</h2></div>
+<table class="gt"><tbody>
+<tr><td>nire</td><td>my</td></tr><tr><td>zure</td><td>your</td></tr><tr><td>bere</td><td>his / her</td></tr>
+<tr><td>gure</td><td>our</td></tr><tr><td>zuen</td><td>your (plural)</td></tr><tr><td>haien</td><td>their</td></tr>
+</tbody></table>
+<div class="prose"><p>They sit before the noun: <b class="bq">nire ama</b> (my mother), <b class="bq">gure etxea</b> (our house), <b class="bq">zure familia</b> (your family).</p></div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · say it in Basque</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>my father</div><input class="ex-input" data-a="nire aita"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>our house</div><input class="ex-input" data-a="gure etxea"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>your family</div><input class="ex-input" data-a="zure familia"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`}
+],
+7:[
+ {title:"Dialogue — Where do you live?",blurb:"Comparing homes and commutes.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Non bizi zara? — Where do you live?</h2></div>
+<div class="dlg">
+<div><span class="who">Maddi</span><span class="l-bq">Non bizi zara?</span></div><span class="l-en">Where do you live?</span>
+<div><span class="who">Jon</span><span class="l-bq">Zarautzen bizi naiz, hondartzatik hurbil. Eta zu?</span></div><span class="l-en">I live in Zarautz, near the beach. And you?</span>
+<div><span class="who">Maddi</span><span class="l-bq">Ni Bilbon. Baina egunero Donostiara noa, lanera.</span></div><span class="l-en">Me in Bilbao. But every day I go to San Sebastián, to work.</span>
+<div><span class="who">Jon</span><span class="l-bq">Bilbotik Donostiara? Urruti dago!</span></div><span class="l-en">From Bilbao to San Sebastián? That's far!</span>
+<div><span class="who">Maddi</span><span class="l-bq">Bai, baina trenez. Etxetik geltokira oinez noa.</span></div><span class="l-en">Yes, but by train. From home to the station I go on foot.</span>
+</div>
+<div class="callout">Spot the three endings at work: <b class="bq">Zarautzen</b> (in), <b class="bq">Donostiara</b> (to), <b class="bq">Bilbotik</b> (from). That trio is the whole grammar of this unit.</div>`},
+ {title:"in, to, from — the place trio",blurb:"-n / -ra / -tik, all glued to the place.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>Standing still, going, coming</h2></div>
+<table class="gt"><thead><tr><th>ending</th><th>meaning</th><th>example</th></tr></thead><tbody>
+<tr><td>-n</td><td>in / at</td><td>tabernan (in the bar)</td></tr>
+<tr><td>-ra</td><td>to (towards)</td><td>tabernara (to the bar)</td></tr>
+<tr><td>-tik</td><td>from</td><td>tabernatik (from the bar)</td></tr>
+</tbody></table>
+<div class="callout">Their question words match: <b class="bq">non?</b> (where), <b class="bq">nora?</b> (where to), <b class="bq">nondik?</b> (where from). Explore in the <strong>in/to/from tool</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>Spanish uses three separate words — <em>en / a / de</em>. Basque uses three suffixes. Same idea, glued on.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · add the right ending to \u201cetxe\u201d (home)</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>at home</div><input class="ex-input" data-a="etxean"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>(to) home</div><input class="ex-input" data-a="etxera"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>from home</div><input class="ex-input" data-a="etxetik"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Home & town",blurb:"Rooms of the house, and 'I live'.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Etxea</div><h2>The home</h2></div>
+<div class="prose"><p><b class="bq">bizi naiz</b> I live · <b class="bq">Non bizi zara?</b> where do you live · <b class="bq">Zarautzen bizi naiz</b> I live in Zarautz.</p>
+<p>Rooms: <b class="bq">sukaldea</b> kitchen · <b class="bq">logela</b> bedroom · <b class="bq">egongela</b> living room · <b class="bq">komuna</b> bathroom · <b class="bq">lorategia</b> garden. Places: <b class="bq">herria</b> town · <b class="bq">auzoa</b> neighbourhood · <b class="bq">pisua</b> flat.</p></div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · translate</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>Where do you live?</div><input class="ex-input" data-a="non bizi zara"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>I live in Zarautz.</div><input class="ex-input" data-a="zarautzen bizi naiz"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>the kitchen</div><input class="ex-input" data-a="sukaldea"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — the baserri.</strong> The traditional Basque farmhouse, the <b class="bq">baserri</b>, gave many families their surnames. If a Basque surname sounds like a landscape (Etxeberria = \u201cnew house\u201d, Mendizabal = \u201cwide mountain\u201d), that's why.</div>`}
+],
+8:[
+ {title:"Dialogue — A morning routine",blurb:"What time everything happens.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Zer ordutan? — At what time?</h2></div>
+<div class="dlg">
+<div><span class="who">Maddi</span><span class="l-bq">Zer ordutan esnatzen zara?</span></div><span class="l-en">What time do you wake up?</span>
+<div><span class="who">Jon</span><span class="l-bq">Zazpietan esnatzen naiz, eta zortzietan gosaltzen dut.</span></div><span class="l-en">I wake up at seven, and I have breakfast at eight.</span>
+<div><span class="who">Maddi</span><span class="l-bq">Eta gero?</span></div><span class="l-en">And then?</span>
+<div><span class="who">Jon</span><span class="l-bq">Gero lan egiten dut. Ordu bata eta erdietan bazkaltzen dut.</span></div><span class="l-en">Then I work. I have lunch at half past one.</span>
+<div><span class="who">Maddi</span><span class="l-bq">Berandu afaltzen duzu?</span></div><span class="l-en">Do you have dinner late?</span>
+<div><span class="who">Jon</span><span class="l-bq">Bai, beti. Hamarretan afaltzen dut!</span></div><span class="l-en">Yes, always. I have dinner at ten!</span>
+</div>`},
+ {title:"Telling the time",blurb:"o'clock, half past, quarter.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Ordua</div><h2>What time is it?</h2></div>
+<div class="prose"><p>Ask <b class="bq">Zer ordu da?</b> One o'clock is singular; from two, it goes plural (like Spanish <em>son las dos</em>):</p></div>
+<table class="gt"><tbody>
+<tr><td>Ordu bata da</td><td>It's one o'clock</td></tr>
+<tr><td>Ordu biak dira</td><td>It's two o'clock</td></tr>
+<tr><td>Hirurak dira</td><td>It's three o'clock</td></tr>
+<tr><td>Laurak eta erdi</td><td>Half past four</td></tr>
+<tr><td>Bostak eta laurden</td><td>Quarter past five</td></tr>
+<tr><td>Seiak laurden gutxi</td><td>Quarter to six</td></tr>
+</tbody></table>
+<div class="callout">To say <em>at</em> a time, add <b class="bq">-etan</b>: <b class="bq">zazpietan</b> (at seven), <b class="bq">hamarretan</b> (at ten).</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · o'clock</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>It's one o'clock.</div><input class="ex-input" data-a="ordu bata da"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>It's three o'clock.</div><input class="ex-input" data-a="hirurak dira"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>at seven</div><input class="ex-input" data-a="zazpietan"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"The habitual present",blurb:"How to say what you do every day.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Ohiturak</div><h2>Saying what you do</h2></div>
+<div class="prose"><p>To describe a habit, take the verb, add <b class="bq">-tzen</b> (or <b class="bq">-ten</b>), then a helper. Transitive verbs (eat, drink) take the <b class="bq">ukan</b> helper; \u201cself\u201d verbs (wake up, get up) take <b class="bq">izan</b>:</p></div>
+<table class="gt"><tbody>
+<tr><td>jan → jaten dut</td><td>I eat</td></tr>
+<tr><td>edan → edaten dut</td><td>I drink</td></tr>
+<tr><td>lan egin → lan egiten dut</td><td>I work</td></tr>
+<tr><td>esnatu → esnatzen naiz</td><td>I wake up</td></tr>
+</tbody></table>
+<div class="callout">The <b class="bq">-tzen</b> part never changes — only the little helper at the end moves for the person. Try the <strong>habitual builder</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>Spanish packs it into one word (<em>como</em>); Basque uses two pieces (<b class="bq">jaten dut</b>) — but the pattern is dead regular, which makes it easy.</div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · make the habit</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>I eat (jan)</div><input class="ex-input" data-a="jaten dut"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>I work (lan egin)</div><input class="ex-input" data-a="lan egiten dut"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>I wake up (esnatu)</div><input class="ex-input" data-a="esnatzen naiz"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — meal times.</strong> The Basque clock runs late: lunch (<b class="bq">bazkaria</b>) around 2pm, dinner (<b class="bq">afaria</b>) from 9pm. The mid-morning <b class="bq">hamaiketako</b> — \u201celevenses\u201d — bridges the gap.</div>`}
+],
+9:[
+ {title:"Dialogue — What do you like?",blurb:"Comparing tastes in music and more.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Zer gustatzen zaizu? — What do you like?</h2></div>
+<div class="dlg">
+<div><span class="who">Ane</span><span class="l-bq">Musika gustatzen zaizu?</span></div><span class="l-en">Do you like music?</span>
+<div><span class="who">Tom</span><span class="l-bq">Bai, asko gustatzen zait. Zuri?</span></div><span class="l-en">Yes, I like it a lot. You?</span>
+<div><span class="who">Ane</span><span class="l-bq">Niri ere bai. Baina ez zait dantza egitea gustatzen!</span></div><span class="l-en">Me too. But I don't like dancing!</span>
+<div><span class="who">Tom</span><span class="l-bq">Eta liburuak? Irakurtzea gustatzen zaizu?</span></div><span class="l-en">And books? Do you like reading?</span>
+<div><span class="who">Ane</span><span class="l-bq">Bai, liburuak asko gustatzen zaizkit. Zinema ere bai.</span></div><span class="l-en">Yes, I like books a lot. Cinema too.</span>
+</div>
+<div class="callout">Notice <b class="bq">gustatzen zaizkit</b> in the last line — the <em>zki</em> shows she likes <em>several</em> things (books, plural).</div>`},
+ {title:"The 'me gusta' pattern",blurb:"zait, zaizu, zaio — who it pleases.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>Liking, the Basque way</h2></div>
+<div class="prose"><p>Basque doesn't say \u201cI like X\u201d. It says \u201cX is pleasing to me\u201d — exactly like Spanish <em>me gusta</em>. The thing is the subject; a little word marks who's pleased:</p></div>
+<table class="gt"><tbody>
+<tr><td>gustatzen zait</td><td>I like it (to me)</td></tr>
+<tr><td>gustatzen zaizu</td><td>you like it</td></tr>
+<tr><td>gustatzen zaio</td><td>he/she likes it</td></tr>
+<tr><td>gustatzen zaigu</td><td>we like it</td></tr>
+<tr><td>gustatzen zaie</td><td>they like it</td></tr>
+<tr><td>gustatzen zaizkit</td><td>I like them (several)</td></tr>
+</tbody></table>
+<div class="callout">Negative: the little word jumps forward — <b class="bq">ez zait gustatzen</b> (I don't like it). Explore the <strong>gustatu tool</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>This is your Spanish <em>me gusta / me gustan</em> mapped one-to-one. <b class="bq">zait</b> = me gusta, <b class="bq">zaizkit</b> = me gustan.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · who likes it?</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>I like it. (Gustatzen ___)</div><input class="ex-input" data-a="zait"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>Do you like it? (Gustatzen ___?)</div><input class="ex-input" data-a="zaizu"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>I like them. (Gustatzen ___)</div><input class="ex-input" data-a="zaizkit"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">4</span>I don't like it. (Ez ___ gustatzen)</div><input class="ex-input" data-a="zait"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Hobbies & opinions",blurb:"Things to like, and how much.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Zaletasunak</div><h2>Hobbies</h2></div>
+<div class="prose"><p><b class="bq">musika entzun</b> listen to music · <b class="bq">irakurri</b> read · <b class="bq">kirola egin</b> do sport · <b class="bq">dantza egin</b> dance · <b class="bq">margotu</b> paint · <b class="bq">sukaldatu</b> cook · <b class="bq">bidaiatu</b> travel · <b class="bq">surf egin</b> surf.</p>
+<p>How much: <b class="bq">asko</b> a lot · <b class="bq">pixka bat</b> a little · <b class="bq">batere ez</b> not at all. Verdicts: <b class="bq">ederra</b> lovely · <b class="bq">interesgarria</b> interesting · <b class="bq">aspergarria</b> boring.</p></div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · put it together</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>I like music a lot. (Musika asko ___ zait)</div><input class="ex-input" data-a="gustatzen"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>to surf</div><input class="ex-input" data-a="surf egin"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>interesting</div><input class="ex-input" data-a="interesgarria"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — jaiak.</strong> Basque social life turns on its festivals (<b class="bq">jaiak</b>) — from village <em>patron-saint</em> days to Bilbao's Aste Nagusia. Music, dancing, food and cider are never far away.</div>`}
+],
+10:[
+ {title:"Dialogue — At the craft market",blurb:"Choosing something by colour.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Koloreak — Colours</h2></div>
+<div class="dlg">
+<div><span class="who">Bezeroa</span><span class="l-bq">Zein polita! Zenbat balio du poltsa gorriak?</span></div><span class="l-en">How pretty! How much is the red bag?</span>
+<div><span class="who">Saltzailea</span><span class="l-bq">Poltsa gorria hogeita bost euro da.</span></div><span class="l-en">The red bag is twenty-five euros.</span>
+<div><span class="who">Bezeroa</span><span class="l-bq">Eta urdina? Merkeagoa da?</span></div><span class="l-en">And the blue one? Is it cheaper?</span>
+<div><span class="who">Saltzailea</span><span class="l-bq">Bai, urdina hogei euro. Txikiagoa da, ordea.</span></div><span class="l-en">Yes, the blue one twenty euros. It's smaller, though.</span>
+<div><span class="who">Bezeroa</span><span class="l-bq">Berdea nahiago dut. Ederra da!</span></div><span class="l-en">I prefer the green one. It's lovely!</span>
+</div>`},
+ {title:"Colours & adjectives",blurb:"Describers follow the noun.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>Describing things</h2></div>
+<div class="prose"><p>Colours and other adjectives come <em>after</em> the noun, and the article <b class="bq">-a</b> rides on the adjective:</p></div>
+<table class="gt"><tbody>
+<tr><td>etxe gorria</td><td>a/the red house</td></tr>
+<tr><td>kotxe berria</td><td>a/the new car</td></tr>
+<tr><td>liburu ona</td><td>a/the good book</td></tr>
+<tr><td>poltsa txikia</td><td>a/the small bag</td></tr>
+</tbody></table>
+<div class="prose"><p>Colours: <b class="bq">gorria</b> red · <b class="bq">urdina</b> blue · <b class="bq">berdea</b> green · <b class="bq">horia</b> yellow · <b class="bq">beltza</b> black · <b class="bq">zuria</b> white · <b class="bq">morea</b> purple.</p></div>
+<div class="callout">Explore in the <strong>adjective tool</strong>. Ask <b class="bq">Nolakoa da?</b> — \u201cwhat's it like?\u201d</div>
+<div class="es-note"><span class="tag">ES</span>Like Spanish, the colour follows the noun (<em>casa roja</em> → <b class="bq">etxe gorria</b>). The twist: Basque puts the article on the adjective, not the noun.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · describe it</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>a red house</div><input class="ex-input" data-a="etxe gorria"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>a new car</div><input class="ex-input" data-a="kotxe berria"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>a small bag</div><input class="ex-input" data-a="poltsa txikia"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Numbers to a hundred",blurb:"Filling in the base-20 ladder.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Ehunera arte</div><h2>Counting to 100</h2></div>
+<table class="gt"><tbody>
+<tr><td>hogei</td><td>20</td></tr><tr><td>hogeita hamar</td><td>30</td></tr>
+<tr><td>berrogei</td><td>40</td></tr><tr><td>berrogeita hamar</td><td>50</td></tr>
+<tr><td>hirurogei</td><td>60</td></tr><tr><td>hirurogeita hamar</td><td>70</td></tr>
+<tr><td>laurogei</td><td>80</td></tr><tr><td>laurogeita hamar</td><td>90</td></tr>
+<tr><td>ehun</td><td>100</td></tr>
+</tbody></table>
+<div class="callout">The tens between are \u201c(a twenty) and ten\u201d: <b class="bq">hogeita hamar</b> = 30, <b class="bq">berrogeita hamar</b> = 50. Add a unit with <b class="bq">-ta</b>: <b class="bq">hogeita bost</b> = 25.</div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · build the number</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>fifty</div><input class="ex-input" data-a="berrogeita hamar"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>sixty</div><input class="ex-input" data-a="hirurogei"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>a hundred</div><input class="ex-input" data-a="ehun"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Zorionak!</strong> That's Level 2 complete — you can now talk about family, home, time, likes and describe the world in colour. <b class="bq">Aurrera, Goazen!</b></div>`}
 ]
 };
 
