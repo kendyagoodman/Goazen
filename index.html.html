@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Goazen">
+<meta name="theme-color" content="#15201D">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%2315201D'/%3E%3Ctext x='90' y='126' font-size='96' font-family='Georgia,serif' font-style='italic' fill='%237FB59B' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
+<title>Goazen — Learn Basque</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F4F0; --bg-card:#FBFCF9; --ink:#15201D; --ink-mid:#48564F; --ink-light:#8B978F;
+    --accent:#2E7D5B; --accent-pale:#DFEEE6; --border:#D6DED7;
+    --basque:#1F4A3A; --success:#2E7D5B; --success-bg:#E3F1E9; --warn:#B5762A; --warn-bg:#F4E9D6;
+    --c-root:#33372F; --c-root-bg:#E7E9E1; --c-article:#2F6B8A; --c-article-bg:#DEECF2;
+    --c-doer:#C0504A; --c-doer-bg:#F6E3E1; --c-compare:#7E54A3; --c-compare-bg:#ECE3F4;
+    --c-quant:#B5762A; --c-quant-bg:#F4E9D6; --c-describe:#48794F; --c-describe-bg:#E1EFE2;
+    --c-demon:#B0547F; --c-demon-bg:#F5E2EC; --c-verb:#2E7D5B; --c-verb-bg:#DFEEE6;
+    --c-gram:#8A8175; --c-gram-bg:#E9E5DD; --c-person:#C77E2E; --c-person-bg:#F5E7D4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden}
+  .appbar{position:sticky;top:0;z-index:50;background:var(--ink);color:var(--bg);padding:calc(env(safe-area-inset-top) + .8rem) 1rem .8rem;display:flex;align-items:center;gap:12px;min-height:52px}
+  .appbar .back{background:none;border:none;color:var(--bg);font-size:1.5rem;cursor:pointer;width:26px;display:none;line-height:1}
+  .appbar.has-back .back{display:block}
+  .appbar h1{font-family:'Lora',serif;font-weight:400;font-size:1.02rem;flex:1}
+  .appbar h1 em{font-style:italic;color:#7FB59B}
+  .appbar .gear{background:none;border:none;color:#8B978F;font-size:1.15rem;cursor:pointer}
+  .wrap{max-width:680px;margin:0 auto;padding:1.25rem 1.1rem calc(env(safe-area-inset-bottom) + 4rem)}
+  .screen{display:none;animation:fade .25s ease}.screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .hero{margin:.5rem 0 1.4rem}
+  .hero h2{font-family:'Lora',serif;font-weight:400;font-size:1.6rem;margin-bottom:.3rem}
+  .hero h2 em{font-style:italic;color:var(--ink-mid)}
+  .hero p{font-size:.88rem;color:var(--ink-mid)}
+  .badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:var(--accent-pale);padding:3px 9px;border-radius:99px;margin-bottom:.8rem}
+  .card{background:var(--bg-card);border:.5px solid var(--border);border-radius:15px;padding:1.2rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .tap-card{cursor:pointer;transition:transform .12s}.tap-card:active{transform:scale(.985)}
+  .kicker{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+  .card h3{font-family:'Lora',serif;font-weight:400;font-size:1.25rem;margin-bottom:.15rem}
+  .card h3 em{font-style:italic;color:var(--ink-mid)}
+  .card .sub{font-size:.83rem;color:var(--ink-light)}
+  .prog-track{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:1rem}
+  .prog-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+  .prog-label{font-size:.7rem;color:var(--ink-light);font-family:'DM Mono',monospace;margin-top:.5rem}
+  .soon-card{background:none;border:1px dashed var(--border);border-radius:15px;padding:1rem 1.2rem;text-align:center;color:var(--ink-light);font-size:.83rem}
+  .mode-card{display:flex;align-items:center;gap:1rem}
+  .mode-icon{font-size:1.4rem;width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .mode-card .mc-body h3{font-size:1.1rem;margin-bottom:.1rem}.mode-card .mc-body p{font-size:.8rem;color:var(--ink-light);line-height:1.4}
+  .sec-title{font-family:'DM Mono',monospace;font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-light);margin:1.5rem 0 .75rem}
+  .phase-row{display:flex;align-items:center;gap:12px;background:var(--bg-card);border:.5px solid var(--border);border-radius:13px;padding:.95rem 1.1rem;margin-bottom:.7rem;cursor:pointer;transition:transform .12s}
+  .phase-row:active{transform:scale(.985)}
+  .phase-num{font-family:'DM Mono',monospace;font-size:.8rem;width:30px;height:30px;border-radius:8px;background:var(--accent-pale);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:500}
+  .phase-row.done .phase-num{background:var(--success-bg);color:var(--success)}
+  .phase-body{flex:1}.phase-body h4{font-size:.95rem;font-weight:500;margin-bottom:.1rem}.phase-body p{font-size:.76rem;color:var(--ink-light);line-height:1.35}
+  .phase-check{font-size:1rem;color:var(--success);opacity:0}.phase-row.done .phase-check{opacity:1}
+  .phase-head{margin-bottom:1.2rem}.phase-head .kicker{margin-bottom:.5rem}
+  .phase-head h2{font-family:'Lora',serif;font-weight:400;font-size:1.4rem;line-height:1.25}
+  .prose{font-size:.95rem;line-height:1.75;color:var(--ink);margin-bottom:1rem}.prose p{margin-bottom:.8rem}.prose strong{font-weight:500}
+  b.bq{font-family:'Lora',serif;font-style:italic;font-weight:400;color:var(--basque)}
+  .dlg{background:var(--bg-card);border:.5px solid var(--border);border-radius:12px;padding:1.1rem 1.2rem;margin:1rem 0;font-size:.92rem;line-height:1.85}
+  .dlg .who{font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);display:inline-block;min-width:64px}
+  .dlg .l-bq{font-family:'Lora',serif;font-style:italic;color:var(--basque)}
+  .dlg .l-en{color:var(--ink-light);font-size:.8rem;display:block;margin:.1rem 0 .6rem 64px}
+  .dlg .pron{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--ink-light);font-style:normal}
+  table.gt{width:100%;border-collapse:collapse;font-size:.86rem;margin:1rem 0}
+  table.gt th{text-align:left;font-weight:500;font-size:.68rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);padding:6px 10px;border-bottom:.5px solid var(--border)}
+  table.gt td{padding:6px 10px;border-bottom:.5px solid var(--border);vertical-align:top}
+  table.gt td:first-child{font-family:'Lora',serif;font-style:italic;color:var(--basque);white-space:nowrap}
+  table.gt tr:last-child td{border-bottom:none}
+  .callout{border-left:3px solid var(--accent);padding:.8rem 1rem;margin:1rem 0;background:var(--accent-pale);border-radius:0 8px 8px 0;font-size:.86rem;line-height:1.65;color:var(--ink-mid)}
+  .callout strong{color:var(--ink);font-weight:500}
+  .es-note{border-left:3px solid var(--c-quant);background:var(--c-quant-bg);padding:.7rem 1rem;border-radius:0 8px 8px 0;margin:1rem 0;font-size:.84rem;color:#7a4f12}
+  .es-note .tag{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
+  .phase-nav{display:flex;justify-content:space-between;gap:10px;margin-top:1.5rem;padding-top:1.2rem;border-top:.5px solid var(--border)}
+  .pn-btn{padding:10px 18px;border-radius:10px;font-size:.84rem;cursor:pointer;border:.5px solid var(--border);background:none;color:var(--ink-mid)}
+  .pn-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);flex:1;text-align:center}
+  .ex{background:var(--bg-card);border:.5px solid var(--border);border-radius:12px;padding:1.1rem;margin:1.1rem 0}
+  .ex-label{font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.8rem}
+  .ex-item{margin-bottom:.9rem}.ex-q{font-size:.9rem;margin-bottom:.35rem}.ex-q .num{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--ink-light);margin-right:5px}
+  .ex-input{width:100%;padding:8px 11px;font-size:.9rem;font-family:'Lora',serif;font-style:italic;border:.5px solid var(--border);border-radius:7px;background:var(--bg);color:var(--basque);outline:none}
+  .ex-input:focus{border-color:var(--accent)}.ex-input.correct{border-color:var(--success);background:var(--success-bg)}.ex-input.wrong{border-color:var(--c-doer);background:#F9ECEC}
+  .ex-fb{font-size:.74rem;font-family:'DM Mono',monospace;min-height:14px;margin-top:3px}.ex-fb.ok{color:var(--success)}.ex-fb.no{color:var(--c-doer)}
+  .ex-btns{display:flex;gap:8px;margin-top:.6rem}.ex-btns button{font-size:.78rem;padding:7px 14px;border-radius:8px;cursor:pointer}
+  .ck{background:var(--accent);color:#fff;border:none}.sh{background:none;border:.5px solid var(--border);color:var(--ink-mid)}
+  .pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem}
+  .pill{font-size:.78rem;padding:7px 13px;border-radius:8px;border:.5px solid var(--border);background:var(--bg-card);cursor:pointer;color:var(--ink-mid);display:flex;gap:6px;align-items:center}
+  .pill .pn{font-family:'DM Mono',monospace;font-size:.66rem;opacity:.55}.pill.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .subpanel{display:none}.subpanel.active{display:block;animation:fade .25s}
+  .legend{background:var(--bg-card);border:.5px solid var(--border);border-radius:12px;padding:.85rem 1rem;margin-bottom:1.2rem}
+  .legend h4{font-family:'DM Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-light);margin-bottom:.55rem}
+  .legend-grid{display:flex;flex-wrap:wrap;gap:5px}
+  .leg-chip{display:inline-flex;align-items:center;gap:5px;font-size:.7rem;padding:2px 9px 2px 7px;border-radius:99px;font-family:'DM Mono',monospace}
+  .leg-dot{width:8px;height:8px;border-radius:2px}
+  .fn-root{color:var(--c-root)}.bgfn-root{background:var(--c-root-bg)}.fn-person{color:var(--c-person)}.bgfn-person{background:var(--c-person-bg)}
+  .fn-verb{color:var(--c-verb)}.bgfn-verb{background:var(--c-verb-bg)}.fn-demon{color:var(--c-demon)}.bgfn-demon{background:var(--c-demon-bg)}
+  .fn-article{color:var(--c-article)}.bgfn-article{background:var(--c-article-bg)}.fn-gram{color:var(--c-gram)}.bgfn-gram{background:var(--c-gram-bg)}
+  /* izan builder */
+  .izan-stage{background:var(--bg-card);border:.5px solid var(--border);border-radius:14px;padding:1.5rem 1.2rem;text-align:center}
+  .izan-prompt{font-size:.72rem;color:var(--ink-light);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.2rem}
+  .person-row{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-bottom:1.5rem}
+  .person-chip{font-family:'Lora',serif;font-style:italic;font-size:1rem;padding:7px 15px;border-radius:99px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;color:var(--c-person)}
+  .person-chip.active{background:var(--c-person);color:#fff;border-color:var(--c-person)}
+  .izan-sentence{font-family:'Lora',serif;font-style:italic;font-size:1.9rem;min-height:50px;display:flex;justify-content:center;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:.4rem}
+  .izan-sentence .w-person{color:var(--c-person)}.izan-sentence .w-verb{color:var(--c-verb);background:var(--c-verb-bg);padding:0 7px;border-radius:6px}
+  .izan-en{font-size:1.05rem;color:var(--ink);margin-top:1.1rem}
+  .izan-es{font-size:.85rem;color:var(--ink-light);font-style:italic;margin-top:3px}
+  .izan-es::before{content:'ES ';font-family:'DM Mono',monospace;font-style:normal;font-size:.58rem;opacity:.7}
+  .anat-sentence{background:var(--bg-card);border:.5px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1rem}
+  .anat-line{display:flex;flex-wrap:wrap;align-items:flex-start;gap:2px;margin-bottom:.7rem;line-height:2.1}
+  .tok{font-family:'Lora',serif;font-style:italic;font-size:1.2rem;cursor:pointer;border-radius:4px;padding:0 2px;border-bottom:2.5px solid transparent}
+  .tok.sel{box-shadow:0 0 0 2px currentColor inset}.tok-space{width:5px}
+  .anat-en{font-size:.83rem;color:var(--ink-mid);padding-top:.5rem;border-top:.5px dashed var(--border)}
+  .anat-detail{margin-top:.7rem;background:var(--bg);border-radius:8px;padding:.75rem .85rem;font-size:.84rem;min-height:40px;color:var(--ink-mid)}
+  .anat-detail.empty{color:var(--ink-light);font-style:italic;font-size:.78rem}
+  .anat-detail .d-role{font-family:'DM Mono',monospace;font-size:.56rem;text-transform:uppercase;letter-spacing:.07em;padding:2px 7px;border-radius:99px;margin-right:8px;white-space:nowrap}
+  .anat-detail .d-bq{font-family:'Lora',serif;font-style:italic;font-weight:500}
+  .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:520px){.cards-grid{grid-template-columns:1fr}}
+  .flip-card{height:185px;perspective:1200px;cursor:pointer}
+  .flip-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+  .flip-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;border:.5px solid var(--border);padding:1rem;display:flex;flex-direction:column}
+  .flip-front{background:var(--ink);color:var(--bg);justify-content:center;align-items:center;text-align:center}
+  .flip-front .fc-concept{font-family:'Lora',serif;font-size:1.05rem;font-style:italic;margin-bottom:.4rem}
+  .flip-front .fc-hint{font-size:.66rem;font-family:'DM Mono',monospace;color:#8B978F}
+  .flip-back{background:var(--bg-card);transform:rotateY(180deg);gap:.4rem;overflow-y:auto}
+  .cmp-row{display:flex;gap:7px;font-size:.78rem;line-height:1.4}
+  .cmp-lang{font-family:'DM Mono',monospace;font-size:.54rem;font-weight:500;padding:2px 5px;border-radius:4px;height:fit-content;margin-top:2px}
+  .cmp-en{background:#E5E5E5;color:#444}.cmp-es{background:#F4E9D6;color:#9A6B1E}.cmp-eu{background:var(--c-verb-bg);color:var(--c-verb)}
+  .cmp-text{flex:1}.cmp-text .eu-word{font-family:'Lora',serif;font-style:italic;color:var(--c-root);font-size:.9rem}
+  .cmp-note{font-size:.72rem;color:var(--ink-light);font-style:italic;margin-top:auto;padding-top:.4rem;border-top:.5px dashed var(--border)}
+  .dec-toggle{display:flex;justify-content:center;background:var(--bg);border-radius:99px;padding:4px;width:fit-content;margin:0 auto 1rem;border:.5px solid var(--border)}
+  .dec-opt{font-size:.8rem;padding:8px 18px;border-radius:99px;border:none;background:none;cursor:pointer;color:var(--ink-mid)}
+  .dec-opt.active{background:var(--accent);color:#fff}
+  .fc-sectionbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+  .fc-secbtn{font-size:.7rem;font-family:'DM Mono',monospace;padding:5px 10px;border-radius:99px;border:.5px solid var(--border);background:none;cursor:pointer;color:var(--ink-mid)}
+  .fc-secbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .fc-stage{perspective:1400px;margin-bottom:1rem}
+  .fc-card{position:relative;width:100%;min-height:250px;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
+  .fc-card.flipped{transform:rotateY(180deg)}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;border:.5px solid var(--border);background:var(--bg-card);box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1.4rem;text-align:center}
+  .fc-back{transform:rotateY(180deg)}
+  .fc-word{font-family:'Lora',serif;font-style:italic;font-size:1.9rem;color:var(--basque);margin-bottom:.5rem}
+  .fc-en{font-size:1.5rem;color:var(--ink);line-height:1.4}
+  .fc-tap{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:.64rem;font-family:'DM Mono',monospace;color:var(--ink-light)}
+  .fc-hook{margin-top:.9rem;font-size:.78rem;color:var(--ink-mid);max-width:92%}
+  .fc-hook .hook-tag{font-family:'DM Mono',monospace;font-size:.54rem;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:99px;margin-right:6px}
+  .tag-link{background:var(--c-describe-bg);color:var(--c-describe)}.tag-logic{background:var(--c-compare-bg);color:var(--c-compare)}
+  .tag-hook{background:var(--c-quant-bg);color:var(--c-quant)}.tag-mine{background:var(--c-article-bg);color:var(--c-article)}
+  .fc-status{position:absolute;top:13px;right:15px;font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 8px;border-radius:99px}
+  .st-known{background:var(--success-bg);color:var(--success)}.st-learning{background:var(--warn-bg);color:var(--warn)}
+  .fc-controls{display:flex;gap:8px;margin-bottom:.6rem}
+  .fc-btn{flex:1;padding:11px;border-radius:10px;border:.5px solid var(--border);background:var(--bg-card);cursor:pointer;font-size:.84rem;color:var(--ink-mid)}
+  .fc-btn.known{border-color:var(--success);color:var(--success)}
+  .fc-nav{display:flex;justify-content:space-between;align-items:center;font-size:.76rem;color:var(--ink-light);font-family:'DM Mono',monospace}
+  .fc-nav button{background:none;border:.5px solid var(--border);border-radius:8px;padding:7px 14px;cursor:pointer;color:var(--ink-mid);font-family:'DM Sans',sans-serif;font-size:.78rem}
+  .hook-edit{width:100%;margin-top:.7rem;padding:7px 10px;border:.5px dashed var(--border);border-radius:8px;background:var(--bg);font-family:'DM Sans',sans-serif;font-size:.78rem;color:var(--ink);resize:none}
+  .game-card{background:var(--bg-card);border:.5px solid var(--border);border-radius:14px;padding:1.3rem;text-align:center}
+  .game-stat{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--ink-light);margin-bottom:1rem}.game-stat b{color:var(--accent)}
+  .btn-primary{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:11px 22px;font-size:.86rem;cursor:pointer}
+  .btn-ghost{background:none;border:.5px solid var(--border);border-radius:10px;padding:10px 18px;font-size:.82rem;cursor:pointer;color:var(--ink-mid)}
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:1rem 0}
+  .match-tile{padding:13px 8px;border-radius:10px;border:.5px solid var(--border);background:var(--bg-card);cursor:pointer;font-size:.88rem;transition:all .15s;min-height:50px;display:flex;align-items:center;justify-content:center;text-align:center}
+  .match-tile.eu{font-family:'Lora',serif;font-style:italic;color:var(--basque)}
+  .match-tile.sel{border-color:var(--accent);background:var(--accent-pale)}.match-tile.done{opacity:0;pointer-events:none;transform:scale(.8)}
+  .match-tile.wrong{border-color:var(--c-doer);background:var(--c-doer-bg);animation:shake .35s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  .sp-word{font-family:'Lora',serif;font-style:italic;font-size:2.1rem;color:var(--basque);margin:1rem 0}
+  .sp-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+  .sp-opt{padding:13px 8px;border-radius:10px;border:.5px solid var(--border);background:var(--bg-card);cursor:pointer;font-size:.86rem}
+  .sp-opt.correct{border-color:var(--success);background:var(--success-bg)}.sp-opt.wrong{border-color:var(--c-doer);background:var(--c-doer-bg)}
+  .sp-bar{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:.74rem;color:var(--ink-light);margin-bottom:.5rem}
+  .backup-box p{font-size:.84rem;color:var(--ink-mid);margin-bottom:1rem;line-height:1.6}.backup-row{display:flex;gap:8px}
+  .footer-note{margin-top:1.5rem;padding:.9rem 1.1rem;background:var(--bg-card);border:.5px solid var(--border);border-radius:10px;font-size:.8rem;color:var(--ink-mid);line-height:1.6}
+  .footer-note strong{color:var(--ink);font-weight:500}
+  .feedback-link{color:var(--accent);text-decoration:underline;cursor:pointer}
+  /* dialect layer */
+  .dia-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-card,var(--bg-card));border:.5px solid var(--border);border-radius:10px;padding:.5rem .8rem;margin-bottom:1rem;font-size:.8rem;color:var(--ink-mid)}
+  .dia-switch{width:42px;height:24px;border-radius:99px;background:var(--border);border:none;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s}
+  .dia-switch.on{background:var(--accent)}
+  .dia-switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+  .dia-switch.on::after{transform:translateX(18px)}
+  .dia-tag{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.03em;padding:2px 9px;border-radius:99px;background:var(--c-gram-bg);color:var(--ink-mid);border:.5px solid var(--border);display:inline-flex;align-items:center;gap:4px}
+  .dia-flag{font-size:.5rem;text-transform:uppercase;letter-spacing:.06em;opacity:.7}
+  .dia-reveal{font-family:'DM Mono',monospace;font-size:.6rem;padding:1px 8px;border-radius:99px;background:var(--c-gram-bg);color:var(--ink-mid);border:.5px solid var(--border);cursor:pointer;white-space:nowrap}
+  .dia-reveal.open{background:var(--accent-pale);color:var(--accent);border-color:var(--accent)}
+  .dia-val{font-family:'Lora',serif;font-style:italic;color:var(--accent);font-size:.9rem}
+  .dia-note{margin-top:.5rem;font-size:.72rem;color:var(--ink-light);font-style:italic}
+</style>
+</head>
+<body>
+<div class="appbar" id="appbar">
+  <button class="back" onclick="goBack()">‹</button>
+  <h1 id="appbar-title"><em>Goazen</em> · Basque</h1>
+  <button class="gear" onclick="nav('backup')">⛭</button>
+</div>
+<div class="wrap">
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="hero"><span class="badge">Pilot · Level 1</span><h2>Goazen</h2><p>Learn Basque — properly, and beautifully. Let's go.</p></div>
+    <div id="unit-list"></div>
+    <div class="footer-note"><strong>Beta testing:</strong> this is an early prototype. Notes on anything — wording, naturalness, what's confusing — are gold. All content is original and pending native-speaker review. <span class="feedback-link" onclick="nav('backup')">Export progress →</span></div>
+  </div>
+
+  <!-- UNIT HUB -->
+  <div class="screen" id="screen-unit">
+    <div class="hero"><h2 id="unit-hub-title"></h2><p id="unit-hub-theme"></p></div>
+    <div class="card tap-card mode-card" onclick="nav('phases')"><div class="mode-icon bgfn-verb" style="color:var(--c-verb)">◧</div><div class="mc-body"><h3 id="unit-hub-lessons">Lessons</h3><p>Dialogue, grammar, and exercises, phase by phase.</p></div></div>
+    <div class="card tap-card mode-card" onclick="nav('vocab')"><div class="mode-icon bgfn-quant" style="color:var(--c-quant)">◉</div><div class="mc-body"><h3 id="unit-hub-vocab">Vocabulary</h3><p>Flashcards with hooks, plus two games.</p></div></div>
+    <div class="card tap-card mode-card" onclick="nav('tools')"><div class="mode-icon bgfn-person" style="color:var(--c-person)">◫</div><div class="mc-body"><h3>Grammar tools</h3><p id="unit-hub-tool">Interactive builder, sentence anatomy, EN/ES/EU cards.</p></div></div>
+  </div>
+
+  <!-- PHASES LIST -->
+  <div class="screen" id="screen-phases"><div class="hero"><h2>Lessons</h2><p>Short phases. Pause after each — tap when it's sunk in.</p></div><div id="phases-list"></div></div>
+  <div class="screen" id="screen-phase"><div id="phase-content"></div></div>
+
+  <!-- VOCAB HUB -->
+  <div class="screen" id="screen-vocab">
+    <div class="hero"><h2>Vocabulary</h2><p id="fc-prog-text">Flashcards to meet the words, games to lock them in.</p></div>
+    <div class="card tap-card mode-card" onclick="nav('flashcards')"><div class="mode-icon bgfn-article" style="color:var(--c-article)">▭</div><div class="mc-body"><h3>Flashcards</h3><p>Grouped by theme, with memory hooks.</p></div></div>
+    <div class="card tap-card mode-card" onclick="startMatch()"><div class="mode-icon bgfn-demon" style="color:var(--c-demon)">⧉</div><div class="mc-body"><h3>Match-up</h3><p>Pair Basque with English against the clock.</p></div></div>
+    <div class="card tap-card mode-card" onclick="startSpeed()"><div class="mode-icon bgfn-verb" style="color:var(--c-verb)">⚡</div><div class="mc-body"><h3>Speed recall</h3><p>Rapid-fire multiple choice with a streak.</p></div></div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="screen" id="screen-tools">
+    <div class="legend"><h4>Colour key</h4><div class="legend-grid">
+      <span class="leg-chip bgfn-root" style="color:var(--c-root)"><span class="leg-dot" style="background:var(--c-root)"></span>root</span>
+      <span class="leg-chip bgfn-person" style="color:var(--c-person)"><span class="leg-dot" style="background:var(--c-person)"></span>person</span>
+      <span class="leg-chip bgfn-verb" style="color:var(--c-verb)"><span class="leg-dot" style="background:var(--c-verb)"></span>verb</span>
+      <span class="leg-chip bgfn-demon" style="color:var(--c-demon)"><span class="leg-dot" style="background:var(--c-demon)"></span>demonstr.</span>
+      <span class="leg-chip bgfn-article" style="color:var(--c-article)"><span class="leg-dot" style="background:var(--c-article)"></span>article</span>
+      <span class="leg-chip bgfn-describe" style="color:var(--c-describe)"><span class="leg-dot" style="background:var(--c-describe)"></span>-ko / -n</span>
+      <span class="leg-chip bgfn-quant" style="color:var(--c-quant)"><span class="leg-dot" style="background:var(--c-quant)"></span>quantity</span>
+    </div></div>
+    <div class="pills">
+      <button class="pill active" onclick="toolTab(0,this)"><span class="pn">01</span><span id="pill-builder-label">Builder</span></button>
+      <button class="pill" onclick="toolTab(1,this)"><span class="pn">02</span>Anatomy</button>
+      <button class="pill" onclick="toolTab(2,this)"><span class="pn">03</span>EN/ES/EU</button>
+    </div>
+    <div class="subpanel active" id="tool-0">
+      <div class="dia-toggle-row" id="dia-row-tool" style="display:none"><span>Dialect notes <span style="color:var(--ink-light)">· show Bizkaian forms</span></span><button class="dia-switch" id="dia-switch-tool" onclick="toggleDialect()" aria-label="Toggle dialect notes"></button></div>
+      <div id="builder-mount"></div>
+    </div>
+    <div class="subpanel" id="tool-1"><div id="anatomy-container"></div></div>
+    <div class="subpanel" id="tool-2"><div class="cards-grid" id="cards-grid"></div></div>
+  </div>
+
+  <!-- FLASHCARDS -->
+  <div class="screen" id="screen-flashcards">
+    <div class="dec-toggle" style="margin-bottom:1rem">
+      <button class="dec-opt active" id="fcdir-produce" onclick="setFcDir('produce')">EN → Basque</button>
+      <button class="dec-opt" id="fcdir-recognise" onclick="setFcDir('recognise')">Basque → EN</button>
+    </div>
+    <div class="fc-sectionbar" id="fc-sectionbar"></div>
+    <div class="dia-toggle-row" id="dia-row-fc" style="display:none"><span>Dialect notes <span style="color:var(--ink-light)">· Bizkaian variants</span></span><button class="dia-switch" id="dia-switch-fc" onclick="toggleDialect()" aria-label="Toggle dialect notes"></button></div>
+    <div class="fc-stage"><div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-face fc-front"><div class="fc-status" id="fc-status-front"></div><div id="fc-front-text"></div><div class="fc-tap" id="fc-tap-hint">recall, then tap to check</div></div>
+      <div class="fc-face fc-back"><div class="fc-status" id="fc-status-back"></div><div id="fc-back-text"></div><div class="fc-hook" id="fc-hook"></div></div>
+    </div></div>
+    <textarea class="hook-edit" id="hook-edit" rows="2" placeholder="✎ Add your own memory hook…" onchange="saveHook()" onclick="event.stopPropagation()"></textarea>
+    <div class="fc-controls" style="margin-top:.7rem"><button class="fc-btn" onclick="rateCard('learning')">Still learning</button><button class="fc-btn known" onclick="rateCard('known')">Got it ✓</button></div>
+    <div class="fc-nav"><button onclick="prevCard()">‹ Prev</button><span id="fc-counter"></span><button onclick="nextCard()">Next ›</button></div>
+  </div>
+
+  <!-- MATCH -->
+  <div class="screen" id="screen-match"><div class="game-card">
+    <div class="game-stat">Time <b id="match-time">0.0s</b> · Best <b id="match-best">—</b></div>
+    <div class="match-grid" id="match-grid"></div>
+    <div id="match-done" style="display:none"><p style="font-family:'Lora',serif;font-size:1.15rem;font-style:italic;margin-bottom:.3rem" id="match-result"></p><button class="btn-primary" onclick="startMatch()">Play again</button></div>
+  </div></div>
+
+  <!-- SPEED -->
+  <div class="screen" id="screen-speed"><div class="game-card">
+    <div class="sp-bar"><span>Q <b id="sp-qnum">1</b>/10</span><span>Streak <b id="sp-streak">0</b></span><span>Best <b id="sp-best">—</b></span></div>
+    <div class="sp-word" id="sp-word"></div><div class="sp-options" id="sp-options"></div>
+    <div id="sp-done" style="display:none"><p style="font-family:'Lora',serif;font-size:1.25rem;font-style:italic;margin:.5rem 0" id="sp-result"></p><button class="btn-primary" onclick="startSpeed()">Play again</button></div>
+  </div></div>
+
+  <!-- BACKUP -->
+  <div class="screen" id="screen-backup">
+    <div class="hero"><h2>Backup</h2><p>Save or restore your progress and hooks.</p></div>
+    <div class="card backup-box">
+      <p>Progress and custom hooks live on this device. Export a backup, or import one to move to a new phone.</p>
+      <div class="backup-row"><button class="btn-primary" onclick="exportData()">Export backup</button><button class="btn-ghost" onclick="document.getElementById('import-file').click()">Import</button><input type="file" id="import-file" accept="application/json" style="display:none" onchange="importData(event)"></div>
+      <div id="backup-msg" style="font-size:.8rem;color:var(--success);margin-top:.8rem;min-height:18px"></div>
+    </div>
+    <div class="footer-note" style="margin-top:1rem"><strong>Reset:</strong> <button onclick="resetAll()" style="background:none;border:none;color:var(--c-doer);text-decoration:underline;cursor:pointer;font-size:inherit;font-family:inherit">clear everything</button> on this device.</div>
+  </div>
+</div>
+<script>
+/* ============ GOAZEN — LEVEL 1 (Units 1–5) · original content ============ */
+/* Each unit: phases[], vocab[], secNames, anatomy[], contrast[], tool{}, dialect flag */
+
+const UNITS=[
+/* ==================== UNIT 1 ==================== */
+{
+ id:1, code:"Unit 1", title:"Kaixo!", en:"Hello!",
+ theme:"Greetings · the verb izan · introducing yourself",
+ secNames:{GR:"Greetings",CO:"Courtesy",BA:"Basics"},
+ vocab:[
+  {bq:"kaixo",en:"hi, hello",s:"GR",hk:"hook",hook:"\u201ckai-SHO\u201d — x is always \u201csh\u201d in Basque"},
+  {bq:"egun on",en:"good morning",s:"GR",hk:"logic",hook:"egun (day) + on (good)"},
+  {bq:"arratsalde on",en:"good afternoon",s:"GR",hk:"logic",hook:"arratsalde + on (good)",dia:"Biz · arrasti on"},
+  {bq:"gabon",en:"good evening, good night",s:"GR",hk:"logic",hook:"gau (night) + on (good)"},
+  {bq:"agur",en:"goodbye",s:"GR",hk:"",hook:"",dia:"Biz · aio (informal)"},
+  {bq:"gero arte",en:"see you later",s:"GR",hk:"logic",hook:"gero (later) + arte (until)"},
+  {bq:"ikusi arte",en:"see you (lit. until [I] see)",s:"GR",hk:"logic",hook:"ikusi (see) + arte (until)"},
+  {bq:"bihar arte",en:"see you tomorrow",s:"GR",hk:"logic",hook:"bihar (tomorrow) + arte"},
+  {bq:"ongi etorri",en:"welcome",s:"GR",hk:"logic",hook:"ongi (well) + etorri (come)"},
+  {bq:"zer moduz?",en:"how are you?",s:"GR",hk:"hook",hook:"\u201cmoduz\u201d \u2248 Spanish \u201cmodo\u201d",dia:"Biz · zelan zagoz?"},
+  {bq:"ondo",en:"well, fine",s:"GR",hk:"",hook:""},
+  {bq:"oso ondo",en:"very well",s:"GR",hk:"logic",hook:"oso (very) + ondo (well)"},
+  {bq:"hala-hola",en:"so-so",s:"GR",hk:"hook",hook:"sing-song \u201chala-hola\u201d = wobbly"},
+  {bq:"gaizki",en:"badly, not well",s:"GR",hk:"",hook:""},
+  {bq:"eta zu?",en:"and you?",s:"GR",hk:"logic",hook:"eta (and) + zu (you)"},
+  {bq:"mesedez",en:"please",s:"CO",hk:"",hook:""},
+  {bq:"eskerrik asko",en:"thank you very much",s:"CO",hk:"hook",hook:"esker = thanks; asko = a lot"},
+  {bq:"mila esker",en:"thanks (a thousand thanks)",s:"CO",hk:"logic",hook:"mila (thousand) + esker"},
+  {bq:"ez horregatik",en:"you're welcome",s:"CO",hk:"",hook:""},
+  {bq:"barkatu",en:"sorry; excuse me",s:"CO",hk:"hook",hook:"\u2248 Spanish disculpa / pardon"},
+  {bq:"ez dut ulertzen",en:"I don't understand",s:"CO",hk:"logic",hook:"ez (not) + ulertu (understand)"},
+  {bq:"ni",en:"I",s:"BA",hk:"",hook:""},
+  {bq:"zu",en:"you (one person)",s:"BA",hk:"",hook:""},
+  {bq:"hau",en:"this; this is",s:"BA",hk:"",hook:""},
+  {bq:"naiz",en:"I am",s:"BA",hk:"logic",hook:"ni + naiz = I am",dia:"Biz · naz"},
+  {bq:"zara",en:"you are",s:"BA",hk:"logic",hook:"zu + zara = you are"},
+  {bq:"da",en:"(he/she/it) is",s:"BA",hk:"",hook:""},
+  {bq:"bai",en:"yes",s:"BA",hk:"",hook:""},
+  {bq:"ez",en:"no; not",s:"BA",hk:"",hook:""},
+  {bq:"eta",en:"and",s:"BA",hk:"",hook:""},
+  {bq:"nor?",en:"who?",s:"BA",hk:"",hook:""},
+  {bq:"izena",en:"name",s:"BA",hk:"hook",hook:"holds \u201cname\u201d inside it"},
+  {bq:"laguna",en:"the friend",s:"BA",hk:"",hook:""},
+  {bq:"euskalduna",en:"a Basque speaker",s:"BA",hk:"logic",hook:"euskal (Basque) + dun (one who has it)"},
+  {bq:"pozten naiz",en:"pleased to meet you (lit. I'm glad)",s:"BA",hk:"logic",hook:"poz (joy) + naiz (I am)"}
+ ],
+ tool:{type:"explorer",title:"izan — to be",prompt:"tap a person — watch izan agree",
+  note:"The verb izan changes shape for each person: naiz, zara, da, gara, zarete, dira. The pronoun is usually dropped — the verb already tells you who.",
+  rows:[
+   {trig:"ni",form:"naiz",en:"I am",es:"(yo) soy",biz:"naz"},
+   {trig:"zu",form:"zara",en:"you are",es:"(tú) eres"},
+   {trig:"hau",form:"da",en:"this is / he-she-it is",es:"es / esto es"},
+   {trig:"gu",form:"gara",en:"we are",es:"(nosotros) somos"},
+   {trig:"zuek",form:"zarete",en:"you are (plural)",es:"(vosotros) sois",biz:"zarie"},
+   {trig:"haiek",form:"dira",en:"they are",es:"(ellos) son"}
+  ]},
+ anatomy:[
+  {en:"I am Maddi.",toks:[{t:"Ni",fn:"person",bq:"ni",note:"\u201cI\u201d — the pronoun. Often dropped, since the verb already shows \u201cI\u201d."},{sp:1},{t:"Maddi",fn:"root",bq:"Maddi",note:"the name — what I am."},{sp:1},{t:"naiz",fn:"verb",bq:"naiz",note:"\u201cam\u201d — the izan form for \u201cI\u201d."}]},
+  {en:"Are you Jon?",toks:[{t:"Jon",fn:"root",bq:"Jon",note:"the name. Key info often comes first."},{sp:1},{t:"zara",fn:"verb",bq:"zara",note:"\u201care\u201d — izan for \u201cyou\u201d. A question needs no extra word; intonation does the work."}]},
+  {en:"This is the friend.",toks:[{t:"Hau",fn:"demon",bq:"hau",note:"\u201cthis\u201d — points things and people out."},{sp:1},{t:"lagun",fn:"root",bq:"lagun",note:"\u201cfriend\u201d — the bare noun."},{t:"a",fn:"article",bq:"-a",note:"\u201cthe\u201d — glued to the noun. lagun \u2192 laguna."},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis\u201d — izan for he/she/it/this."}]}
+ ],
+ contrast:[
+  {concept:"\u201cI am\u201d",rows:[["EN","en","\u201cI am\u201d — pronoun + verb"],["ES","es","\u201c(yo) soy\u201d — pronoun dropped"],["EU","eu","<span class='eu-word'>naiz</span> — one word; ni optional"]],note:"Like Spanish, Basque drops the pronoun — the verb carries the person."},
+  {concept:"\u201cto be\u201d",rows:[["EN","en","one verb: \u201cto be\u201d"],["ES","es","two: ser / estar"],["EU","eu","two: <span class='eu-word'>izan</span> / <span class='eu-word'>egon</span>"]],note:"Basque splits \u201cbe\u201d like Spanish. egon comes in Unit 4."},
+  {concept:"\u201cthank you\u201d",rows:[["EN","en","\u201cthank you\u201d"],["ES","es","\u201cgracias\u201d"],["EU","eu","<span class='eu-word'>eskerrik asko</span>"]],note:"No link to gracias — esker is entirely its own word."},
+  {concept:"pleased to meet you",rows:[["EN","en","\u201cpleased to meet you\u201d"],["ES","es","\u201cencantado/a\u201d"],["EU","eu","<span class='eu-word'>pozten naiz</span> — \u201cI am glad\u201d"]],note:"Basque says it with a full verb: poz (joy) + naiz."}
+ ],
+ dialect:true
+},
+/* ==================== UNIT 2 ==================== */
+{
+ id:2, code:"Unit 2", title:"Nor zara?", en:"Who are you?",
+ theme:"Introductions · where you're from · izan in the plural",
+ secNames:{IN:"Introductions",OR:"Origins",PE:"People"},
+ vocab:[
+  {bq:"nire izena",en:"my name",s:"IN",hk:"logic",hook:"nire (my) + izena (the name)"},
+  {bq:"zure izena",en:"your name",s:"IN",hk:"logic",hook:"zure (your) + izena"},
+  {bq:"nire izena ... da",en:"my name is ...",s:"IN",hk:"",hook:""},
+  {bq:"nor zara zu?",en:"who are you?",s:"IN",hk:"",hook:""},
+  {bq:"hau nire laguna da",en:"this is my friend",s:"IN",hk:"logic",hook:"hau (this) + nire laguna (my friend) + da"},
+  {bq:"abizena",en:"surname",s:"IN",hk:"logic",hook:"abizen — the \u201cafter-name\u201d"},
+  {bq:"gu",en:"we",s:"IN",hk:"",hook:""},
+  {bq:"zuek",en:"you (plural)",s:"IN",hk:"",hook:""},
+  {bq:"haiek",en:"they",s:"IN",hk:"",hook:""},
+  {bq:"gara",en:"we are",s:"IN",hk:"logic",hook:"gu + gara"},
+  {bq:"zarete",en:"you are (plural)",s:"IN",hk:"logic",hook:"zuek + zarete",dia:"Biz · zarie"},
+  {bq:"dira",en:"they are",s:"IN",hk:"logic",hook:"haiek + dira"},
+  {bq:"nongoa zara?",en:"where are you from?",s:"OR",hk:"logic",hook:"non (where) + -go + -a = \u201cof-where\u201d"},
+  {bq:"...koa naiz",en:"I'm from ... (of ...)",s:"OR",hk:"logic",hook:"place + -ko (of) + -a + naiz"},
+  {bq:"Bilbokoa",en:"from Bilbao",s:"OR",hk:"logic",hook:"Bilbo + -ko + -a"},
+  {bq:"Donostiakoa",en:"from San Sebastián",s:"OR",hk:"logic",hook:"Donostia + -ko + -a"},
+  {bq:"Zarauzkoa",en:"from Zarautz",s:"OR",hk:"logic",hook:"Zarautz \u2192 Zarauzko + -a (tz softens to z)"},
+  {bq:"Londreskoa",en:"from London",s:"OR",hk:"logic",hook:"Londres + -ko + -a"},
+  {bq:"herria",en:"town; the people/nation",s:"OR",hk:"hook",hook:"Euskal Herria = the Basque Country"},
+  {bq:"hiria",en:"city",s:"OR",hk:"",hook:""},
+  {bq:"nongoa",en:"where-from (of where)",s:"OR",hk:"",hook:""},
+  {bq:"euskalduna",en:"Basque (speaker)",s:"PE",hk:"logic",hook:"euskal + dun (one who has it)"},
+  {bq:"espainiarra",en:"Spanish (person)",s:"PE",hk:"hook",hook:"España + -ar (from-there)"},
+  {bq:"frantziarra",en:"French (person)",s:"PE",hk:"hook",hook:"Frantzia + -ar"},
+  {bq:"ingelesa",en:"English (person)",s:"PE",hk:"link",hook:"\u2248 inglés"},
+  {bq:"irlandarra",en:"Irish (person)",s:"PE",hk:"hook",hook:"Irlanda + -ar"},
+  {bq:"amerikarra",en:"American (person)",s:"PE",hk:"hook",hook:"Amerika + -ar"},
+  {bq:"laguna",en:"friend",s:"PE",hk:"",hook:""},
+  {bq:"lagunak",en:"friends",s:"PE",hk:"logic",hook:"lagun + -ak (plural \u201cthe\u201d)"},
+  {bq:"mutila",en:"boy",s:"PE",hk:"",hook:""},
+  {bq:"neska",en:"girl",s:"PE",hk:"",hook:""},
+  {bq:"gizona",en:"man",s:"PE",hk:"",hook:""},
+  {bq:"emakumea",en:"woman",s:"PE",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"Where are you from? (-koa)",prompt:"tap a place — build \u201cI'm from there\u201d",
+  note:"To say where you're from, take the place name, add -ko (\u201cof\u201d), then the article -a: Bilbo \u2192 Bilboko \u2192 Bilbokoa. Watch how Zarautz softens its -tz to -z before -ko.",
+  rows:[
+   {trig:"Bilbo",form:"Bilbokoa naiz",en:"I'm from Bilbao",es:"soy de Bilbao"},
+   {trig:"Donostia",form:"Donostiakoa naiz",en:"I'm from San Sebastián",es:"soy de San Sebastián"},
+   {trig:"Zarautz",form:"Zarauzkoa naiz",en:"I'm from Zarautz",es:"soy de Zarautz"},
+   {trig:"Gasteiz",form:"Gasteizkoa naiz",en:"I'm from Vitoria",es:"soy de Vitoria"},
+   {trig:"Londres",form:"Londreskoa naiz",en:"I'm from London",es:"soy de Londres"}
+  ]},
+ anatomy:[
+  {en:"I'm from Zarautz.",toks:[{t:"Zarauz",fn:"root",bq:"Zarautz",note:"the place name (tz softens to z before the ending)."},{t:"ko",fn:"describe",bq:"-ko",note:"\u201cof / from\u201d — the describer suffix."},{t:"a",fn:"article",bq:"-a",note:"\u201cthe\u201d — the article, making it \u201cthe one from Zarautz\u201d."},{sp:1},{t:"naiz",fn:"verb",bq:"naiz",note:"\u201cI am\u201d."}]},
+  {en:"This is my friend.",toks:[{t:"Hau",fn:"demon",bq:"hau",note:"\u201cthis\u201d."},{sp:1},{t:"nire",fn:"person",bq:"nire",note:"\u201cmy\u201d — the possessive."},{sp:1},{t:"lagun",fn:"root",bq:"lagun",note:"\u201cfriend\u201d."},{t:"a",fn:"article",bq:"-a",note:"\u201cthe\u201d."},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis\u201d."}]},
+  {en:"They are friends.",toks:[{t:"Lagun",fn:"root",bq:"lagun",note:"\u201cfriend\u201d."},{t:"ak",fn:"article",bq:"-ak",note:"the PLURAL article \u201cthe\u201d — lagun \u2192 lagunak (friends)."},{sp:1},{t:"dira",fn:"verb",bq:"dira",note:"\u201cthey are\u201d — izan, plural."}]}
+ ],
+ contrast:[
+  {concept:"\u201cthe\u201d (article)",rows:[["EN","en","separate word: \u201cthe friend\u201d"],["ES","es","separate word: \u201cel amigo\u201d"],["EU","eu","glued on: lagun \u2192 <span class='eu-word'>laguna</span>"]],note:"Basque\u2019s \u201cthe\u201d is a suffix (-a), not a separate word."},
+  {concept:"plural \u201cthe\u201d",rows:[["EN","en","\u201cthe friends\u201d — s on noun"],["ES","es","\u201clos amigos\u201d"],["EU","eu","<span class='eu-word'>lagunak</span> — -ak"]],note:"Plural is -ak, replacing singular -a."},
+  {concept:"\u201cfrom (a place)\u201d",rows:[["EN","en","\u201cfrom London\u201d"],["ES","es","\u201cde Londres\u201d"],["EU","eu","<span class='eu-word'>Londreskoa</span> — place+ko+a"]],note:"Basque folds \u201cthe one from X\u201d into one word."},
+  {concept:"nationality -ar",rows:[["EN","en","\u201cFrench\u201d"],["ES","es","\u201cfrancés\u201d"],["EU","eu","<span class='eu-word'>frantziarra</span> — country + -ar"]],note:"Most nationalities: country + -ar + article."}
+ ],
+ dialect:true
+},
+/* ==================== UNIT 3 ==================== */
+{
+ id:3, code:"Unit 3", title:"Hau zer da?", en:"What is this?",
+ theme:"Naming things · this / that · asking about objects",
+ secNames:{OB:"Objects",MK:"At the market",QW:"Question words"},
+ vocab:[
+  {bq:"mahaia",en:"table",s:"OB",hk:"",hook:""},
+  {bq:"aulkia",en:"chair",s:"OB",hk:"",hook:""},
+  {bq:"atea",en:"door",s:"OB",hk:"",hook:""},
+  {bq:"leihoa",en:"window",s:"OB",hk:"",hook:""},
+  {bq:"liburua",en:"book",s:"OB",hk:"",hook:""},
+  {bq:"boligrafoa",en:"pen",s:"OB",hk:"link",hook:"\u2248 bolígrafo"},
+  {bq:"giltza",en:"key",s:"OB",hk:"",hook:""},
+  {bq:"telefonoa",en:"phone",s:"OB",hk:"link",hook:"\u2248 teléfono"},
+  {bq:"poltsa",en:"bag",s:"OB",hk:"",hook:""},
+  {bq:"dirua",en:"money",s:"OB",hk:"",hook:""},
+  {bq:"kotxea",en:"car",s:"OB",hk:"link",hook:"\u2248 coche"},
+  {bq:"ordularia",en:"watch, clock",s:"OB",hk:"logic",hook:"ordu (hour) + -lari"},
+  {bq:"sagarra",en:"apple",s:"MK",hk:"",hook:""},
+  {bq:"tomatea",en:"tomato",s:"MK",hk:"link",hook:"= tomate"},
+  {bq:"gazta",en:"cheese",s:"MK",hk:"",hook:""},
+  {bq:"arraina",en:"fish",s:"MK",hk:"",hook:""},
+  {bq:"barazkiak",en:"vegetables",s:"MK",hk:"",hook:""},
+  {bq:"loreak",en:"flowers",s:"MK",hk:"",hook:""},
+  {bq:"azoka",en:"market",s:"MK",hk:"",hook:""},
+  {bq:"garestia",en:"expensive",s:"MK",hk:"",hook:""},
+  {bq:"merkea",en:"cheap",s:"MK",hk:"",hook:""},
+  {bq:"polita",en:"pretty, nice",s:"MK",hk:"",hook:""},
+  {bq:"hau",en:"this",s:"QW",hk:"",hook:""},
+  {bq:"hori",en:"that",s:"QW",hk:"",hook:""},
+  {bq:"hura",en:"that (over there)",s:"QW",hk:"",hook:""},
+  {bq:"hauek",en:"these",s:"QW",hk:"logic",hook:"hau + -ek"},
+  {bq:"horiek",en:"those",s:"QW",hk:"logic",hook:"hori + -ek (say \u201choiek\u201d)"},
+  {bq:"haiek",en:"those (over there)",s:"QW",hk:"",hook:""},
+  {bq:"zer da hau?",en:"what is this?",s:"QW",hk:"",hook:""},
+  {bq:"zer dira hauek?",en:"what are these?",s:"QW",hk:"",hook:""},
+  {bq:"zer",en:"what",s:"QW",hk:"",hook:""},
+  {bq:"beste bat",en:"another one",s:"QW",hk:"logic",hook:"beste (other) + bat (one)"}
+ ],
+ tool:{type:"explorer",title:"this / that / those",prompt:"tap a pointer — see it change for number",
+  note:"Basque has three degrees of distance (like Spanish este/ese/aquel), each with a plural in -ek. Demonstratives follow the noun: liburu hau = \u201cbook this\u201d = this book.",
+  rows:[
+   {trig:"this",form:"hau",en:"this (near me)",es:"este"},
+   {trig:"that",form:"hori",en:"that (near you)",es:"ese"},
+   {trig:"that yonder",form:"hura",en:"that (over there)",es:"aquel"},
+   {trig:"these",form:"hauek",en:"these",es:"estos"},
+   {trig:"those",form:"horiek",en:"those",es:"esos"},
+   {trig:"those yonder",form:"haiek",en:"those (over there)",es:"aquellos"}
+  ]},
+ anatomy:[
+  {en:"What is this?",toks:[{t:"Zer",fn:"gram",bq:"zer",note:"\u201cwhat\u201d — the question word."},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis\u201d."},{sp:1},{t:"hau",fn:"demon",bq:"hau",note:"\u201cthis\u201d — the thing pointed at."}]},
+  {en:"This is a book.",toks:[{t:"Hau",fn:"demon",bq:"hau",note:"\u201cthis\u201d."},{sp:1},{t:"liburu",fn:"root",bq:"liburu",note:"\u201cbook\u201d."},{t:"a",fn:"article",bq:"-a",note:"\u201ca / the\u201d — the article."},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis\u201d."}]},
+  {en:"These are flowers.",toks:[{t:"Hauek",fn:"demon",bq:"hauek",note:"\u201cthese\u201d — plural of hau."},{sp:1},{t:"lore",fn:"root",bq:"lore",note:"\u201cflower\u201d."},{t:"ak",fn:"article",bq:"-ak",note:"plural \u201cthe\u201d."},{sp:1},{t:"dira",fn:"verb",bq:"dira",note:"\u201cthey are\u201d."}]}
+ ],
+ contrast:[
+  {concept:"\u201cthis / that\u201d",rows:[["EN","en","2 levels: this / that"],["ES","es","3 levels: este / ese / aquel"],["EU","eu","3 levels: <span class='eu-word'>hau / hori / hura</span>"]],note:"Basque matches Spanish — three degrees of distance."},
+  {concept:"word order",rows:[["EN","en","\u201cthis book\u201d — before noun"],["ES","es","\u201ceste libro\u201d — before"],["EU","eu","<span class='eu-word'>liburu hau</span> — AFTER noun"]],note:"The demonstrative follows the noun in Basque."},
+  {concept:"\u201cwhat is\u2026\u201d",rows:[["EN","en","\u201cwhat is this?\u201d"],["ES","es","\u201c¿qué es esto?\u201d"],["EU","eu","<span class='eu-word'>zer da hau?</span>"]],note:"Same building blocks, Basque word order."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 4 ==================== */
+{
+ id:4, code:"Unit 4", title:"Non dago?", en:"Where is it?",
+ theme:"Location · the verb egon · here, there, in & at",
+ secNames:{PL:"Places in town",LO:"Location words",VB:"egon (to be located)"},
+ vocab:[
+  {bq:"taberna",en:"bar, pub",s:"PL",hk:"link",hook:"= taberna / tavern"},
+  {bq:"denda",en:"shop",s:"PL",hk:"",hook:""},
+  {bq:"hondartza",en:"beach",s:"PL",hk:"",hook:""},
+  {bq:"plaza",en:"square",s:"PL",hk:"link",hook:"= plaza"},
+  {bq:"eliza",en:"church",s:"PL",hk:"link",hook:"\u2248 iglesia (Latin)"},
+  {bq:"kalea",en:"street",s:"PL",hk:"",hook:""},
+  {bq:"etxea",en:"house, home",s:"PL",hk:"",hook:""},
+  {bq:"frontoia",en:"pelota court",s:"PL",hk:"hook",hook:"the heart of a Basque town"},
+  {bq:"geltokia",en:"station",s:"PL",hk:"",hook:""},
+  {bq:"hotela",en:"hotel",s:"PL",hk:"link",hook:"= hotel"},
+  {bq:"jatetxea",en:"restaurant",s:"PL",hk:"logic",hook:"jan (eat) + etxe (house)"},
+  {bq:"komuna",en:"toilet",s:"PL",hk:"",hook:""},
+  {bq:"non?",en:"where?",s:"LO",hk:"",hook:""},
+  {bq:"hemen",en:"here",s:"LO",hk:"",hook:""},
+  {bq:"hor",en:"there (near you)",s:"LO",hk:"",hook:""},
+  {bq:"han",en:"there (over there)",s:"LO",hk:"",hook:""},
+  {bq:"tabernan",en:"in the bar",s:"LO",hk:"logic",hook:"taberna + -n (in/at)"},
+  {bq:"etxean",en:"at home",s:"LO",hk:"logic",hook:"etxea + -n \u2192 etxean"},
+  {bq:"hondartzan",en:"on the beach",s:"LO",hk:"logic",hook:"hondartza + -n"},
+  {bq:"Zarautzen",en:"in Zarautz",s:"LO",hk:"logic",hook:"place + -en"},
+  {bq:"kanpoan",en:"outside",s:"LO",hk:"",hook:""},
+  {bq:"barruan",en:"inside",s:"LO",hk:"",hook:""},
+  {bq:"hurbil",en:"near, close",s:"LO",hk:"",hook:""},
+  {bq:"urruti",en:"far",s:"LO",hk:"",hook:""},
+  {bq:"nago",en:"I am (located)",s:"VB",hk:"logic",hook:"egon: ni + nago"},
+  {bq:"zaude",en:"you are (located)",s:"VB",hk:"logic",hook:"egon: zu + zaude"},
+  {bq:"dago",en:"(it) is (located)",s:"VB",hk:"logic",hook:"egon: hau + dago"},
+  {bq:"gaude",en:"we are (located)",s:"VB",hk:"logic",hook:"egon: gu + gaude"},
+  {bq:"daude",en:"they are (located)",s:"VB",hk:"logic",hook:"egon: haiek + daude"},
+  {bq:"non dago?",en:"where is it?",s:"VB",hk:"",hook:""},
+  {bq:"hemen dago",en:"it's here",s:"VB",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"egon — to be (located)",prompt:"tap a person — egon shows position & state",
+  note:"Basque has a second \u201cbe\u201d: egon, for WHERE something is and how it feels — like Spanish estar. izan says what you ARE; egon says where you are and how you are.",
+  rows:[
+   {trig:"ni",form:"nago",en:"I am (located)",es:"(yo) estoy"},
+   {trig:"zu",form:"zaude",en:"you are (located)",es:"(tú) estás"},
+   {trig:"hau",form:"dago",en:"it is (located)",es:"está"},
+   {trig:"gu",form:"gaude",en:"we are (located)",es:"(nosotros) estamos"},
+   {trig:"zuek",form:"zaudete",en:"you are (located, pl)",es:"(vosotros) estáis"},
+   {trig:"haiek",form:"daude",en:"they are (located)",es:"(ellos) están"}
+  ]},
+ anatomy:[
+  {en:"Where is the beach?",toks:[{t:"Non",fn:"gram",bq:"non",note:"\u201cwhere\u201d — the question word for location."},{sp:1},{t:"dago",fn:"verb",bq:"dago",note:"\u201cis (located)\u201d — egon, not izan, because it's about position."},{sp:1},{t:"hondartza",fn:"root",bq:"hondartza",note:"\u201cbeach\u201d."},{t:"?",fn:"gram",bq:"",note:""}]},
+  {en:"It's in the bar.",toks:[{t:"Taberna",fn:"root",bq:"taberna",note:"\u201cbar\u201d."},{t:"n",fn:"describe",bq:"-n",note:"the INESSIVE \u201cin / at\u201d — added to the place. taberna \u2192 tabernan."},{sp:1},{t:"dago",fn:"verb",bq:"dago",note:"\u201cit is (located)\u201d."}]},
+  {en:"I am at home.",toks:[{t:"Etxea",fn:"root",bq:"etxea",note:"\u201cthe house/home\u201d."},{t:"n",fn:"describe",bq:"-n",note:"\u201cat/in\u201d \u2192 etxean."},{sp:1},{t:"nago",fn:"verb",bq:"nago",note:"\u201cI am (located)\u201d — egon."}]}
+ ],
+ contrast:[
+  {concept:"two \u201cto be\u201d verbs",rows:[["EN","en","one: \u201cbe\u201d"],["ES","es","ser / estar"],["EU","eu","<span class='eu-word'>izan</span> / <span class='eu-word'>egon</span>"]],note:"egon = estar (location, state). izan = ser (identity)."},
+  {concept:"\u201cin / at\u201d",rows:[["EN","en","preposition before: \u201cin the bar\u201d"],["ES","es","\u201cen el bar\u201d"],["EU","eu","suffix after: <span class='eu-word'>tabernan</span>"]],note:"Basque marks \u201cin/at\u201d with -n glued to the place."},
+  {concept:"here / there",rows:[["EN","en","here / there (2)"],["ES","es","aquí / ahí / allí (3)"],["EU","eu","<span class='eu-word'>hemen / hor / han</span> (3)"]],note:"Three degrees, matching this/that/yonder."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 5 ==================== */
+{
+ id:5, code:"Unit 5", title:"Zenbat?", en:"How many?",
+ theme:"Numbers · counting · there is / there are",
+ secNames:{NU:"Numbers 0–20",BG:"Bigger numbers",BA:"At the bar"},
+ vocab:[
+  {bq:"zenbat?",en:"how many? how much?",s:"NU",hk:"",hook:""},
+  {bq:"bat",en:"one",s:"NU",hk:"",hook:""},
+  {bq:"bi",en:"two",s:"NU",hk:"",hook:""},
+  {bq:"hiru",en:"three",s:"NU",hk:"",hook:""},
+  {bq:"lau",en:"four",s:"NU",hk:"",hook:""},
+  {bq:"bost",en:"five",s:"NU",hk:"",hook:""},
+  {bq:"sei",en:"six",s:"NU",hk:"link",hook:"\u2248 seis"},
+  {bq:"zazpi",en:"seven",s:"NU",hk:"",hook:""},
+  {bq:"zortzi",en:"eight",s:"NU",hk:"",hook:""},
+  {bq:"bederatzi",en:"nine",s:"NU",hk:"",hook:""},
+  {bq:"hamar",en:"ten",s:"NU",hk:"",hook:""},
+  {bq:"hamaika",en:"eleven",s:"NU",hk:"hook",hook:"also means \u201ccountless\u201d"},
+  {bq:"hamabi",en:"twelve",s:"NU",hk:"logic",hook:"hama(r) + bi (10+2)"},
+  {bq:"hamahiru",en:"thirteen",s:"NU",hk:"logic",hook:"hamar + hiru"},
+  {bq:"hamalau",en:"fourteen",s:"NU",hk:"logic",hook:"hamar + lau"},
+  {bq:"hamabost",en:"fifteen",s:"NU",hk:"logic",hook:"hamar + bost"},
+  {bq:"hamasei",en:"sixteen",s:"NU",hk:"logic",hook:"hamar + sei"},
+  {bq:"hogei",en:"twenty",s:"NU",hk:"hook",hook:"the base of the whole system"},
+  {bq:"hogeita bat",en:"twenty-one",s:"BG",hk:"logic",hook:"hogei + ta + bat (20 and 1)"},
+  {bq:"hogeita hamar",en:"thirty",s:"BG",hk:"logic",hook:"20 and 10"},
+  {bq:"berrogei",en:"forty",s:"BG",hk:"logic",hook:"ber(ri) + hogei = 2×20"},
+  {bq:"hirurogei",en:"sixty",s:"BG",hk:"logic",hook:"hiru + hogei = 3×20"},
+  {bq:"laurogei",en:"eighty",s:"BG",hk:"logic",hook:"lau + hogei = 4×20"},
+  {bq:"ehun",en:"hundred",s:"BG",hk:"",hook:""},
+  {bq:"badago",en:"there is",s:"BA",hk:"logic",hook:"ba- (affirmative) + dago"},
+  {bq:"badaude",en:"there are",s:"BA",hk:"logic",hook:"ba- + daude"},
+  {bq:"ez dago",en:"there isn't",s:"BA",hk:"logic",hook:"ez (not) + dago"},
+  {bq:"pintxoa",en:"pintxo (bar snack)",s:"BA",hk:"",hook:""},
+  {bq:"ardoa",en:"wine",s:"BA",hk:"",hook:""},
+  {bq:"garagardoa",en:"beer",s:"BA",hk:"logic",hook:"garagar (barley) + ardo"},
+  {bq:"sagardoa",en:"cider",s:"BA",hk:"logic",hook:"sagar (apple) + ardo"},
+  {bq:"ura",en:"water",s:"BA",hk:"",hook:""},
+  {bq:"kafea",en:"coffee",s:"BA",hk:"link",hook:"= café"},
+  {bq:"kontua",en:"the bill",s:"BA",hk:"link",hook:"\u2248 la cuenta"}
+ ],
+ tool:{type:"number",title:"The base-20 system",prompt:"tap a number — see how Basque builds it",
+  note:"Basque counts in twenties (vigesimal), like the oldest European counting systems. Everything above 20 is built from hogei (20): 40 is \u201ctwo-twenty\u201d, 60 is \u201cthree-twenty\u201d, and the tens in between add -ta (\u201cand\u201d).",
+  rows:[
+   {n:"21",form:"hogeita bat",bd:"20 + 1"},
+   {n:"30",form:"hogeita hamar",bd:"20 + 10"},
+   {n:"40",form:"berrogei",bd:"2 × 20"},
+   {n:"50",form:"berrogeita hamar",bd:"(2×20) + 10"},
+   {n:"60",form:"hirurogei",bd:"3 × 20"},
+   {n:"75",form:"hirurogeita hamabost",bd:"(3×20) + 15"},
+   {n:"80",form:"laurogei",bd:"4 × 20"},
+   {n:"100",form:"ehun",bd:"a fresh word"}
+  ]},
+ anatomy:[
+  {en:"Three pintxos, please.",toks:[{t:"Hiru",fn:"quant",bq:"hiru",note:"\u201cthree\u201d — the number comes BEFORE the noun."},{sp:1},{t:"pintxo",fn:"root",bq:"pintxo",note:"\u201cpintxo\u201d — note it stays SINGULAR after a number (no -s)."},{sp:1},{t:"mesedez",fn:"gram",bq:"mesedez",note:"\u201cplease\u201d."}]},
+  {en:"There are two bars.",toks:[{t:"Bi",fn:"quant",bq:"bi",note:"\u201ctwo\u201d."},{sp:1},{t:"taberna",fn:"root",bq:"taberna",note:"\u201cbar\u201d — singular after the number."},{sp:1},{t:"daude",fn:"verb",bq:"daude",note:"\u201cthere are\u201d — egon plural."}]},
+  {en:"Is there any wine?",toks:[{t:"Ba",fn:"gram",bq:"ba-",note:"the affirmative particle that starts a yes/no \u201cis there\u2026?\u201d"},{t:"dago",fn:"verb",bq:"dago",note:"\u201cthere is\u201d — badago."},{sp:1},{t:"ardo",fn:"root",bq:"ardo",note:"\u201cwine\u201d."},{t:"rik",fn:"quant",bq:"-rik",note:"\u201cany\u201d — the partitive (a taste of Unit 11)."}]}
+ ],
+ contrast:[
+  {concept:"counting base",rows:[["EN","en","base 10: twenty, thirty\u2026"],["ES","es","base 10: veinte, treinta"],["EU","eu","base 20: <span class='eu-word'>berrogei</span> = 2×20"]],note:"Basque counts in twenties — a sign of its great age."},
+  {concept:"noun after a number",rows:[["EN","en","\u201cthree books\u201d — plural"],["ES","es","\u201ctres libros\u201d — plural"],["EU","eu","<span class='eu-word'>hiru liburu</span> — SINGULAR"]],note:"After a number, the Basque noun stays singular."},
+  {concept:"\u201cthere is / are\u201d",rows:[["EN","en","\u201cthere is / there are\u201d"],["ES","es","\u201chay\u201d (one word)"],["EU","eu","<span class='eu-word'>badago / badaude</span>"]],note:"Basque still marks singular vs plural: badago / badaude."}
+ ],
+ dialect:false
+}
+,
+/* ==================== UNIT 6 ==================== */
+{
+ id:6, code:"Unit 6", title:"Nire familia", en:"My family",
+ theme:"Family · possessives · the verb ukan (to have)",
+ secNames:{FA:"Family",PO:"Possessives",HV:"ukan (to have)"},
+ vocab:[
+  {bq:"familia",en:"family",s:"FA",hk:"link",hook:"= familia"},
+  {bq:"ama",en:"mother",s:"FA",hk:"",hook:""},
+  {bq:"aita",en:"father",s:"FA",hk:"",hook:""},
+  {bq:"gurasoak",en:"parents",s:"FA",hk:"",hook:""},
+  {bq:"anaia",en:"brother",s:"FA",hk:"hook",hook:"a man's brother (see culture note)"},
+  {bq:"arreba",en:"sister (of a man)",s:"FA",hk:"",hook:""},
+  {bq:"ahizpa",en:"sister (of a woman)",s:"FA",hk:"",hook:""},
+  {bq:"neba",en:"brother (of a woman)",s:"FA",hk:"",hook:""},
+  {bq:"seme",en:"son",s:"FA",hk:"",hook:""},
+  {bq:"alaba",en:"daughter",s:"FA",hk:"",hook:""},
+  {bq:"seme-alabak",en:"children (sons & daughters)",s:"FA",hk:"logic",hook:"seme + alaba"},
+  {bq:"aitona",en:"grandfather",s:"FA",hk:"logic",hook:"aita (father) + -ona"},
+  {bq:"amona",en:"grandmother",s:"FA",hk:"logic",hook:"ama (mother) + -ona"},
+  {bq:"osaba",en:"uncle",s:"FA",hk:"",hook:""},
+  {bq:"izeba",en:"aunt",s:"FA",hk:"",hook:""},
+  {bq:"lehengusua",en:"cousin",s:"FA",hk:"",hook:""},
+  {bq:"senarra",en:"husband",s:"FA",hk:"",hook:""},
+  {bq:"emaztea",en:"wife",s:"FA",hk:"",hook:""},
+  {bq:"nire",en:"my",s:"PO",hk:"",hook:""},
+  {bq:"zure",en:"your",s:"PO",hk:"",hook:""},
+  {bq:"bere",en:"his, her",s:"PO",hk:"",hook:""},
+  {bq:"gure",en:"our",s:"PO",hk:"",hook:""},
+  {bq:"zuen",en:"your (plural)",s:"PO",hk:"",hook:""},
+  {bq:"haien",en:"their",s:"PO",hk:"",hook:""},
+  {bq:"dut",en:"I have (it)",s:"HV",hk:"logic",hook:"ukan: nik + dut"},
+  {bq:"duzu",en:"you have (it)",s:"HV",hk:"logic",hook:"ukan: zuk + duzu"},
+  {bq:"du",en:"(he/she) has (it)",s:"HV",hk:"",hook:""},
+  {bq:"dugu",en:"we have (it)",s:"HV",hk:"logic",hook:"ukan: guk + dugu"},
+  {bq:"duzue",en:"you (pl) have (it)",s:"HV",hk:"",hook:""},
+  {bq:"dute",en:"they have (it)",s:"HV",hk:"",hook:""},
+  {bq:"anaia bat dut",en:"I have a brother",s:"HV",hk:"",hook:""},
+  {bq:"zenbat?",en:"how many?",s:"HV",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"ukan — to have",prompt:"tap a person — see 'have' agree",
+  note:"ukan is the workhorse verb for \u201chave\u201d — and later, the helper for most other verbs. With one thing owned: dut, duzu, du, dugu, duzue, dute. The doer takes -k (nik, zuk\u2026), which you'll meet properly in Unit 12.",
+  rows:[
+   {trig:"nik",form:"dut",en:"I have (it)",es:"(yo) tengo"},
+   {trig:"zuk",form:"duzu",en:"you have (it)",es:"(tú) tienes"},
+   {trig:"hark",form:"du",en:"he/she has (it)",es:"tiene"},
+   {trig:"guk",form:"dugu",en:"we have (it)",es:"(nosotros) tenemos"},
+   {trig:"zuek",form:"duzue",en:"you (pl) have (it)",es:"(vosotros) tenéis"},
+   {trig:"haiek",form:"dute",en:"they have (it)",es:"(ellos) tienen"}
+  ]},
+ anatomy:[
+  {en:"I have a brother.",toks:[{t:"Anaia",fn:"root",bq:"anaia",note:"\u201cbrother\u201d — the thing had."},{sp:1},{t:"bat",fn:"quant",bq:"bat",note:"\u201ca / one\u201d — follows the noun."},{sp:1},{t:"dut",fn:"verb",bq:"dut",note:"\u201cI have it\u201d — ukan. One word carries \u201cI\u2026 it\u201d."}]},
+  {en:"This is my mother.",toks:[{t:"Hau",fn:"demon",bq:"hau",note:"\u201cthis\u201d."},{sp:1},{t:"nire",fn:"person",bq:"nire",note:"\u201cmy\u201d — possessive, before the noun."},{sp:1},{t:"ama",fn:"root",bq:"ama",note:"\u201cmother\u201d."},{t:"",fn:"",bq:"",note:""},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis\u201d — izan (identity)."}]},
+  {en:"How many children do you have?",toks:[{t:"Zenbat",fn:"gram",bq:"zenbat",note:"\u201chow many\u201d."},{sp:1},{t:"seme-alaba",fn:"root",bq:"seme-alaba",note:"\u201cchildren\u201d — stays singular after zenbat."},{sp:1},{t:"dituzu",fn:"verb",bq:"dituzu",note:"\u201cdo you have (them)\u201d — plural-object form of ukan."}]}
+ ],
+ contrast:[
+  {concept:"\u201cto have\u201d",rows:[["EN","en","\u201cI have\u201d"],["ES","es","\u201ctengo\u201d"],["EU","eu","<span class='eu-word'>dut</span> — \u201cI\u2026 it\u201d in one word"]],note:"The Basque verb bakes in both the doer and the thing had."},
+  {concept:"possessive",rows:[["EN","en","\u201cmy mother\u201d"],["ES","es","\u201cmi madre\u201d"],["EU","eu","<span class='eu-word'>nire ama</span>"]],note:"Possessive before the noun, like both English and Spanish."},
+  {concept:"sister",rows:[["EN","en","\u201csister\u201d — one word"],["ES","es","\u201chermana\u201d — one word"],["EU","eu","<span class='eu-word'>arreba</span> / <span class='eu-word'>ahizpa</span>"]],note:"Basque picks the word by the SPEAKER's gender — a man's sister vs a woman's sister."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 7 ==================== */
+{
+ id:7, code:"Unit 7", title:"Non bizi zara?", en:"Where do you live?",
+ theme:"Home & town · in / to / from (the place cases)",
+ secNames:{HO:"The home",MO:"Coming & going",CA:"in / to / from"},
+ vocab:[
+  {bq:"etxea",en:"house, home",s:"HO",hk:"",hook:""},
+  {bq:"pisua",en:"flat, apartment",s:"HO",hk:"link",hook:"\u2248 piso"},
+  {bq:"gela",en:"room",s:"HO",hk:"",hook:""},
+  {bq:"logela",en:"bedroom",s:"HO",hk:"logic",hook:"lo (sleep) + gela (room)"},
+  {bq:"sukaldea",en:"kitchen",s:"HO",hk:"",hook:""},
+  {bq:"egongela",en:"living room",s:"HO",hk:"logic",hook:"egon (be) + gela"},
+  {bq:"komuna",en:"bathroom, toilet",s:"HO",hk:"",hook:""},
+  {bq:"lorategia",en:"garden",s:"HO",hk:"logic",hook:"lore (flower) + -tegi"},
+  {bq:"herria",en:"town, village",s:"HO",hk:"",hook:""},
+  {bq:"auzoa",en:"neighbourhood",s:"HO",hk:"",hook:""},
+  {bq:"bizi naiz",en:"I live",s:"MO",hk:"logic",hook:"bizi (life) + naiz"},
+  {bq:"bizi zara",en:"you live",s:"MO",hk:"",hook:""},
+  {bq:"non bizi zara?",en:"where do you live?",s:"MO",hk:"",hook:""},
+  {bq:"noa",en:"I go, I'm going",s:"MO",hk:"logic",hook:"joan: ni + noa"},
+  {bq:"zoaz",en:"you go",s:"MO",hk:"logic",hook:"joan: zu + zoaz"},
+  {bq:"doa",en:"(he/she) goes",s:"MO",hk:"",hook:""},
+  {bq:"nora?",en:"where to?",s:"MO",hk:"logic",hook:"nor + -a (to where)"},
+  {bq:"nondik?",en:"where from?",s:"MO",hk:"logic",hook:"non + -dik (from where)"},
+  {bq:"etxean",en:"at home (in the house)",s:"CA",hk:"logic",hook:"etxe + -an (in/at)"},
+  {bq:"etxera",en:"home, to the house",s:"CA",hk:"logic",hook:"etxe + -ra (to)"},
+  {bq:"etxetik",en:"from home",s:"CA",hk:"logic",hook:"etxe + -tik (from)"},
+  {bq:"Bilbon",en:"in Bilbao",s:"CA",hk:"",hook:""},
+  {bq:"Bilbora",en:"to Bilbao",s:"CA",hk:"logic",hook:"Bilbo + -ra"},
+  {bq:"Bilbotik",en:"from Bilbao",s:"CA",hk:"logic",hook:"Bilbo + -tik"},
+  {bq:"tabernara",en:"to the bar",s:"CA",hk:"logic",hook:"taberna + -ra"},
+  {bq:"tabernatik",en:"from the bar",s:"CA",hk:"logic",hook:"taberna + -tik"},
+  {bq:"-n",en:"in / at (inessive)",s:"CA",hk:"",hook:""},
+  {bq:"-ra",en:"to (allative)",s:"CA",hk:"",hook:""},
+  {bq:"-tik",en:"from (ablative)",s:"CA",hk:"",hook:""},
+  {bq:"hemen bizi naiz",en:"I live here",s:"CA",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"in / to / from",prompt:"tap a direction — watch the ending change",
+  note:"Three little endings do the work of English \u201cin, to, from\u201d — all glued onto the place. The place here is taberna (the bar): stay (-n), go towards (-ra), come away (-tik).",
+  rows:[
+   {trig:"in / at",form:"tabernan",en:"in the bar",es:"en el bar"},
+   {trig:"to",form:"tabernara",en:"to the bar",es:"al bar"},
+   {trig:"from",form:"tabernatik",en:"from the bar",es:"del bar"}
+  ]},
+ anatomy:[
+  {en:"I live in Zarautz.",toks:[{t:"Zarautz",fn:"root",bq:"Zarautz",note:"the place."},{t:"en",fn:"describe",bq:"-en",note:"\u201cin/at\u201d — the inessive on a proper name."},{sp:1},{t:"bizi",fn:"root",bq:"bizi",note:"\u201clive\u201d."},{sp:1},{t:"naiz",fn:"verb",bq:"naiz",note:"\u201cI am\u201d — bizi izan = to live."}]},
+  {en:"I'm going to Bilbao.",toks:[{t:"Bilbo",fn:"root",bq:"Bilbo",note:"the place."},{t:"ra",fn:"describe",bq:"-ra",note:"\u201cto\u201d — the allative, direction towards."},{sp:1},{t:"noa",fn:"verb",bq:"noa",note:"\u201cI go\u201d — joan."}]},
+  {en:"From home to the bar.",toks:[{t:"Etxe",fn:"root",bq:"etxe",note:"\u201chome\u201d."},{t:"tik",fn:"describe",bq:"-tik",note:"\u201cfrom\u201d — the ablative."},{sp:1},{t:"taberna",fn:"root",bq:"taberna",note:"\u201cbar\u201d."},{t:"ra",fn:"describe",bq:"-ra",note:"\u201cto\u201d."}]}
+ ],
+ contrast:[
+  {concept:"\u201cto a place\u201d",rows:[["EN","en","\u201cto Bilbao\u201d"],["ES","es","\u201ca Bilbao\u201d"],["EU","eu","<span class='eu-word'>Bilbora</span> — -ra"]],note:"Direction \u201cto\u201d is a suffix, -ra."},
+  {concept:"\u201cfrom a place\u201d",rows:[["EN","en","\u201cfrom Bilbao\u201d"],["ES","es","\u201cde Bilbao\u201d"],["EU","eu","<span class='eu-word'>Bilbotik</span> — -tik"]],note:"\u201cFrom\u201d is -tik."},
+  {concept:"a set of three",rows:[["EN","en","in / to / from"],["ES","es","en / a / de"],["EU","eu","<span class='eu-word'>-n / -ra / -tik</span>"]],note:"One tidy trio — learn them together."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 8 ==================== */
+{
+ id:8, code:"Unit 8", title:"Zer ordutan?", en:"At what time?",
+ theme:"Telling the time · daily routine · the habitual present",
+ secNames:{TI:"Time",RO:"Daily routine",HP:"Habitual present"},
+ vocab:[
+  {bq:"zer ordu da?",en:"what time is it?",s:"TI",hk:"",hook:""},
+  {bq:"ordu bata da",en:"it's one o'clock",s:"TI",hk:"",hook:""},
+  {bq:"ordu biak dira",en:"it's two o'clock",s:"TI",hk:"hook",hook:"2+ takes plural: \u201cthe twos are\u201d"},
+  {bq:"hirurak dira",en:"it's three o'clock",s:"TI",hk:"",hook:""},
+  {bq:"eta erdi",en:"half past",s:"TI",hk:"logic",hook:"eta (and) + erdi (half)"},
+  {bq:"eta laurden",en:"quarter past",s:"TI",hk:"logic",hook:"eta + laurden (quarter)"},
+  {bq:"laurden gutxi",en:"quarter to",s:"TI",hk:"logic",hook:"laurden (quarter) + gutxi (less)"},
+  {bq:"ordua",en:"hour, o'clock, time",s:"TI",hk:"",hook:""},
+  {bq:"goizean",en:"in the morning",s:"TI",hk:"logic",hook:"goiz (morning) + -ean"},
+  {bq:"arratsaldean",en:"in the afternoon",s:"TI",hk:"logic",hook:"arratsalde + -an"},
+  {bq:"gauean",en:"at night",s:"TI",hk:"logic",hook:"gau (night) + -ean"},
+  {bq:"esnatu",en:"to wake up",s:"RO",hk:"",hook:""},
+  {bq:"jaiki",en:"to get up",s:"RO",hk:"",hook:""},
+  {bq:"gosaldu",en:"to have breakfast",s:"RO",hk:"",hook:""},
+  {bq:"lan egin",en:"to work",s:"RO",hk:"logic",hook:"lan (work) + egin (do)"},
+  {bq:"bazkaldu",en:"to have lunch",s:"RO",hk:"",hook:""},
+  {bq:"afaldu",en:"to have dinner",s:"RO",hk:"",hook:""},
+  {bq:"lo egin",en:"to sleep",s:"RO",hk:"logic",hook:"lo (sleep) + egin (do)"},
+  {bq:"etxera itzuli",en:"to go back home",s:"RO",hk:"",hook:""},
+  {bq:"jaten dut",en:"I eat",s:"HP",hk:"logic",hook:"jan \u2192 jaten + dut"},
+  {bq:"edaten dut",en:"I drink",s:"HP",hk:"logic",hook:"edan \u2192 edaten + dut"},
+  {bq:"esnatzen naiz",en:"I wake up",s:"HP",hk:"logic",hook:"esnatu \u2192 esnatzen + naiz"},
+  {bq:"lan egiten dut",en:"I work",s:"HP",hk:"logic",hook:"lan egin \u2192 egiten + dut"},
+  {bq:"zer ordutan?",en:"at what time?",s:"HP",hk:"logic",hook:"ordu + -tan (at)"},
+  {bq:"zazpietan",en:"at seven",s:"HP",hk:"logic",hook:"zazpi + -etan"},
+  {bq:"beti",en:"always",s:"HP",hk:"",hook:""},
+  {bq:"batzuetan",en:"sometimes",s:"HP",hk:"",hook:""},
+  {bq:"inoiz ez",en:"never",s:"HP",hk:"logic",hook:"inoiz (ever) + ez (not)"},
+  {bq:"gero",en:"then, later",s:"HP",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"The habitual present",prompt:"tap a person — 'I eat, you eat…'",
+  note:"To say what you do regularly, take the verb, add -tzen/-ten, then the helper. For \u201ceat\u201d (jan): jaten + the ukan helper. The helper changes for the person; the -tzen part stays put.",
+  rows:[
+   {trig:"nik",form:"jaten dut",en:"I eat",es:"(yo) como"},
+   {trig:"zuk",form:"jaten duzu",en:"you eat",es:"(tú) comes"},
+   {trig:"hark",form:"jaten du",en:"he/she eats",es:"come"},
+   {trig:"guk",form:"jaten dugu",en:"we eat",es:"(nosotros) comemos"},
+   {trig:"zuek",form:"jaten duzue",en:"you (pl) eat",es:"(vosotros) coméis"},
+   {trig:"haiek",form:"jaten dute",en:"they eat",es:"(ellos) comen"}
+  ]},
+ anatomy:[
+  {en:"What time do you get up?",toks:[{t:"Zer",fn:"gram",bq:"zer",note:"\u201cwhat\u201d."},{sp:1},{t:"ordu",fn:"root",bq:"ordu",note:"\u201chour\u201d."},{t:"tan",fn:"describe",bq:"-tan",note:"\u201cat (what time)\u201d."},{sp:1},{t:"jaikitzen",fn:"root",bq:"jaikitzen",note:"\u201cgetting up\u201d — the -tzen habitual form."},{sp:1},{t:"zara",fn:"verb",bq:"zara",note:"\u201cyou are\u201d — jaiki is intransitive, so izan helps."}]},
+  {en:"I eat at two.",toks:[{t:"Ordu biak",fn:"quant",bq:"ordu biak",note:"\u201ctwo o'clock\u201d."},{t:"etan",fn:"describe",bq:"-etan",note:"\u201cat\u201d (with the hours)."},{sp:1},{t:"jaten",fn:"root",bq:"jaten",note:"\u201ceating\u201d — habitual."},{sp:1},{t:"dut",fn:"verb",bq:"dut",note:"\u201cI\u2026 it\u201d — ukan helper (jan is transitive)."}]},
+  {en:"I always work.",toks:[{t:"Beti",fn:"gram",bq:"beti",note:"\u201calways\u201d."},{sp:1},{t:"lan",fn:"root",bq:"lan",note:"\u201cwork\u201d."},{sp:1},{t:"egiten",fn:"root",bq:"egiten",note:"\u201cdoing\u201d — habitual of egin."},{sp:1},{t:"dut",fn:"verb",bq:"dut",note:"\u201cI do it\u201d."}]}
+ ],
+ contrast:[
+  {concept:"\u201cI eat\u201d (habit)",rows:[["EN","en","\u201cI eat\u201d — one word"],["ES","es","\u201ccomo\u201d — one word"],["EU","eu","<span class='eu-word'>jaten dut</span> — two parts"]],note:"Basque splits it: the -tzen form + a helper verb."},
+  {concept:"o'clock uses plural",rows:[["EN","en","\u201cit is two\u201d"],["ES","es","\u201cson las dos\u201d — plural!"],["EU","eu","<span class='eu-word'>ordu biak dira</span> — plural"]],note:"Like Spanish, Basque treats hours 2+ as plural."},
+  {concept:"\u201cat (a time)\u201d",rows:[["EN","en","\u201cat seven\u201d"],["ES","es","\u201ca las siete\u201d"],["EU","eu","<span class='eu-word'>zazpietan</span> — -etan"]],note:"\u201cAt\u201d a clock time is the suffix -etan."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 9 ==================== */
+{
+ id:9, code:"Unit 9", title:"Gustatzen zait", en:"I like it",
+ theme:"Likes & dislikes · hobbies · the me/you/them pattern",
+ secNames:{LI:"Liking",HB:"Hobbies",OP:"Opinions"},
+ vocab:[
+  {bq:"gustatzen zait",en:"I like it",s:"LI",hk:"logic",hook:"it is pleasing TO ME (zait)"},
+  {bq:"gustatzen zaizu",en:"you like it",s:"LI",hk:"logic",hook:"pleasing to you (zaizu)"},
+  {bq:"gustatzen zaio",en:"he/she likes it",s:"LI",hk:"logic",hook:"pleasing to him/her (zaio)"},
+  {bq:"gustatzen zaizkit",en:"I like them (plural)",s:"LI",hk:"logic",hook:"zaizki- = plural liked thing"},
+  {bq:"ez zait gustatzen",en:"I don't like it",s:"LI",hk:"logic",hook:"ez + zait + gustatzen"},
+  {bq:"asko gustatzen zait",en:"I like it a lot",s:"LI",hk:"logic",hook:"asko (a lot) + gustatzen zait"},
+  {bq:"gorroto dut",en:"I hate it",s:"LI",hk:"",hook:""},
+  {bq:"nahiago dut",en:"I prefer",s:"LI",hk:"logic",hook:"nahi (want) + -ago (more)"},
+  {bq:"zer gustatzen zaizu?",en:"what do you like?",s:"LI",hk:"",hook:""},
+  {bq:"musika",en:"music",s:"HB",hk:"link",hook:"= música"},
+  {bq:"musika entzun",en:"to listen to music",s:"HB",hk:"logic",hook:"musika + entzun (listen)"},
+  {bq:"irakurri",en:"to read",s:"HB",hk:"",hook:""},
+  {bq:"kirola",en:"sport",s:"HB",hk:"",hook:""},
+  {bq:"kirola egin",en:"to do sport",s:"HB",hk:"logic",hook:"kirol + egin"},
+  {bq:"dantza egin",en:"to dance",s:"HB",hk:"logic",hook:"dantza + egin"},
+  {bq:"margotu",en:"to paint",s:"HB",hk:"",hook:""},
+  {bq:"sukaldatu",en:"to cook",s:"HB",hk:"logic",hook:"sukalde (kitchen) + -atu"},
+  {bq:"bidaiatu",en:"to travel",s:"HB",hk:"link",hook:"\u2248 viajar"},
+  {bq:"surf egin",en:"to surf",s:"HB",hk:"logic",hook:"surf + egin"},
+  {bq:"zinema",en:"cinema",s:"HB",hk:"link",hook:"= cine"},
+  {bq:"jaialdia",en:"festival",s:"HB",hk:"logic",hook:"jai (festival) + -aldi"},
+  {bq:"ardo naturala",en:"natural wine",s:"HB",hk:"logic",hook:"ardo (wine) + naturala"},
+  {bq:"asko",en:"a lot, very much",s:"OP",hk:"",hook:""},
+  {bq:"pixka bat",en:"a little",s:"OP",hk:"",hook:""},
+  {bq:"batere ez",en:"not at all",s:"OP",hk:"",hook:""},
+  {bq:"oso ondo",en:"very well / great",s:"OP",hk:"",hook:""},
+  {bq:"ederra",en:"lovely, beautiful",s:"OP",hk:"",hook:""},
+  {bq:"aspergarria",en:"boring",s:"OP",hk:"logic",hook:"asper (bore) + -garri"},
+  {bq:"interesgarria",en:"interesting",s:"OP",hk:"logic",hook:"interes + -garri"},
+  {bq:"ados",en:"agreed, OK",s:"OP",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"gustatu — liking",prompt:"tap a person — 'it pleases me / you…'",
+  note:"Basque \u201clike\u201d works exactly like Spanish me gusta: the thing does the pleasing, and a little word says who's pleased. zait (to me), zaizu (to you), zaio (to him/her). If you like several things, it becomes zaizki-.",
+  rows:[
+   {trig:"to me",form:"gustatzen zait",en:"I like it",es:"me gusta"},
+   {trig:"to you",form:"gustatzen zaizu",en:"you like it",es:"te gusta"},
+   {trig:"to him/her",form:"gustatzen zaio",en:"he/she likes it",es:"le gusta"},
+   {trig:"to us",form:"gustatzen zaigu",en:"we like it",es:"nos gusta"},
+   {trig:"to them",form:"gustatzen zaie",en:"they like it",es:"les gusta"},
+   {trig:"to me (things)",form:"gustatzen zaizkit",en:"I like them",es:"me gustan"}
+  ]},
+ anatomy:[
+  {en:"I like music.",toks:[{t:"Musika",fn:"root",bq:"musika",note:"\u201cmusic\u201d — the thing doing the pleasing (the subject!)."},{sp:1},{t:"gustatzen",fn:"root",bq:"gustatzen",note:"\u201cpleasing\u201d."},{sp:1},{t:"zait",fn:"verb",bq:"zait",note:"\u201cto me\u201d — the little word saying who likes it."}]},
+  {en:"I don't like it.",toks:[{t:"Ez",fn:"gram",bq:"ez",note:"\u201cnot\u201d."},{sp:1},{t:"zait",fn:"verb",bq:"zait",note:"\u201cto me\u201d — moves before the verb in negatives."},{sp:1},{t:"gustatzen",fn:"root",bq:"gustatzen",note:"\u201cpleasing\u201d."}]},
+  {en:"I like books.",toks:[{t:"Liburuak",fn:"root",bq:"liburuak",note:"\u201cbooks\u201d — plural, so the verb goes plural too."},{sp:1},{t:"gustatzen",fn:"root",bq:"gustatzen",note:"\u201cpleasing\u201d."},{sp:1},{t:"zaizkit",fn:"verb",bq:"zaizkit",note:"\u201cto me (them)\u201d — plural liked thing = zaizki-."}]}
+ ],
+ contrast:[
+  {concept:"\u201cI like X\u201d",rows:[["EN","en","\u201cI like music\u201d — I'm the subject"],["ES","es","\u201cme gusta\u201d — music is subject"],["EU","eu","<span class='eu-word'>musika gustatzen zait</span>"]],note:"Basque matches Spanish exactly: the thing pleases you."},
+  {concept:"liking several",rows:[["EN","en","\u201cI like books\u201d"],["ES","es","\u201cme gustan\u201d — plural verb"],["EU","eu","<span class='eu-word'>zaizkit</span> — plural"]],note:"Like Spanish, the verb agrees with the liked thing's number."},
+  {concept:"\u201cI prefer\u201d",rows:[["EN","en","\u201cI prefer\u201d"],["ES","es","\u201cprefiero\u201d"],["EU","eu","<span class='eu-word'>nahiago dut</span> — \u201cwant-more\u201d"]],note:"nahi (want) + -ago (the \u201c-er\u201d ending)."}
+ ],
+ dialect:false
+},
+/* ==================== UNIT 10 ==================== */
+{
+ id:10, code:"Unit 10", title:"Koloreak", en:"Colours",
+ theme:"Colours · describing things · adjectives after the noun",
+ secNames:{KO:"Colours",DE:"Describing",NB:"Numbers to 100"},
+ vocab:[
+  {bq:"kolorea",en:"colour",s:"KO",hk:"link",hook:"= color"},
+  {bq:"gorria",en:"red",s:"KO",hk:"",hook:""},
+  {bq:"urdina",en:"blue",s:"KO",hk:"",hook:""},
+  {bq:"berdea",en:"green",s:"KO",hk:"link",hook:"\u2248 verde"},
+  {bq:"horia",en:"yellow",s:"KO",hk:"",hook:""},
+  {bq:"beltza",en:"black",s:"KO",hk:"",hook:""},
+  {bq:"zuria",en:"white",s:"KO",hk:"",hook:""},
+  {bq:"marroia",en:"brown",s:"KO",hk:"link",hook:"\u2248 marrón"},
+  {bq:"grisa",en:"grey",s:"KO",hk:"link",hook:"\u2248 gris"},
+  {bq:"laranja",en:"orange",s:"KO",hk:"link",hook:"= naranja (also \u201corange\u201d fruit)"},
+  {bq:"arrosa",en:"pink",s:"KO",hk:"link",hook:"\u2248 rosa"},
+  {bq:"morea",en:"purple",s:"KO",hk:"",hook:""},
+  {bq:"handia",en:"big",s:"DE",hk:"",hook:""},
+  {bq:"txikia",en:"small",s:"DE",hk:"",hook:""},
+  {bq:"berria",en:"new",s:"DE",hk:"",hook:""},
+  {bq:"zaharra",en:"old",s:"DE",hk:"",hook:""},
+  {bq:"ona",en:"good",s:"DE",hk:"",hook:""},
+  {bq:"txarra",en:"bad",s:"DE",hk:"",hook:""},
+  {bq:"polita",en:"pretty, nice",s:"DE",hk:"",hook:""},
+  {bq:"itsusia",en:"ugly",s:"DE",hk:"",hook:""},
+  {bq:"garestia",en:"expensive",s:"DE",hk:"",hook:""},
+  {bq:"merkea",en:"cheap",s:"DE",hk:"",hook:""},
+  {bq:"nolakoa da?",en:"what's it like?",s:"DE",hk:"logic",hook:"nola (how) + -koa"},
+  {bq:"hogeita hamar",en:"thirty",s:"NB",hk:"logic",hook:"20 + 10"},
+  {bq:"berrogei",en:"forty",s:"NB",hk:"logic",hook:"2 × 20"},
+  {bq:"berrogeita hamar",en:"fifty",s:"NB",hk:"logic",hook:"(2×20) + 10"},
+  {bq:"hirurogei",en:"sixty",s:"NB",hk:"logic",hook:"3 × 20"},
+  {bq:"laurogei",en:"eighty",s:"NB",hk:"logic",hook:"4 × 20"},
+  {bq:"ehun",en:"a hundred",s:"NB",hk:"",hook:""}
+ ],
+ tool:{type:"explorer",title:"Adjectives follow the noun",prompt:"tap a describer — see where it goes",
+  note:"In Basque the adjective comes AFTER the noun, and the article -a sits on the adjective, not the noun: etxe (house) + gorri (red) \u2192 etxe gorria = \u201ca red house\u201d. The noun stays bare; the ending rides on the describer.",
+  rows:[
+   {trig:"red",form:"etxe gorria",en:"a red house",es:"una casa roja"},
+   {trig:"big",form:"etxe handia",en:"a big house",es:"una casa grande"},
+   {trig:"new",form:"etxe berria",en:"a new house",es:"una casa nueva"},
+   {trig:"white",form:"etxe zuria",en:"a white house",es:"una casa blanca"},
+   {trig:"old",form:"etxe zaharra",en:"an old house",es:"una casa vieja"}
+  ]},
+ anatomy:[
+  {en:"a red house",toks:[{t:"etxe",fn:"root",bq:"etxe",note:"\u201chouse\u201d — the noun stays bare (no article yet)."},{sp:1},{t:"gorri",fn:"root",bq:"gorri",note:"\u201cred\u201d — the adjective, AFTER the noun."},{t:"a",fn:"article",bq:"-a",note:"\u201ca/the\u201d — the article rides on the adjective, not the noun."}]},
+  {en:"The car is new.",toks:[{t:"Kotxea",fn:"root",bq:"kotxea",note:"\u201cthe car\u201d."},{sp:1},{t:"berria",fn:"root",bq:"berria",note:"\u201cnew\u201d — with its own article when standing after \u201cis\u201d."},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis\u201d."}]},
+  {en:"What's it like?",toks:[{t:"Nola",fn:"gram",bq:"nola",note:"\u201chow\u201d."},{t:"koa",fn:"describe",bq:"-koa",note:"\u201cwhat kind of\u201d — nolakoa."},{sp:1},{t:"da",fn:"verb",bq:"da",note:"\u201cis it\u201d."}]}
+ ],
+ contrast:[
+  {concept:"adjective order",rows:[["EN","en","\u201cred house\u201d — before"],["ES","es","\u201ccasa roja\u201d — after"],["EU","eu","<span class='eu-word'>etxe gorria</span> — after"]],note:"Basque agrees with Spanish: the colour follows the noun."},
+  {concept:"where the article goes",rows:[["EN","en","\u201cthe red house\u201d"],["ES","es","\u201cla casa roja\u201d"],["EU","eu","etxe gorri<span class='eu-word'>a</span> — on the adjective"]],note:"The article -a lands on the LAST word of the phrase."},
+  {concept:"colours as loanwords",rows:[["EN","en","grey, brown, pink"],["ES","es","gris, marrón, rosa"],["EU","eu","<span class='eu-word'>grisa, marroia, arrosa</span>"]],note:"Several colours are shared with Spanish — an easy win."}
+ ],
+ dialect:false
+}
+];
+
+/* ============ PHASES per unit (original content) ============ */
+const PHASES_BY_UNIT={
+1:[
+ {title:"Dialogue — Two friends meet",blurb:"Maddi and Jon meet in a Donostia café.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Kafetegian — In the café</h2></div>
+<div class="prose"><p>Maddi is meeting Jon for the first time at a café on the Donostia seafront. Read each line aloud.</p></div>
+<div class="dlg">
+<div><span class="who">Maddi</span><span class="l-bq">Kaixo! Jon zara?</span></div><span class="l-en"><span class="pron">KY-sho! yon SA-ra?</span> · Hi! Are you Jon?</span>
+<div><span class="who">Jon</span><span class="l-bq">Bai, ni naiz. Eta zu?</span></div><span class="l-en"><span class="pron">by, ni nice. EH-ta su?</span> · Yes, I am. And you?</span>
+<div><span class="who">Maddi</span><span class="l-bq">Ni Maddi naiz. Pozten naiz!</span></div><span class="l-en"><span class="pron">ni MA-di nice. POS-ten nice</span> · I'm Maddi. Pleased to meet you!</span>
+<div><span class="who">Jon</span><span class="l-bq">Pozten naiz. Zer moduz?</span></div><span class="l-en"><span class="pron">ser mo-DUS?</span> · Pleased to meet you. How are you?</span>
+<div><span class="who">Maddi</span><span class="l-bq">Oso ondo, eskerrik asko. Eta zu?</span></div><span class="l-en"><span class="pron">O-so ON-do, es-KE-rik AS-ko</span> · Very well, thanks. And you?</span>
+<div><span class="who">Jon</span><span class="l-bq">Ondo, ondo. Goazen barrura?</span></div><span class="l-en"><span class="pron">go-A-sen ba-RU-ra?</span> · Good, good. Shall we go inside?</span>
+<div><span class="who">Maddi</span><span class="l-bq">Bai, goazen!</span></div><span class="l-en">Yes, let's go!</span>
+</div>
+<div class="callout"><strong>That word <b class="bq">goazen</b> — \u201clet's go\u201d — is the friendliest little word in Basque, and the name of this course.</strong></div>
+<div class="es-note"><span class="tag">ES</span><b class="bq">eskerrik asko</b> is not <em>gracias</em> — Basque \u201cthanks\u201d is its own word. But <b class="bq">barkatu</b> (sorry) and <b class="bq">moduz</b> (mood) feel reachable.</div>`},
+ {title:"The verb izan — to be",blurb:"naiz, zara, da and the rest.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>izan — to be</h2></div>
+<div class="prose"><p>The most important verb in the language. It changes shape for each person — only six forms to learn.</p></div>
+<table class="gt"><thead><tr><th>person</th><th>izan</th><th>meaning</th></tr></thead><tbody>
+<tr><td>ni</td><td>naiz <span class="dia-cell" style="display:none"><span class="dia-reveal" onclick="revealDia(this)">Biz</span><span class="dia-val" style="display:none"> naz</span></span></td><td>I am</td></tr>
+<tr><td>zu</td><td>zara</td><td>you are (one person)</td></tr>
+<tr><td>hura / hau / hori</td><td>da</td><td>he/she/it is; this/that is</td></tr>
+<tr><td>gu</td><td>gara</td><td>we are</td></tr>
+<tr><td>zuek</td><td>zarete <span class="dia-cell" style="display:none"><span class="dia-reveal" onclick="revealDia(this)">Biz</span><span class="dia-val" style="display:none"> zarie</span></span></td><td>you are (more than one)</td></tr>
+<tr><td>haiek</td><td>dira</td><td>they are</td></tr>
+</tbody></table>
+<div class="dia-cell dia-note" style="display:none">Dialect notes are on — tap a <b>Biz</b> chip for the Bizkaian form.</div>
+<div class="callout"><strong>You can drop the person word.</strong> Because <b class="bq">naiz</b> already means \u201cI am\u201d, Basques say just <b class="bq">Maddi naiz</b>. Open the <strong>izan builder</strong> tool to feel this.</div>
+<div class="es-note"><span class="tag">ES</span>Spanish splits \u201cbe\u201d into <em>ser</em> and <em>estar</em>. Basque also has two — <b class="bq">izan</b> (identity) and <b class="bq">egon</b> (location, Unit 4).</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · the right form of izan</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>I am Maddi. (Maddi ___)</div><input class="ex-input" data-a="naiz"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>Are you Jon? (Jon ___?)</div><input class="ex-input" data-a="zara"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>This is the friend. (Hau laguna ___)</div><input class="ex-input" data-a="da"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">4</span>We are Basque speakers. (Euskaldunak ___)</div><input class="ex-input" data-a="gara"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">5</span>They are friends. (Lagunak ___)</div><input class="ex-input" data-a="dira"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Greetings & courtesy",blurb:"Hello, please, thanks — at the right time of day.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Agurrak</div><h2>Greetings & courtesy</h2></div>
+<table class="gt"><tbody>
+<tr><td>kaixo</td><td>hi (any time, friendly)</td></tr><tr><td>egun on</td><td>good morning (until ~2pm)</td></tr>
+<tr><td>arratsalde on</td><td>good afternoon</td></tr><tr><td>gabon</td><td>good evening / night</td></tr>
+<tr><td>agur</td><td>goodbye</td></tr><tr><td>gero arte</td><td>see you later</td></tr>
+</tbody></table>
+<p class="sec-title">Courtesy</p>
+<div class="prose"><p><b class="bq">mesedez</b> please · <b class="bq">eskerrik asko</b> thank you very much · <b class="bq">mila esker</b> thanks · <b class="bq">ez horregatik</b> you're welcome · <b class="bq">barkatu</b> sorry.</p></div>
+<div class="callout"><strong>One rhythm:</strong> <b class="bq">on</b> means \u201cgood\u201d, and ends the time-of-day greetings — <em>egun on</em>, <em>arratsalde on</em>, <em>gabon</em>. Spot the <b class="bq">on</b> and you know it's a greeting.</div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · which greeting?</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>Good morning</div><input class="ex-input" data-a="egun on"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>Thank you very much</div><input class="ex-input" data-a="eskerrik asko"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>See you later</div><input class="ex-input" data-a="gero arte"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">4</span>Please</div><input class="ex-input" data-a="mesedez"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"The sounds of Basque",blurb:"How to actually pronounce it.",html:`
+<div class="phase-head"><div class="kicker">Phase 4 · Soinuak</div><h2>The sounds of Basque</h2></div>
+<div class="prose"><p>Basque spelling is consistent. Vowels are pure, exactly like Spanish: <b class="bq">a e i o u</b>. A few consonants differ from English.</p></div>
+<table class="gt"><thead><tr><th>letter</th><th>sounds like</th><th>example</th></tr></thead><tbody>
+<tr><td>x</td><td>\u201csh\u201d</td><td>kaixo = \u201cky-sho\u201d</td></tr>
+<tr><td>tx</td><td>\u201cch\u201d</td><td>txakur = \u201ccha-koor\u201d (dog)</td></tr>
+<tr><td>tz</td><td>\u201cts\u201d</td><td>hitz = \u201cheets\u201d (word)</td></tr>
+<tr><td>z</td><td>soft \u201cs\u201d</td><td>zu = \u201csu\u201d (you)</td></tr>
+<tr><td>j</td><td>\u201cy\u201d (Gipuzkoan coast)</td><td>jan = \u201cyan\u201d (eat)</td></tr>
+<tr><td>r / rr</td><td>tapped / rolled</td><td>ari / agurra</td></tr>
+<tr><td>h</td><td>silent (in the south)</td><td>hau = \u201cow\u201d</td></tr>
+</tbody></table>
+<div class="callout"><strong>The big one:</strong> <b class="bq">x</b> is never \u201cks\u201d — always \u201csh\u201d. And <b class="bq">j</b> is \u201cy\u201d on the Gipuzkoan coast (in Bizkaia it's the Spanish <em>jota</em>).</div>
+<div class="es-note"><span class="tag">ES</span>Your Spanish vowels transfer perfectly, and the rolled <b class="bq">rr</b> is the same as <em>perro</em>. A real head start.</div>
+<div class="ex" data-ex="3"><div class="ex-label">Ariketa 3 · how is it pronounced?</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>How is \u201cx\u201d pronounced? (one word)</div><input class="ex-input" data-a="sh"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>How is \u201ctx\u201d pronounced?</div><input class="ex-input" data-a="ch"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>How is \u201cj\u201d pronounced (Gipuzkoan)?</div><input class="ex-input" data-a="y"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Putting it together",blurb:"Introduce yourself, end to end.",html:`
+<div class="phase-head"><div class="kicker">Phase 5 · Dena batera</div><h2>Putting it together</h2></div>
+<div class="dlg">
+<div><span class="l-bq">— Kaixo! Zer moduz?</span></div><span class="l-en" style="margin-left:0">Hi! How are you?</span>
+<div><span class="l-bq">— Oso ondo, eskerrik asko. Eta zu?</span></div><span class="l-en" style="margin-left:0">Very well, thanks. And you?</span>
+<div><span class="l-bq">— Ondo. Ni [izena] naiz. Eta zu, nor zara?</span></div><span class="l-en" style="margin-left:0">Good. I'm [name]. And you, who are you?</span>
+<div><span class="l-bq">— [Izena] naiz. Pozten naiz!</span></div><span class="l-en" style="margin-left:0">I'm [name]. Pleased to meet you!</span>
+</div>
+<div class="ex" data-ex="4"><div class="ex-label">Ariketa 4 · build the conversation</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>Hi! How are you?</div><input class="ex-input" data-a="kaixo zer moduz"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>Very well, thanks.</div><input class="ex-input" data-a="oso ondo eskerrik asko"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>Who are you?</div><input class="ex-input" data-a="nor zara"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">4</span>Pleased to meet you!</div><input class="ex-input" data-a="pozten naiz"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — the two-kiss hello.</strong> Meeting someone, you'll usually give two kisses (one on each cheek), starting on the right — even on a first meeting. A handshake is the formal alternative. <b class="bq">Zorionak</b> — you've finished Unit 1!</div>`}
+],
+2:[
+ {title:"Dialogue — At the language exchange",blurb:"Two learners swap names and origins in Bilbao.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Mintzalagunak — Language partners</h2></div>
+<div class="prose"><p>At a <em>mintzalaguna</em> meet-up in Bilbao, people pair off to practise. Ane introduces herself and a friend.</p></div>
+<div class="dlg">
+<div><span class="who">Ane</span><span class="l-bq">Kaixo! Nire izena Ane da. Nor zara zu?</span></div><span class="l-en">Hi! My name is Ane. Who are you?</span>
+<div><span class="who">Tom</span><span class="l-bq">Tom naiz. Nongoa zara?</span></div><span class="l-en">I'm Tom. Where are you from?</span>
+<div><span class="who">Ane</span><span class="l-bq">Bilbokoa naiz. Eta zu?</span></div><span class="l-en">I'm from Bilbao. And you?</span>
+<div><span class="who">Tom</span><span class="l-bq">Ni Londreskoa naiz, baina orain Donostiakoa.</span></div><span class="l-en">I'm from London, but now from San Sebastián.</span>
+<div><span class="who">Ane</span><span class="l-bq">A, ingelesa zara! Hau nire laguna da. Jon du izena.</span></div><span class="l-en">Ah, you're English! This is my friend. His name is Jon.</span>
+<div><span class="who">Tom</span><span class="l-bq">Pozten naiz, Jon. Zuek biak euskaldunak zarete?</span></div><span class="l-en">Pleased to meet you, Jon. Are you both Basque?</span>
+<div><span class="who">Ane</span><span class="l-bq">Bai, biak euskaldunak gara.</span></div><span class="l-en">Yes, we're both Basque.</span>
+</div>
+<div class="callout"><strong>Note:</strong> <b class="bq">Jon du izena</b> is a very Basque way to say \u201chis name is Jon\u201d — literally \u201che has Jon as name\u201d. You'll meet the verb behind it later; for now, learn it as a phrase.</div>`},
+ {title:"izan in the plural",blurb:"gara, zarete, dira — we / you all / they.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>We, you all, they</h2></div>
+<div class="prose"><p>You met the singular in Unit 1. Here's the full picture of <b class="bq">izan</b>:</p></div>
+<table class="gt"><thead><tr><th>person</th><th>izan</th><th>meaning</th></tr></thead><tbody>
+<tr><td>ni</td><td>naiz</td><td>I am</td></tr><tr><td>zu</td><td>zara</td><td>you are</td></tr>
+<tr><td>hau/hori/hura</td><td>da</td><td>it/he/she is</td></tr>
+<tr><td>gu</td><td>gara</td><td>we are</td></tr>
+<tr><td>zuek</td><td>zarete <span class="dia-cell" style="display:none"><span class="dia-reveal" onclick="revealDia(this)">Biz</span><span class="dia-val" style="display:none"> zarie</span></span></td><td>you (pl) are</td></tr>
+<tr><td>haiek</td><td>dira</td><td>they are</td></tr>
+</tbody></table>
+<div class="dia-cell dia-note" style="display:none">Tap the <b>Biz</b> chip for the Bizkaian form.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · fill in izan</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>We are friends. (Lagunak ___)</div><input class="ex-input" data-a="gara"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>Are you (all) Basque? (Euskaldunak ___?)</div><input class="ex-input" data-a="zarete"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>They are from Bilbao. (Bilbokoak ___)</div><input class="ex-input" data-a="dira"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Where are you from? (-koa)",blurb:"Building 'I'm from…' with place + -ko + -a.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Nongoa?</div><h2>Saying where you're from</h2></div>
+<div class="prose"><p>Ask with <b class="bq">Nongoa zara?</b> Answer by taking the place, adding <b class="bq">-ko</b> (\u201cof\u201d) and the article <b class="bq">-a</b>:</p></div>
+<table class="gt"><tbody>
+<tr><td>Bilbo → Bilbokoa</td><td>from Bilbao</td></tr>
+<tr><td>Donostia → Donostiakoa</td><td>from San Sebastián</td></tr>
+<tr><td>Zarautz → Zarauzkoa</td><td>from Zarautz (tz softens to z)</td></tr>
+<tr><td>Londres → Londreskoa</td><td>from London</td></tr>
+</tbody></table>
+<div class="callout">Use the <strong>-koa builder</strong> tool to try more places. The same <b class="bq">-ko</b> turns any place into a describer — you'll see it everywhere.</div>
+<div class="es-note"><span class="tag">ES</span>Where Spanish uses two words (<em>de Bilbao</em>), Basque folds \u201cthe one from Bilbao\u201d into a single word: <b class="bq">Bilbokoa</b>.</div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · I'm from …</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>from Bilbao</div><input class="ex-input" data-a="bilbokoa"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>from San Sebastián</div><input class="ex-input" data-a="donostiakoa"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>from London</div><input class="ex-input" data-a="londreskoa"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"The article & people",blurb:"lagun → laguna → lagunak, and nationalities.",html:`
+<div class="phase-head"><div class="kicker">Phase 4 · Artikulua</div><h2>The article, and words for people</h2></div>
+<div class="prose"><p>Basque \u201cthe\u201d is a suffix, not a word. Add <b class="bq">-a</b> for one, <b class="bq">-ak</b> for more:</p></div>
+<table class="gt"><tbody>
+<tr><td>lagun → laguna</td><td>the friend</td></tr><tr><td>lagun → lagunak</td><td>the friends</td></tr>
+<tr><td>mutil → mutila</td><td>the boy</td></tr><tr><td>neska → neskak</td><td>the girls</td></tr>
+</tbody></table>
+<p class="sec-title">Nationalities — country + -ar</p>
+<div class="prose"><p><b class="bq">espainiarra</b> Spanish · <b class="bq">frantziarra</b> French · <b class="bq">irlandarra</b> Irish · <b class="bq">amerikarra</b> American · <b class="bq">ingelesa</b> English · <b class="bq">euskalduna</b> Basque.</p></div>
+<div class="ex" data-ex="3"><div class="ex-label">Ariketa 3 · singular or plural \u201cthe\u201d?</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>the friend (lagun + ?)</div><input class="ex-input" data-a="laguna"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>the friends</div><input class="ex-input" data-a="lagunak"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>the man (gizon + ?)</div><input class="ex-input" data-a="gizona"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — Zazpiak Bat.</strong> \u201cThe seven [are] one.\u201d The Basque Country spans seven historic provinces across Spain and France — Bizkaia, Gipuzkoa, Araba, Nafarroa, Lapurdi, Nafarroa Beherea and Zuberoa. <b class="bq">Euskal Herria</b> means \u201cthe Basque-speaking land\u201d.</div>`}
+],
+3:[
+ {title:"Dialogue — At the Gernika market",blurb:"Naming things on a Monday market stall.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Azokan — At the market</h2></div>
+<div class="prose"><p>It's Monday in Gernika, market day. A learner points at things on a stall.</p></div>
+<div class="dlg">
+<div><span class="who">Learner</span><span class="l-bq">Barkatu, zer da hau?</span></div><span class="l-en">Excuse me, what is this?</span>
+<div><span class="who">Saltzailea</span><span class="l-bq">Hori gazta da. Oso ona!</span></div><span class="l-en">That's cheese. Very good!</span>
+<div><span class="who">Learner</span><span class="l-bq">Eta hauek? Zer dira hauek?</span></div><span class="l-en">And these? What are these?</span>
+<div><span class="who">Saltzailea</span><span class="l-bq">Horiek sagarrak dira. Eta hura han, hura loreak.</span></div><span class="l-en">Those are apples. And that over there, those are flowers.</span>
+<div><span class="who">Learner</span><span class="l-bq">Polita da! Garestia da gazta hau?</span></div><span class="l-en">It's nice! Is this cheese expensive?</span>
+<div><span class="who">Saltzailea</span><span class="l-bq">Ez, ez, merkea da. Beste bat?</span></div><span class="l-en">No, no, it's cheap. Another one?</span>
+</div>
+<div class="callout"><strong>Kultura — Gernika's market.</strong> The Monday market and the old oak of Gernika are symbols of Basque tradition. The tree stood over centuries of Basque assemblies.</div>`},
+ {title:"this, that, and that over there",blurb:"hau / hori / hura and their plurals.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>Pointing things out</h2></div>
+<div class="prose"><p>Basque has three degrees of distance, each with a plural in <b class="bq">-ek</b>:</p></div>
+<table class="gt"><thead><tr><th>singular</th><th></th><th>plural</th><th></th></tr></thead><tbody>
+<tr><td>hau</td><td>this (by me)</td><td>hauek</td><td>these</td></tr>
+<tr><td>hori</td><td>that (by you)</td><td>horiek</td><td>those</td></tr>
+<tr><td>hura</td><td>that (over there)</td><td>haiek</td><td>those yonder</td></tr>
+</tbody></table>
+<div class="callout">They come <em>after</em> the noun: <b class="bq">gazta hau</b> (this cheese), <b class="bq">sagar horiek</b> (those apples). Most speakers say <b class="bq">horiek</b> as \u201choiek\u201d. Explore in the <strong>demonstrative tool</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>Three levels, just like <em>este / ese / aquel</em> — but Basque puts them after the noun.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · singular → plural</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>this → these</div><input class="ex-input" data-a="hauek"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>that → those</div><input class="ex-input" data-a="horiek" data-loose="hoiek"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>what are these? (Zer ___ hauek?)</div><input class="ex-input" data-a="dira"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Naming things",blurb:"Objects and 'what is this?'",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Gauzak</div><h2>What is this?</h2></div>
+<div class="prose"><p>Ask <b class="bq">Zer da hau?</b> (what is this?) or <b class="bq">Zer dira hauek?</b> (what are these?). Answer <b class="bq">Hau ... da</b>.</p>
+<p>Everyday things: <b class="bq">mahaia</b> table · <b class="bq">aulkia</b> chair · <b class="bq">atea</b> door · <b class="bq">leihoa</b> window · <b class="bq">liburua</b> book · <b class="bq">giltza</b> key · <b class="bq">telefonoa</b> phone · <b class="bq">poltsa</b> bag · <b class="bq">dirua</b> money · <b class="bq">kotxea</b> car.</p></div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · say it in Basque</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>What is this?</div><input class="ex-input" data-a="zer da hau"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>This is a book. (___ liburua da)</div><input class="ex-input" data-a="hau"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>These are flowers. (Hauek ___ dira)</div><input class="ex-input" data-a="loreak"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`}
+],
+4:[
+ {title:"Dialogue — Finding your way",blurb:"Asking where things are in Zarautz.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Non dago? — Where is it?</h2></div>
+<div class="prose"><p>A visitor stops someone on the promenade in Zarautz.</p></div>
+<div class="dlg">
+<div><span class="who">Bisitaria</span><span class="l-bq">Barkatu, non dago hondartza?</span></div><span class="l-en">Excuse me, where's the beach?</span>
+<div><span class="who">Herritarra</span><span class="l-bq">Hor dago, hurbil. Eta zu, non zaude orain?</span></div><span class="l-en">It's there, close by. And where are you now?</span>
+<div><span class="who">Bisitaria</span><span class="l-bq">Plazan nago. Non dago taberna on bat?</span></div><span class="l-en">I'm in the square. Where's a good bar?</span>
+<div><span class="who">Herritarra</span><span class="l-bq">Taberna asko daude kalean. Bat elizaren ondoan dago.</span></div><span class="l-en">There are lots of bars on the street. One is next to the church.</span>
+<div><span class="who">Bisitaria</span><span class="l-bq">Eskerrik asko! Eta komuna? Non dago?</span></div><span class="l-en">Thank you! And the toilet? Where is it?</span>
+<div><span class="who">Herritarra</span><span class="l-bq">Barruan dago, tabernan.</span></div><span class="l-en">It's inside, in the bar.</span>
+</div>`},
+ {title:"egon — to be located",blurb:"nago, zaude, dago… the other 'to be'.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>egon — where things are</h2></div>
+<div class="prose"><p>Basque uses a <em>different</em> verb for location and physical state: <b class="bq">egon</b>. Compare Spanish <em>estar</em>.</p></div>
+<table class="gt"><thead><tr><th>person</th><th>egon</th><th>meaning</th></tr></thead><tbody>
+<tr><td>ni</td><td>nago</td><td>I am (located)</td></tr><tr><td>zu</td><td>zaude</td><td>you are</td></tr>
+<tr><td>hau</td><td>dago</td><td>it is</td></tr><tr><td>gu</td><td>gaude</td><td>we are</td></tr>
+<tr><td>zuek</td><td>zaudete</td><td>you (pl) are</td></tr><tr><td>haiek</td><td>daude</td><td>they are</td></tr>
+</tbody></table>
+<div class="callout"><strong>izan vs egon:</strong> <b class="bq">Ni Ane naiz</b> (I <em>am</em> Ane — identity, izan) but <b class="bq">Ni etxean nago</b> (I <em>am</em> at home — location, egon). Explore the <strong>egon builder</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>This is exactly the <em>ser</em>/<em>estar</em> split you already know — <b class="bq">egon</b> = estar.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · izan or egon?</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>Where is the beach? (Non ___ hondartza?)</div><input class="ex-input" data-a="dago"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>I am at home. (Etxean ___)</div><input class="ex-input" data-a="nago"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>There are many bars. (Taberna asko ___)</div><input class="ex-input" data-a="daude"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"in, at, here & there",blurb:"The -n ending and hemen / hor / han.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Non</div><h2>Saying where</h2></div>
+<div class="prose"><p>To say \u201cin/at\u201d a place, add <b class="bq">-n</b> (the inessive) to the place word:</p></div>
+<table class="gt"><tbody>
+<tr><td>taberna → tabernan</td><td>in the bar</td></tr><tr><td>etxea → etxean</td><td>at home</td></tr>
+<tr><td>hondartza → hondartzan</td><td>on the beach</td></tr><tr><td>Zarautz → Zarautzen</td><td>in Zarautz</td></tr>
+</tbody></table>
+<div class="prose"><p>Location words: <b class="bq">hemen</b> here · <b class="bq">hor</b> there (by you) · <b class="bq">han</b> over there · <b class="bq">barruan</b> inside · <b class="bq">kanpoan</b> outside · <b class="bq">hurbil</b> near · <b class="bq">urruti</b> far.</p></div>
+<div class="es-note"><span class="tag">ES</span>Spanish puts \u201cen\u201d before the place; Basque glues <b class="bq">-n</b> after it. <em>en el bar</em> → <b class="bq">tabernan</b>.</div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · add \u201cin/at\u201d</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>in the bar (taberna)</div><input class="ex-input" data-a="tabernan"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>at home (etxea)</div><input class="ex-input" data-a="etxean"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>in Zarautz</div><input class="ex-input" data-a="zarautzen"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — the frontoia.</strong> Nearly every Basque town has a <b class="bq">frontoi</b> (pelota court), usually by the church and square — the social heart where the game of <em>pelota</em> is played.</div>`}
+],
+5:[
+ {title:"Dialogue — At the pintxos bar",blurb:"Counting and ordering in Donostia's old town.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Pintxo-barran — At the pintxos bar</h2></div>
+<div class="prose"><p>In the Donostia old town, friends order at a crowded bar.</p></div>
+<div class="dlg">
+<div><span class="who">Jon</span><span class="l-bq">Zenbat pintxo daude?</span></div><span class="l-en">How many pintxos are there?</span>
+<div><span class="who">Ane</span><span class="l-bq">Pila bat! Hiru edo lau hartuko ditut.</span></div><span class="l-en">Loads! I'll take three or four.</span>
+<div><span class="who">Jon</span><span class="l-bq">Ni bi. Eta bi ardo, mesedez.</span></div><span class="l-en">Two for me. And two wines, please.</span>
+<div><span class="who">Tabernaria</span><span class="l-bq">Ez dago ardorik. Sagardoa badago.</span></div><span class="l-en">There's no wine. There is cider.</span>
+<div><span class="who">Jon</span><span class="l-bq">Ondo, bi sagardo orduan. Zenbat da dena?</span></div><span class="l-en">Fine, two ciders then. How much is everything?</span>
+<div><span class="who">Tabernaria</span><span class="l-bq">Hamabi euro.</span></div><span class="l-en">Twelve euros.</span>
+</div>`},
+ {title:"Numbers 0–20",blurb:"bat, bi, hiru… up to hogei.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Zenbakiak</div><h2>Counting to twenty</h2></div>
+<table class="gt"><tbody>
+<tr><td>1 bat · 2 bi · 3 hiru · 4 lau</td><td></td></tr>
+<tr><td>5 bost · 6 sei · 7 zazpi · 8 zortzi</td><td></td></tr>
+<tr><td>9 bederatzi · 10 hamar · 11 hamaika</td><td></td></tr>
+<tr><td>12 hamabi · 13 hamahiru · 14 hamalau</td><td></td></tr>
+<tr><td>15 hamabost · 16 hamasei · 20 hogei</td><td></td></tr>
+</tbody></table>
+<div class="callout"><strong>The teens are transparent:</strong> <b class="bq">hama-</b> (from hamar, 10) + the unit. <em>hamabi</em> = 10+2, <em>hamalau</em> = 10+4. And <b class="bq">hamaika</b> (11) also means \u201ccountless\u201d in old idiom.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · write the number</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>three</div><input class="ex-input" data-a="hiru"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>seven</div><input class="ex-input" data-a="zazpi"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>twelve</div><input class="ex-input" data-a="hamabi"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">4</span>twenty</div><input class="ex-input" data-a="hogei"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Counting in twenties",blurb:"The vigesimal system, and 'there is/are'.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Hogei ta…</div><h2>The base-20 system</h2></div>
+<div class="prose"><p>Above twenty, Basque counts in <em>twenties</em> — one of the oldest counting systems in Europe:</p></div>
+<table class="gt"><tbody>
+<tr><td>hogei</td><td>20</td></tr><tr><td>hogeita hamar</td><td>30 (20 + 10)</td></tr>
+<tr><td>berrogei</td><td>40 (2 × 20)</td></tr><tr><td>hirurogei</td><td>60 (3 × 20)</td></tr>
+<tr><td>laurogei</td><td>80 (4 × 20)</td></tr><tr><td>ehun</td><td>100</td></tr>
+</tbody></table>
+<div class="callout">Use the <strong>number tool</strong> to break any number apart. And to say \u201cthere is/are\u201d: <b class="bq">badago</b> (there is) / <b class="bq">badaude</b> (there are) / <b class="bq">ez dago</b> (there isn't). After a number, the noun stays <em>singular</em>: <b class="bq">hiru pintxo</b>, not \u201cpintxos\u201d.</div>
+<div class="es-note"><span class="tag">ES</span>Like French <em>quatre-vingts</em> (4×20 = 80), but Basque does it all the way through — a genuinely ancient feature.</div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · build the number</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>forty (2×20)</div><input class="ex-input" data-a="berrogei"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>thirty (20+10)</div><input class="ex-input" data-a="hogeita hamar"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>there are (two bars) — the verb</div><input class="ex-input" data-a="badaude"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — the txikiteo.</strong> Moving bar to bar with small drinks and pintxos, counting your rounds, is a Donostia ritual. <b class="bq">Zorionak</b> — you've finished Level 1!</div>`}
+]
+,
+6:[
+ {title:"Dialogue — Meet the family",blurb:"Ane shows Tom a family photo.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Nire familia — My family</h2></div>
+<div class="prose"><p>Over coffee, Ane shows Tom a photo on her phone.</p></div>
+<div class="dlg">
+<div><span class="who">Ane</span><span class="l-bq">Begira, hau nire familia da.</span></div><span class="l-en">Look, this is my family.</span>
+<div><span class="who">Tom</span><span class="l-bq">Nor da hau?</span></div><span class="l-en">Who's this?</span>
+<div><span class="who">Ane</span><span class="l-bq">Hori nire ama da, eta hau nire aita.</span></div><span class="l-en">That's my mother, and this is my father.</span>
+<div><span class="who">Tom</span><span class="l-bq">Anaia-arrebarik baduzu?</span></div><span class="l-en">Do you have any siblings?</span>
+<div><span class="who">Ane</span><span class="l-bq">Bai, anaia bat eta arreba bat ditut. Eta zuk?</span></div><span class="l-en">Yes, I have a brother and a sister. And you?</span>
+<div><span class="who">Tom</span><span class="l-bq">Nik ez dut anaiarik. Alaba bat dut.</span></div><span class="l-en">I don't have any brothers. I have a daughter.</span>
+</div>
+<div class="callout"><strong>Kultura — a Basque quirk worth knowing.</strong> The word for \u201csister\u201d depends on the speaker's gender: a man calls his sister <b class="bq">arreba</b>, a woman calls hers <b class="bq">ahizpa</b>. Likewise a woman's brother can be <b class="bq">neba</b>. Ask your reviewer how their own family uses these.</div>`},
+ {title:"The verb ukan — to have",blurb:"dut, duzu, du… your first transitive verb.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>ukan — to have</h2></div>
+<div class="prose"><p>This is the second great verb. It means \u201chave\u201d, and later it becomes the helper for most action verbs. With one thing owned:</p></div>
+<table class="gt"><thead><tr><th>doer</th><th>ukan</th><th>meaning</th></tr></thead><tbody>
+<tr><td>nik</td><td>dut</td><td>I have (it)</td></tr><tr><td>zuk</td><td>duzu</td><td>you have (it)</td></tr>
+<tr><td>hark</td><td>du</td><td>he/she has (it)</td></tr><tr><td>guk</td><td>dugu</td><td>we have (it)</td></tr>
+<tr><td>zuek</td><td>duzue</td><td>you (pl) have (it)</td></tr><tr><td>haiek</td><td>dute</td><td>they have (it)</td></tr>
+</tbody></table>
+<div class="callout">Notice the doer takes <b class="bq">-k</b>: <b class="bq">nik, zuk, hark</b>. That little <b class="bq">-k</b> is the famous Basque \u201cergative\u201d — you'll meet it head-on in Unit 12. For now, just learn the pairs. Try the <strong>ukan builder</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>Spanish \u201ctengo\u201d is one word; Basque <b class="bq">dut</b> is too, but it also encodes the <em>thing</em> had — change the object to plural and the verb changes (<b class="bq">ditut</b> = I have them).</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · the right form of ukan</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>I have a brother. (Anaia bat ___)</div><input class="ex-input" data-a="dut"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>Do you have a sister? (Arreba bat ___?)</div><input class="ex-input" data-a="duzu"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>She has a daughter. (Alaba bat ___)</div><input class="ex-input" data-a="du"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">4</span>They have a house. (Etxe bat ___)</div><input class="ex-input" data-a="dute"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"My, your, our — possessives",blurb:"nire, zure, bere, gure…",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Norenak</div><h2>Whose is it?</h2></div>
+<table class="gt"><tbody>
+<tr><td>nire</td><td>my</td></tr><tr><td>zure</td><td>your</td></tr><tr><td>bere</td><td>his / her</td></tr>
+<tr><td>gure</td><td>our</td></tr><tr><td>zuen</td><td>your (plural)</td></tr><tr><td>haien</td><td>their</td></tr>
+</tbody></table>
+<div class="prose"><p>They sit before the noun: <b class="bq">nire ama</b> (my mother), <b class="bq">gure etxea</b> (our house), <b class="bq">zure familia</b> (your family).</p></div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · say it in Basque</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>my father</div><input class="ex-input" data-a="nire aita"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>our house</div><input class="ex-input" data-a="gure etxea"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>your family</div><input class="ex-input" data-a="zure familia"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`}
+],
+7:[
+ {title:"Dialogue — Where do you live?",blurb:"Comparing homes and commutes.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Non bizi zara? — Where do you live?</h2></div>
+<div class="dlg">
+<div><span class="who">Maddi</span><span class="l-bq">Non bizi zara?</span></div><span class="l-en">Where do you live?</span>
+<div><span class="who">Jon</span><span class="l-bq">Zarautzen bizi naiz, hondartzatik hurbil. Eta zu?</span></div><span class="l-en">I live in Zarautz, near the beach. And you?</span>
+<div><span class="who">Maddi</span><span class="l-bq">Ni Bilbon. Baina egunero Donostiara noa, lanera.</span></div><span class="l-en">Me in Bilbao. But every day I go to San Sebastián, to work.</span>
+<div><span class="who">Jon</span><span class="l-bq">Bilbotik Donostiara? Urruti dago!</span></div><span class="l-en">From Bilbao to San Sebastián? That's far!</span>
+<div><span class="who">Maddi</span><span class="l-bq">Bai, baina trenez. Etxetik geltokira oinez noa.</span></div><span class="l-en">Yes, but by train. From home to the station I go on foot.</span>
+</div>
+<div class="callout">Spot the three endings at work: <b class="bq">Zarautzen</b> (in), <b class="bq">Donostiara</b> (to), <b class="bq">Bilbotik</b> (from). That trio is the whole grammar of this unit.</div>`},
+ {title:"in, to, from — the place trio",blurb:"-n / -ra / -tik, all glued to the place.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>Standing still, going, coming</h2></div>
+<table class="gt"><thead><tr><th>ending</th><th>meaning</th><th>example</th></tr></thead><tbody>
+<tr><td>-n</td><td>in / at</td><td>tabernan (in the bar)</td></tr>
+<tr><td>-ra</td><td>to (towards)</td><td>tabernara (to the bar)</td></tr>
+<tr><td>-tik</td><td>from</td><td>tabernatik (from the bar)</td></tr>
+</tbody></table>
+<div class="callout">Their question words match: <b class="bq">non?</b> (where), <b class="bq">nora?</b> (where to), <b class="bq">nondik?</b> (where from). Explore in the <strong>in/to/from tool</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>Spanish uses three separate words — <em>en / a / de</em>. Basque uses three suffixes. Same idea, glued on.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · add the right ending to \u201cetxe\u201d (home)</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>at home</div><input class="ex-input" data-a="etxean"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>(to) home</div><input class="ex-input" data-a="etxera"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>from home</div><input class="ex-input" data-a="etxetik"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Home & town",blurb:"Rooms of the house, and 'I live'.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Etxea</div><h2>The home</h2></div>
+<div class="prose"><p><b class="bq">bizi naiz</b> I live · <b class="bq">Non bizi zara?</b> where do you live · <b class="bq">Zarautzen bizi naiz</b> I live in Zarautz.</p>
+<p>Rooms: <b class="bq">sukaldea</b> kitchen · <b class="bq">logela</b> bedroom · <b class="bq">egongela</b> living room · <b class="bq">komuna</b> bathroom · <b class="bq">lorategia</b> garden. Places: <b class="bq">herria</b> town · <b class="bq">auzoa</b> neighbourhood · <b class="bq">pisua</b> flat.</p></div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · translate</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>Where do you live?</div><input class="ex-input" data-a="non bizi zara"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>I live in Zarautz.</div><input class="ex-input" data-a="zarautzen bizi naiz"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>the kitchen</div><input class="ex-input" data-a="sukaldea"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — the baserri.</strong> The traditional Basque farmhouse, the <b class="bq">baserri</b>, gave many families their surnames. If a Basque surname sounds like a landscape (Etxeberria = \u201cnew house\u201d, Mendizabal = \u201cwide mountain\u201d), that's why.</div>`}
+],
+8:[
+ {title:"Dialogue — A morning routine",blurb:"What time everything happens.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Zer ordutan? — At what time?</h2></div>
+<div class="dlg">
+<div><span class="who">Maddi</span><span class="l-bq">Zer ordutan esnatzen zara?</span></div><span class="l-en">What time do you wake up?</span>
+<div><span class="who">Jon</span><span class="l-bq">Zazpietan esnatzen naiz, eta zortzietan gosaltzen dut.</span></div><span class="l-en">I wake up at seven, and I have breakfast at eight.</span>
+<div><span class="who">Maddi</span><span class="l-bq">Eta gero?</span></div><span class="l-en">And then?</span>
+<div><span class="who">Jon</span><span class="l-bq">Gero lan egiten dut. Ordu bata eta erdietan bazkaltzen dut.</span></div><span class="l-en">Then I work. I have lunch at half past one.</span>
+<div><span class="who">Maddi</span><span class="l-bq">Berandu afaltzen duzu?</span></div><span class="l-en">Do you have dinner late?</span>
+<div><span class="who">Jon</span><span class="l-bq">Bai, beti. Hamarretan afaltzen dut!</span></div><span class="l-en">Yes, always. I have dinner at ten!</span>
+</div>`},
+ {title:"Telling the time",blurb:"o'clock, half past, quarter.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Ordua</div><h2>What time is it?</h2></div>
+<div class="prose"><p>Ask <b class="bq">Zer ordu da?</b> One o'clock is singular; from two, it goes plural (like Spanish <em>son las dos</em>):</p></div>
+<table class="gt"><tbody>
+<tr><td>Ordu bata da</td><td>It's one o'clock</td></tr>
+<tr><td>Ordu biak dira</td><td>It's two o'clock</td></tr>
+<tr><td>Hirurak dira</td><td>It's three o'clock</td></tr>
+<tr><td>Laurak eta erdi</td><td>Half past four</td></tr>
+<tr><td>Bostak eta laurden</td><td>Quarter past five</td></tr>
+<tr><td>Seiak laurden gutxi</td><td>Quarter to six</td></tr>
+</tbody></table>
+<div class="callout">To say <em>at</em> a time, add <b class="bq">-etan</b>: <b class="bq">zazpietan</b> (at seven), <b class="bq">hamarretan</b> (at ten).</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · o'clock</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>It's one o'clock.</div><input class="ex-input" data-a="ordu bata da"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>It's three o'clock.</div><input class="ex-input" data-a="hirurak dira"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>at seven</div><input class="ex-input" data-a="zazpietan"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"The habitual present",blurb:"How to say what you do every day.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Ohiturak</div><h2>Saying what you do</h2></div>
+<div class="prose"><p>To describe a habit, take the verb, add <b class="bq">-tzen</b> (or <b class="bq">-ten</b>), then a helper. Transitive verbs (eat, drink) take the <b class="bq">ukan</b> helper; \u201cself\u201d verbs (wake up, get up) take <b class="bq">izan</b>:</p></div>
+<table class="gt"><tbody>
+<tr><td>jan → jaten dut</td><td>I eat</td></tr>
+<tr><td>edan → edaten dut</td><td>I drink</td></tr>
+<tr><td>lan egin → lan egiten dut</td><td>I work</td></tr>
+<tr><td>esnatu → esnatzen naiz</td><td>I wake up</td></tr>
+</tbody></table>
+<div class="callout">The <b class="bq">-tzen</b> part never changes — only the little helper at the end moves for the person. Try the <strong>habitual builder</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>Spanish packs it into one word (<em>como</em>); Basque uses two pieces (<b class="bq">jaten dut</b>) — but the pattern is dead regular, which makes it easy.</div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · make the habit</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>I eat (jan)</div><input class="ex-input" data-a="jaten dut"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>I work (lan egin)</div><input class="ex-input" data-a="lan egiten dut"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>I wake up (esnatu)</div><input class="ex-input" data-a="esnatzen naiz"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — meal times.</strong> The Basque clock runs late: lunch (<b class="bq">bazkaria</b>) around 2pm, dinner (<b class="bq">afaria</b>) from 9pm. The mid-morning <b class="bq">hamaiketako</b> — \u201celevenses\u201d — bridges the gap.</div>`}
+],
+9:[
+ {title:"Dialogue — What do you like?",blurb:"Comparing tastes in music and more.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Zer gustatzen zaizu? — What do you like?</h2></div>
+<div class="dlg">
+<div><span class="who">Ane</span><span class="l-bq">Musika gustatzen zaizu?</span></div><span class="l-en">Do you like music?</span>
+<div><span class="who">Tom</span><span class="l-bq">Bai, asko gustatzen zait. Zuri?</span></div><span class="l-en">Yes, I like it a lot. You?</span>
+<div><span class="who">Ane</span><span class="l-bq">Niri ere bai. Baina ez zait dantza egitea gustatzen!</span></div><span class="l-en">Me too. But I don't like dancing!</span>
+<div><span class="who">Tom</span><span class="l-bq">Eta liburuak? Irakurtzea gustatzen zaizu?</span></div><span class="l-en">And books? Do you like reading?</span>
+<div><span class="who">Ane</span><span class="l-bq">Bai, liburuak asko gustatzen zaizkit. Zinema ere bai.</span></div><span class="l-en">Yes, I like books a lot. Cinema too.</span>
+</div>
+<div class="callout">Notice <b class="bq">gustatzen zaizkit</b> in the last line — the <em>zki</em> shows she likes <em>several</em> things (books, plural).</div>`},
+ {title:"The 'me gusta' pattern",blurb:"zait, zaizu, zaio — who it pleases.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>Liking, the Basque way</h2></div>
+<div class="prose"><p>Basque doesn't say \u201cI like X\u201d. It says \u201cX is pleasing to me\u201d — exactly like Spanish <em>me gusta</em>. The thing is the subject; a little word marks who's pleased:</p></div>
+<table class="gt"><tbody>
+<tr><td>gustatzen zait</td><td>I like it (to me)</td></tr>
+<tr><td>gustatzen zaizu</td><td>you like it</td></tr>
+<tr><td>gustatzen zaio</td><td>he/she likes it</td></tr>
+<tr><td>gustatzen zaigu</td><td>we like it</td></tr>
+<tr><td>gustatzen zaie</td><td>they like it</td></tr>
+<tr><td>gustatzen zaizkit</td><td>I like them (several)</td></tr>
+</tbody></table>
+<div class="callout">Negative: the little word jumps forward — <b class="bq">ez zait gustatzen</b> (I don't like it). Explore the <strong>gustatu tool</strong>.</div>
+<div class="es-note"><span class="tag">ES</span>This is your Spanish <em>me gusta / me gustan</em> mapped one-to-one. <b class="bq">zait</b> = me gusta, <b class="bq">zaizkit</b> = me gustan.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · who likes it?</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>I like it. (Gustatzen ___)</div><input class="ex-input" data-a="zait"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>Do you like it? (Gustatzen ___?)</div><input class="ex-input" data-a="zaizu"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>I like them. (Gustatzen ___)</div><input class="ex-input" data-a="zaizkit"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">4</span>I don't like it. (Ez ___ gustatzen)</div><input class="ex-input" data-a="zait"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Hobbies & opinions",blurb:"Things to like, and how much.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Zaletasunak</div><h2>Hobbies</h2></div>
+<div class="prose"><p><b class="bq">musika entzun</b> listen to music · <b class="bq">irakurri</b> read · <b class="bq">kirola egin</b> do sport · <b class="bq">dantza egin</b> dance · <b class="bq">margotu</b> paint · <b class="bq">sukaldatu</b> cook · <b class="bq">bidaiatu</b> travel · <b class="bq">surf egin</b> surf.</p>
+<p>How much: <b class="bq">asko</b> a lot · <b class="bq">pixka bat</b> a little · <b class="bq">batere ez</b> not at all. Verdicts: <b class="bq">ederra</b> lovely · <b class="bq">interesgarria</b> interesting · <b class="bq">aspergarria</b> boring.</p></div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · put it together</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>I like music a lot. (Musika asko ___ zait)</div><input class="ex-input" data-a="gustatzen"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>to surf</div><input class="ex-input" data-a="surf egin"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>interesting</div><input class="ex-input" data-a="interesgarria"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Kultura — jaiak.</strong> Basque social life turns on its festivals (<b class="bq">jaiak</b>) — from village <em>patron-saint</em> days to Bilbao's Aste Nagusia. Music, dancing, food and cider are never far away.</div>`}
+],
+10:[
+ {title:"Dialogue — At the craft market",blurb:"Choosing something by colour.",html:`
+<div class="phase-head"><div class="kicker">Phase 1 · Elkarrizketa</div><h2>Koloreak — Colours</h2></div>
+<div class="dlg">
+<div><span class="who">Bezeroa</span><span class="l-bq">Zein polita! Zenbat balio du poltsa gorriak?</span></div><span class="l-en">How pretty! How much is the red bag?</span>
+<div><span class="who">Saltzailea</span><span class="l-bq">Poltsa gorria hogeita bost euro da.</span></div><span class="l-en">The red bag is twenty-five euros.</span>
+<div><span class="who">Bezeroa</span><span class="l-bq">Eta urdina? Merkeagoa da?</span></div><span class="l-en">And the blue one? Is it cheaper?</span>
+<div><span class="who">Saltzailea</span><span class="l-bq">Bai, urdina hogei euro. Txikiagoa da, ordea.</span></div><span class="l-en">Yes, the blue one twenty euros. It's smaller, though.</span>
+<div><span class="who">Bezeroa</span><span class="l-bq">Berdea nahiago dut. Ederra da!</span></div><span class="l-en">I prefer the green one. It's lovely!</span>
+</div>`},
+ {title:"Colours & adjectives",blurb:"Describers follow the noun.",html:`
+<div class="phase-head"><div class="kicker">Phase 2 · Gramatika</div><h2>Describing things</h2></div>
+<div class="prose"><p>Colours and other adjectives come <em>after</em> the noun, and the article <b class="bq">-a</b> rides on the adjective:</p></div>
+<table class="gt"><tbody>
+<tr><td>etxe gorria</td><td>a/the red house</td></tr>
+<tr><td>kotxe berria</td><td>a/the new car</td></tr>
+<tr><td>liburu ona</td><td>a/the good book</td></tr>
+<tr><td>poltsa txikia</td><td>a/the small bag</td></tr>
+</tbody></table>
+<div class="prose"><p>Colours: <b class="bq">gorria</b> red · <b class="bq">urdina</b> blue · <b class="bq">berdea</b> green · <b class="bq">horia</b> yellow · <b class="bq">beltza</b> black · <b class="bq">zuria</b> white · <b class="bq">morea</b> purple.</p></div>
+<div class="callout">Explore in the <strong>adjective tool</strong>. Ask <b class="bq">Nolakoa da?</b> — \u201cwhat's it like?\u201d</div>
+<div class="es-note"><span class="tag">ES</span>Like Spanish, the colour follows the noun (<em>casa roja</em> → <b class="bq">etxe gorria</b>). The twist: Basque puts the article on the adjective, not the noun.</div>
+<div class="ex" data-ex="1"><div class="ex-label">Ariketa 1 · describe it</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>a red house</div><input class="ex-input" data-a="etxe gorria"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>a new car</div><input class="ex-input" data-a="kotxe berria"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>a small bag</div><input class="ex-input" data-a="poltsa txikia"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>`},
+ {title:"Numbers to a hundred",blurb:"Filling in the base-20 ladder.",html:`
+<div class="phase-head"><div class="kicker">Phase 3 · Ehunera arte</div><h2>Counting to 100</h2></div>
+<table class="gt"><tbody>
+<tr><td>hogei</td><td>20</td></tr><tr><td>hogeita hamar</td><td>30</td></tr>
+<tr><td>berrogei</td><td>40</td></tr><tr><td>berrogeita hamar</td><td>50</td></tr>
+<tr><td>hirurogei</td><td>60</td></tr><tr><td>hirurogeita hamar</td><td>70</td></tr>
+<tr><td>laurogei</td><td>80</td></tr><tr><td>laurogeita hamar</td><td>90</td></tr>
+<tr><td>ehun</td><td>100</td></tr>
+</tbody></table>
+<div class="callout">The tens between are \u201c(a twenty) and ten\u201d: <b class="bq">hogeita hamar</b> = 30, <b class="bq">berrogeita hamar</b> = 50. Add a unit with <b class="bq">-ta</b>: <b class="bq">hogeita bost</b> = 25.</div>
+<div class="ex" data-ex="2"><div class="ex-label">Ariketa 2 · build the number</div>
+<div class="ex-item"><div class="ex-q"><span class="num">1</span>fifty</div><input class="ex-input" data-a="berrogeita hamar"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">2</span>sixty</div><input class="ex-input" data-a="hirurogei"><div class="ex-fb"></div></div>
+<div class="ex-item"><div class="ex-q"><span class="num">3</span>a hundred</div><input class="ex-input" data-a="ehun"><div class="ex-fb"></div></div>
+<div class="ex-btns"><button class="ck" onclick="checkEx(this)">Check</button><button class="sh" onclick="showEx(this)">Show</button></div></div>
+<div class="callout"><strong>Zorionak!</strong> That's Level 2 complete — you can now talk about family, home, time, likes and describe the world in colour. <b class="bq">Aurrera, Goazen!</b></div>`}
+]
+};
+
+/* ============ STORAGE (per-unit progress) ============ */
+const STORE_KEY='goazen_l1';
+let mem={hooks:{},status:{},best:{},phasesDone:{},fcDir:'produce',showDialect:false};
+function loadStore(){try{const r=localStorage.getItem(STORE_KEY);if(r)mem=Object.assign(mem,JSON.parse(r));}catch(e){}}
+function saveStore(){try{localStorage.setItem(STORE_KEY,JSON.stringify(mem));}catch(e){}}
+loadStore();
+
+let activeUnit=1;
+function U(){return UNITS.find(u=>u.id===activeUnit);}
+function phasesFor(id){return PHASES_BY_UNIT[id]||[];}
+function keyP(uid,i){return uid+':'+i;}
+function keyC(uid,v){return uid+':'+v.bq+'|'+v.s;}
+
+/* ============ DIALECT ============ */
+function syncDiaSwitches(){['dia-switch-fc','dia-switch-tool'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',!!mem.showDialect);});}
+function toggleDialect(){mem.showDialect=!mem.showDialect;saveStore();syncDiaSwitches();if(curScreen==='flashcards')renderFlash();if(curScreen==='tools')renderBuilder();if(curScreen==='phase')applyDialectVisibility();}
+function applyDialectVisibility(){document.querySelectorAll('.dia-cell').forEach(el=>{el.style.display=mem.showDialect?'':'none';});document.querySelectorAll('.dia-val').forEach(el=>{el.style.display='none';});document.querySelectorAll('.dia-reveal').forEach(el=>el.classList.remove('open'));}
+function revealDia(btn){const val=btn.parentElement.querySelector('.dia-val');const open=val.style.display==='none';val.style.display=open?'inline':'none';btn.classList.toggle('open',open);}
+function unitHasDialect(){return !!U().dialect;}
+
+/* ============ NAV ============ */
+const titles={home:'<em>Goazen</em> · Basque',unit:'',phases:'Lessons',phase:'Lesson',vocab:'Vocabulary',tools:'Grammar tools',flashcards:'Flashcards',match:'Match-up',speed:'Speed recall',backup:'Backup'};
+const backMap={unit:'home',phases:'unit',phase:'phases',vocab:'unit',tools:'unit',flashcards:'vocab',match:'vocab',speed:'vocab',backup:'home'};
+let curScreen='home';
+function nav(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+  document.getElementById('appbar-title').innerHTML=(s==='unit')?('<em>'+U().title+'</em>'):(titles[s]||'Goazen');
+  document.getElementById('appbar').classList.toggle('has-back',s!=='home');
+  curScreen=s;window.scrollTo(0,0);
+  if(s==='home')renderUnitList();
+  if(s==='unit')renderUnitHub();
+  if(s==='phases')renderPhasesList();
+  if(s==='vocab')updateFcProgText();
+  if(s==='tools'){buildTools();syncDiaSwitches();document.getElementById('dia-row-tool').style.display=unitHasDialect()?'':'none';}
+  if(s==='flashcards'){document.getElementById('fcdir-produce').classList.toggle('active',fcDir==='produce');document.getElementById('fcdir-recognise').classList.toggle('active',fcDir==='recognise');document.getElementById('dia-row-fc').style.display=unitHasDialect()?'':'none';syncDiaSwitches();renderFlash();}
+}
+function goBack(){nav(backMap[curScreen]||'home');}
+
+/* ============ HOME: unit list ============ */
+function unitProgress(uid){const ph=phasesFor(uid);let done=0;ph.forEach((p,i)=>{if(mem.phasesDone[keyP(uid,i)])done++;});const voc=UNITS.find(u=>u.id===uid).vocab;let known=0;voc.forEach(v=>{if(mem.status[keyC(uid,v)]==='known')known++;});const pct=Math.round(((done/Math.max(ph.length,1))*0.5+(known/Math.max(voc.length,1))*0.5)*100);return {done,total:ph.length,known,words:voc.length,pct};}
+function renderUnitList(){
+  const wrap=document.getElementById('unit-list');wrap.innerHTML='';
+  UNITS.forEach(u=>{
+    const p=unitProgress(u.id);
+    const card=document.createElement('div');card.className='card tap-card';
+    card.onclick=()=>{activeUnit=u.id;nav('unit');};
+    card.innerHTML=`<div class="kicker">A1.1 · ${u.code}</div><h3>${u.title} — <em>${u.en}</em></h3><div class="sub">${u.theme}</div><div class="prog-track"><div class="prog-fill" style="width:${p.pct}%"></div></div><div class="prog-label">${p.done}/${p.total} phases · ${p.known}/${p.words} words</div>`;
+    wrap.appendChild(card);
+  });
+}
+function renderUnitHub(){
+  const u=U();
+  document.getElementById('unit-hub-title').innerHTML=u.code+' — <em>'+u.title+'</em>';
+  document.getElementById('unit-hub-theme').textContent=u.theme;
+  document.getElementById('unit-hub-lessons').textContent='Lessons — '+phasesFor(u.id).length+' phases';
+  document.getElementById('unit-hub-vocab').textContent='Vocabulary — '+u.vocab.length+' words';
+  document.getElementById('unit-hub-tool').textContent=u.tool.title+', sentence anatomy, EN/ES/EU cards.';
+}
+
+/* ============ PHASES ============ */
+let curPhase=0;
+function renderPhasesList(){const ph=phasesFor(activeUnit);const wrap=document.getElementById('phases-list');wrap.innerHTML='';ph.forEach((p,i)=>{const done=mem.phasesDone[keyP(activeUnit,i)];const row=document.createElement('div');row.className='phase-row'+(done?' done':'');row.innerHTML=`<div class="phase-num">${i+1}</div><div class="phase-body"><h4>${p.title}</h4><p>${p.blurb}</p></div><div class="phase-check">✓</div>`;row.onclick=()=>openPhase(i);wrap.appendChild(row);});}
+function openPhase(i){curPhase=i;const ph=phasesFor(activeUnit);const p=ph[i];const c=document.getElementById('phase-content');const last=i>=ph.length-1;let nextBtn=`<button class="pn-btn primary" onclick="markAndNext(${i})">${last?'Finish unit ✓':'Done — next ›'}</button>`;let prevBtn=i>0?`<button class="pn-btn" onclick="openPhase(${i-1})">‹ Prev</button>`:`<button class="pn-btn" onclick="nav('phases')">All phases</button>`;c.innerHTML=p.html+`<div class="phase-nav">${prevBtn}${nextBtn}</div>`;nav('phase');applyDialectVisibility();}
+function markAndNext(i){mem.phasesDone[keyP(activeUnit,i)]=true;saveStore();const ph=phasesFor(activeUnit);if(i<ph.length-1)openPhase(i+1);else nav('phases');}
+
+/* ============ EXERCISES ============ */
+function norm(s){return (s||'').toLowerCase().replace(/[áä]/g,'a').replace(/[éë]/g,'e').replace(/[íï]/g,'i').replace(/[óö]/g,'o').replace(/[úü]/g,'u').replace(/[.,!?¿¡'’\-]/g,' ').trim().replace(/\s+/g,' ');}
+function checkExInput(inp){const fb=inp.parentElement.querySelector('.ex-fb');const val=norm(inp.value);if(!val){fb.textContent='';fb.className='ex-fb';inp.classList.remove('correct','wrong');return;}const a=norm(inp.dataset.a);const loose=inp.dataset.loose?inp.dataset.loose.split('|').map(norm):[];const ok=[a,...loose].some(x=>x===val);inp.classList.toggle('correct',ok);inp.classList.toggle('wrong',!ok);fb.className='ex-fb '+(ok?'ok':'no');fb.textContent=ok?'✓':'✗';}
+function checkEx(btn){btn.closest('.ex').querySelectorAll('.ex-input').forEach(checkExInput);}
+function showEx(btn){btn.closest('.ex').querySelectorAll('.ex-input').forEach(inp=>{inp.value=inp.dataset.a;inp.classList.remove('wrong');inp.classList.add('correct');const fb=inp.parentElement.querySelector('.ex-fb');fb.className='ex-fb ok';fb.textContent='→';});}
+function updateFcProgText(){const u=U();let known=0;u.vocab.forEach(v=>{if(mem.status[keyC(u.id,v)]==='known')known++;});const el=document.getElementById('fc-prog-text');if(el)el.textContent=known+' of '+u.vocab.length+' words marked known.';}
+
+/* ============ TOOLS ============ */
+function buildTools(){renderBuilder();renderAnatomy();renderCards();document.getElementById('pill-builder-label').textContent=U().tool.type==='number'?'Numbers':'Builder';}
+let explorerSel=0;
+function renderBuilder(){
+  const t=U().tool;const mount=document.getElementById('builder-mount');
+  if(t.type==='number'){renderNumberTool(mount,t);return;}
+  explorerSel=Math.min(explorerSel,t.rows.length-1);
+  let chips=t.rows.map((r,i)=>`<button class="person-chip${i===explorerSel?' active':''}" onclick="pickExplorer(${i})">${r.trig}</button>`).join('');
+  const r=t.rows[explorerSel];
+  const biz=(mem.showDialect&&r.biz)?`<div class="dia-note"><span class="dia-tag"><span class="dia-flag">Biz</span>${r.form.split(' ')[0]==r.form?r.biz:r.biz}</span></div>`:'';
+  mount.innerHTML=`<div class="izan-stage">
+    <div class="izan-prompt">${t.prompt}</div>
+    <div class="person-row">${chips}</div>
+    <div class="izan-sentence"><span class="w-verb">${r.form}</span></div>
+    <div class="izan-en">“${r.en}”</div><div class="izan-es">${r.es||''}</div>${biz}
+  </div>
+  <div class="callout" style="margin-top:1rem">${t.note}</div>`;
+}
+function pickExplorer(i){explorerSel=i;renderBuilder();}
+function renderNumberTool(mount,t){
+  let sel=(typeof mount._sel==='number')?mount._sel:0;
+  let chips=t.rows.map((r,i)=>`<button class="person-chip${i===sel?' active':''}" onclick="pickNumber(${i})">${r.n}</button>`).join('');
+  const r=t.rows[sel];
+  mount.innerHTML=`<div class="izan-stage">
+    <div class="izan-prompt">${t.prompt}</div>
+    <div class="person-row" style="max-width:100%">${chips}</div>
+    <div class="izan-sentence"><span class="w-verb">${r.form}</span></div>
+    <div class="izan-en">${r.n} = ${r.bd}</div>
+  </div><div class="callout" style="margin-top:1rem">${t.note}</div>`;
+  mount._sel=sel;
+}
+function pickNumber(i){const m=document.getElementById('builder-mount');m._sel=i;renderNumberTool(m,U().tool);}
+const roleLabel={root:'root / noun',person:'person / possessive',verb:'verb',demon:'demonstrative',article:'article',describe:'case ending',quant:'quantity / number',gram:'question word / particle'};
+function renderAnatomy(){const cont=document.getElementById('anatomy-container');cont.innerHTML='';U().anatomy.forEach((s,si)=>{const box=document.createElement('div');box.className='anat-sentence';const line=document.createElement('div');line.className='anat-line';s.toks.forEach(tk=>{if(tk.sp){const sp=document.createElement('span');sp.className='tok-space';line.appendChild(sp);return;}if(!tk.fn||!tk.t){const x=document.createElement('span');x.textContent=tk.t||'';x.style.cssText='font-family:Lora,serif;font-style:italic;font-size:1.2rem';line.appendChild(x);return;}const el=document.createElement('span');el.className='tok fn-'+tk.fn;el.style.borderBottomColor='var(--c-'+tk.fn+')';el.textContent=tk.t;el.onclick=()=>{document.querySelectorAll('#anatomy-container .tok').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');const d=document.getElementById('anat-detail-'+si);d.classList.remove('empty');d.innerHTML='<span class="d-role bgfn-'+tk.fn+'" style="color:var(--c-'+tk.fn+')">'+(roleLabel[tk.fn]||tk.fn)+'</span><span><span class="d-bq fn-'+tk.fn+'">'+tk.bq+'</span> — '+tk.note+'</span>';};line.appendChild(el);});box.appendChild(line);const en=document.createElement('div');en.className='anat-en';en.textContent='“'+s.en+'”';box.appendChild(en);const det=document.createElement('div');det.className='anat-detail empty';det.id='anat-detail-'+si;det.textContent='Tap a coloured word to see its job.';box.appendChild(det);cont.appendChild(box);});}
+function renderCards(){const g=document.getElementById('cards-grid');g.innerHTML='';U().contrast.forEach(c=>{const card=document.createElement('div');card.className='flip-card';let back='';c.rows.forEach(r=>{back+='<div class="cmp-row"><span class="cmp-lang cmp-'+r[1]+'">'+r[0]+'</span><span class="cmp-text">'+r[2]+'</span></div>';});back+='<div class="cmp-note">'+c.note+'</div>';card.innerHTML='<div class="flip-inner"><div class="flip-face flip-front"><div class="fc-concept">'+c.concept+'</div><div class="fc-hint">tap to flip</div></div><div class="flip-face flip-back">'+back+'</div></div>';card.onclick=()=>card.classList.toggle('flipped');g.appendChild(card);});}
+function toolTab(i,btn){document.querySelectorAll('#screen-tools .pill').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('#screen-tools .subpanel').forEach((p,idx)=>p.classList.toggle('active',idx===i));window.scrollTo(0,0);}
+
+/* ============ FLASHCARDS ============ */
+let fcSection='',fcIndex=0,fcList=[],fcDir=(mem.fcDir||'produce');
+function setFcDir(dir){fcDir=dir;mem.fcDir=dir;saveStore();document.getElementById('fcdir-produce').classList.toggle('active',dir==='produce');document.getElementById('fcdir-recognise').classList.toggle('active',dir==='recognise');renderFlash();}
+function sectionsFor(){return Object.keys(U().secNames);}
+function renderSectionBar(){const bar=document.getElementById('fc-sectionbar');bar.innerHTML='';const secs=sectionsFor();if(!secs.includes(fcSection))fcSection=secs[0];secs.forEach(s=>{const b=document.createElement('button');b.className='fc-secbtn'+(s===fcSection?' active':'');b.textContent=U().secNames[s];b.onclick=()=>{fcSection=s;fcIndex=0;renderFlash();};bar.appendChild(b);});}
+function renderFlash(){renderSectionBar();fcList=U().vocab.filter(v=>v.s===fcSection);if(fcIndex>=fcList.length)fcIndex=0;const card=document.getElementById('fc-card');card.classList.remove('flipped');const v=fcList[fcIndex];if(!v)return;const ft=document.getElementById('fc-front-text'),bt=document.getElementById('fc-back-text');if(fcDir==='produce'){ft.className='fc-en';ft.textContent=v.en;bt.className='fc-word';bt.textContent=v.bq;document.getElementById('fc-tap-hint').textContent='recall the Basque, then tap to check';}else{ft.className='fc-word';ft.textContent=v.bq;bt.className='fc-en';bt.textContent=v.en;document.getElementById('fc-tap-hint').textContent='recall the meaning, then tap to check';}const userHook=mem.hooks[keyC(activeUnit,v)];let h='';if(v.hk){const tc={link:'tag-link',logic:'tag-logic',hook:'tag-hook'}[v.hk];const tt={link:'real link',logic:'logic',hook:'memory aid'}[v.hk];h+='<div><span class="hook-tag '+tc+'">'+tt+'</span>'+v.hook+'</div>';}if(userHook)h+='<div style="margin-top:.5rem"><span class="hook-tag tag-mine">yours</span>'+userHook+'</div>';if(mem.showDialect&&v.dia)h+='<div style="margin-top:.6rem"><span class="dia-tag"><span class="dia-flag">dialect</span>'+v.dia+'</span></div>';document.getElementById('fc-hook').innerHTML=h;document.getElementById('hook-edit').value=userHook||'';const st=mem.status[keyC(activeUnit,v)];const sh=st==='known'?'<span class="st-known">known</span>':(st==='learning'?'<span class="st-learning">learning</span>':'');document.getElementById('fc-status-front').innerHTML=sh;document.getElementById('fc-status-back').innerHTML=sh;document.getElementById('fc-counter').textContent=(fcIndex+1)+' / '+fcList.length;updateFcProgText();}
+function flipCard(){document.getElementById('fc-card').classList.toggle('flipped');}
+function nextCard(){if(fcList.length)fcIndex=(fcIndex+1)%fcList.length;renderFlash();}
+function prevCard(){if(fcList.length)fcIndex=(fcIndex-1+fcList.length)%fcList.length;renderFlash();}
+function rateCard(st){const v=fcList[fcIndex];if(!v)return;mem.status[keyC(activeUnit,v)]=st;saveStore();renderFlash();setTimeout(nextCard,180);}
+function saveHook(){const v=fcList[fcIndex];if(!v)return;const val=document.getElementById('hook-edit').value.trim();if(val)mem.hooks[keyC(activeUnit,v)]=val;else delete mem.hooks[keyC(activeUnit,v)];saveStore();renderFlash();}
+
+/* ============ GAMES ============ */
+function bestKey(kind){return kind+':'+activeUnit;}
+let matchSel=null,matchPairs=0,matchTimer=null,matchStart=0;
+function startMatch(){nav('match');document.getElementById('match-done').style.display='none';document.getElementById('match-grid').style.display='grid';const b=mem.best[bestKey('match')];document.getElementById('match-best').textContent=b?b.toFixed(1)+'s':'—';const pool=[...U().vocab].sort(()=>Math.random()-.5).slice(0,5);matchPairs=pool.length;matchSel=null;let items=[];pool.forEach(v=>{items.push({k:v.bq+v.s,t:v.bq,eu:1});items.push({k:v.bq+v.s,t:v.en,eu:0});});items.sort(()=>Math.random()-.5);const grid=document.getElementById('match-grid');grid.innerHTML='';items.forEach(it=>{const t=document.createElement('div');t.className='match-tile'+(it.eu?' eu':'');t.textContent=it.t;t.dataset.k=it.k;t.onclick=()=>matchTap(t);grid.appendChild(t);});matchStart=Date.now();clearInterval(matchTimer);matchTimer=setInterval(()=>{document.getElementById('match-time').textContent=((Date.now()-matchStart)/1000).toFixed(1)+'s';},100);}
+function matchTap(t){if(t.classList.contains('done'))return;if(!matchSel){matchSel=t;t.classList.add('sel');return;}if(matchSel===t){t.classList.remove('sel');matchSel=null;return;}if(matchSel.dataset.k===t.dataset.k){matchSel.classList.add('done');t.classList.add('done');matchSel=null;matchPairs--;if(matchPairs===0)finishMatch();}else{const a=matchSel;t.classList.add('wrong');a.classList.add('wrong');setTimeout(()=>{t.classList.remove('wrong','sel');a.classList.remove('wrong','sel');},400);matchSel=null;}}
+function finishMatch(){clearInterval(matchTimer);const secs=(Date.now()-matchStart)/1000;const bk=bestKey('match');let isBest=false;if(mem.best[bk]==null||secs<mem.best[bk]){mem.best[bk]=secs;saveStore();isBest=true;}document.getElementById('match-grid').style.display='none';document.getElementById('match-done').style.display='block';document.getElementById('match-result').textContent=(isBest?'New best! ':'Done! ')+secs.toFixed(1)+'s';}
+let spQueue=[],spIdx=0,spStreak=0,spScore=0;
+function startSpeed(){nav('speed');document.getElementById('sp-done').style.display='none';document.getElementById('sp-options').style.display='grid';document.getElementById('sp-word').style.display='block';const b=mem.best[bestKey('speed')];document.getElementById('sp-best').textContent=b!=null?b:'—';spQueue=[...U().vocab].sort(()=>Math.random()-.5).slice(0,10);spIdx=0;spStreak=0;spScore=0;document.getElementById('sp-streak').textContent='0';showSpeedQ();}
+function showSpeedQ(){if(spIdx>=spQueue.length)return finishSpeed();const v=spQueue[spIdx];document.getElementById('sp-qnum').textContent=spIdx+1;document.getElementById('sp-word').textContent=v.bq;const others=[...U().vocab].filter(x=>x.en!==v.en).sort(()=>Math.random()-.5).slice(0,3).map(x=>x.en);const all=[v.en,...others].sort(()=>Math.random()-.5);const box=document.getElementById('sp-options');box.innerHTML='';all.forEach(o=>{const b=document.createElement('button');b.className='sp-opt';b.textContent=o;b.onclick=()=>speedAnswer(b,o===v.en,box,v.en);box.appendChild(b);});}
+function speedAnswer(btn,correct,box,right){box.querySelectorAll('.sp-opt').forEach(b=>{b.style.pointerEvents='none';if(b.textContent===right)b.classList.add('correct');});if(correct){spScore++;spStreak++;}else{btn.classList.add('wrong');spStreak=0;}document.getElementById('sp-streak').textContent=spStreak;spIdx++;setTimeout(showSpeedQ,620);}
+function finishSpeed(){document.getElementById('sp-word').style.display='none';document.getElementById('sp-options').style.display='none';document.getElementById('sp-done').style.display='block';const bk=bestKey('speed');let isBest=false;if(mem.best[bk]==null||spScore>mem.best[bk]){mem.best[bk]=spScore;saveStore();isBest=true;}document.getElementById('sp-result').textContent=(isBest?'New best! ':'')+spScore+' / 10 correct';}
+
+/* ============ BACKUP ============ */
+function exportData(){const blob=new Blob([JSON.stringify(mem,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='goazen-backup.json';a.click();URL.revokeObjectURL(url);document.getElementById('backup-msg').textContent='Backup downloaded.';}
+function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);mem=Object.assign({hooks:{},status:{},best:{},phasesDone:{},fcDir:'produce',showDialect:false},d);saveStore();document.getElementById('backup-msg').textContent='Backup restored.';renderUnitList();}catch(err){const m=document.getElementById('backup-msg');m.style.color='var(--c-doer)';m.textContent='Could not read that file.';}};r.readAsText(f);}
+function resetAll(){if(confirm('Erase all saved progress and hooks on this device?')){mem={hooks:{},status:{},best:{},phasesDone:{},fcDir:'produce',showDialect:false};saveStore();document.getElementById('backup-msg').textContent='All progress cleared.';renderUnitList();}}
+
+/* ============ INIT ============ */
+renderUnitList();
+
+</script>
+</body></html>
