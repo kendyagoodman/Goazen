@@ -229,10 +229,15 @@
   <!-- HOME -->
   <div class="screen active" id="screen-home">
     <div class="hero"><span class="badge">Pilot · Level 1</span><h2>Goazen</h2><p>Learn Basque — properly, and beautifully. Let's go.</p></div>
-    <div id="unit-list"></div>
-    <div class="sec-title">Reference tools</div>
-    <div class="card tap-card mode-card" onclick="openCaseLab()"><div class="mode-icon bgfn-describe" style="color:var(--c-describe)">⁝</div><div class="mc-body"><h3>Case Lab</h3><p>All the Basque cases in one place — pick a word, try every ending, see the meaning. 112 forms to explore.</p></div></div>
+    <div class="card tap-card mode-card" onclick="nav('levels')"><div class="mode-icon bgfn-verb" style="color:var(--c-verb)">◧</div><div class="mc-body"><h3>Levels</h3><p>The course — ten units from A1 upward. Dialogue, vocabulary, grammar, and games.</p></div></div>
+    <div class="card tap-card mode-card" onclick="openCaseLab()"><div class="mode-icon bgfn-describe" style="color:var(--c-describe)">⁝</div><div class="mc-body"><h3>Case Lab</h3><p>All the Basque cases in one place — pick a word, try every ending, see the meaning. 700 forms to explore.</p></div></div>
     <div class="footer-note"><strong>Beta testing:</strong> this is an early prototype. Notes on anything — wording, naturalness, what's confusing — are gold. All content is original and pending native-speaker review. <span class="feedback-link" onclick="nav('backup')">Export progress →</span></div>
+  </div>
+
+  <!-- LEVELS -->
+  <div class="screen" id="screen-levels">
+    <div class="hero"><h2>Levels</h2><p>Pick a unit to begin. Progress saves as you go.</p></div>
+    <div id="unit-list"></div>
   </div>
 
   <!-- UNIT HUB -->
@@ -1512,7 +1517,8 @@ const NOUNS=[
   f:{abs:"etxea",erg:"etxeak",dat:"etxeari",gen:"etxearen",ine:"etxean",all:"etxera",abl:"etxetik",des:"etxerako",com:"etxearekin",ins:"etxez",ben:"etxearentzat",cau:"etxearengatik",par:"etxerik",pro:"etxetzat"}},
  {stem:"lagun", the:"laguna", en:"friend", type:"anim",
   f:{abs:"laguna",erg:"lagunak",dat:"lagunari",gen:"lagunaren",ine:"lagunarengan",all:"lagunarengana",abl:"lagunarengandik",des:"lagunarentzako",com:"lagunarekin",ins:"lagunaz",ben:"lagunarentzat",cau:"lagunarengatik",par:"lagunik",pro:"laguntzat"},
-  biz:{com:"lagunagaz"}},
+  biz:{com:"lagunagaz"},
+  hi:{ine:"animate → local cases use the -gan series"}},
  {stem:"taberna", the:"taberna", en:"bar", type:"inan",
   f:{abs:"taberna",erg:"tabernak",dat:"tabernari",gen:"tabernaren",ine:"tabernan",all:"tabernara",abl:"tabernatik",des:"tabernarako",com:"tabernarekin",ins:"tabernaz",ben:"tabernarentzat",cau:"tabernarengatik",par:"tabernarik",pro:"tabernatzat"}},
  {stem:"mendi", the:"mendia", en:"mountain", type:"inan",
@@ -1521,13 +1527,115 @@ const NOUNS=[
   f:{abs:"hiria",erg:"hiriak",dat:"hiriari",gen:"hiriaren",ine:"hirian",all:"hirira",abl:"hiritik",des:"hirirako",com:"hiriarekin",ins:"hiriz",ben:"hiriarentzat",cau:"hiriarengatik",par:"hiririk",pro:"hiritzat"}},
  {stem:"oin", the:"oina", en:"foot", type:"inan",
   f:{abs:"oina",erg:"oinak",dat:"oinari",gen:"oinaren",ine:"oinean",all:"oinera",abl:"oinetik",des:"oinerako",com:"oinarekin",ins:"oinez",ben:"oinarentzat",cau:"oinarengatik",par:"oinik",pro:"ointzat"},
-  hi:{ine:"consonant stem → -e- slips in: oin+ean",all:"oin+era",abl:"oin+etik"}},
+  hi:{ine:"consonant stem → euphonic -e- before the ending"}},
  {stem:"mutil", the:"mutila", en:"boy", type:"anim",
   f:{abs:"mutila",erg:"mutilak",dat:"mutilari",gen:"mutilaren",ine:"mutilarengan",all:"mutilarengana",abl:"mutilarengandik",des:"mutilarentzako",com:"mutilarekin",ins:"mutilaz",ben:"mutilarentzat",cau:"mutilarengatik",par:"mutilik",pro:"mutiltzat"},
-  biz:{com:"mutilagaz"}},
+  biz:{com:"mutilagaz"},
+  hi:{ine:"animate → local cases use the -gan series"}},
  {stem:"Bilbo", the:"Bilbo", en:"Bilbao (place name)", type:"place",
   f:{abs:"Bilbo",erg:"Bilbok",dat:"Bilbori",gen:"Bilboren",ine:"Bilbon",all:"Bilbora",abl:"Bilbotik",des:"Bilborako",com:"Bilborekin",ins:"Bilboz",ben:"Bilborentzat",cau:"Bilborengatik",par:"Bilborik",pro:"Bilbotzat"},
-  hi:{abs:"proper names take no article; case adds straight onto the name"}}
+  hi:{abs:"proper name → no article; case attaches to the name"}},
+ {stem:"liburu", the:"liburua", en:"book", type:"inan",
+  f:{abs:"liburua",erg:"liburuak",dat:"liburuari",gen:"liburuaren",ine:"liburuan",all:"liburura",abl:"liburutik",des:"libururako",com:"liburuarekin",ins:"liburuz",ben:"liburuarentzat",cau:"liburuarengatik",par:"libururik",pro:"liburutzat"}},
+ {stem:"kale", the:"kalea", en:"street", type:"inan",
+  f:{abs:"kalea",erg:"kaleak",dat:"kaleari",gen:"kalearen",ine:"kalean",all:"kalera",abl:"kaletik",des:"kalerako",com:"kalearekin",ins:"kalez",ben:"kalearentzat",cau:"kalearengatik",par:"kalerik",pro:"kaletzat"}},
+ {stem:"jatetxe", the:"jatetxea", en:"restaurant", type:"inan",
+  f:{abs:"jatetxea",erg:"jatetxeak",dat:"jatetxeari",gen:"jatetxearen",ine:"jatetxean",all:"jatetxera",abl:"jatetxetik",des:"jatetxerako",com:"jatetxearekin",ins:"jatetxez",ben:"jatetxearentzat",cau:"jatetxearengatik",par:"jatetxerik",pro:"jatetxetzat"}},
+ {stem:"geltoki", the:"geltokia", en:"station", type:"inan",
+  f:{abs:"geltokia",erg:"geltokiak",dat:"geltokiari",gen:"geltokiaren",ine:"geltokian",all:"geltokira",abl:"geltokitik",des:"geltokirako",com:"geltokiarekin",ins:"geltokiz",ben:"geltokiarentzat",cau:"geltokiarengatik",par:"geltokirik",pro:"geltokitzat"}},
+ {stem:"ate", the:"atea", en:"door", type:"inan",
+  f:{abs:"atea",erg:"ateak",dat:"ateari",gen:"atearen",ine:"atean",all:"atera",abl:"atetik",des:"aterako",com:"atearekin",ins:"atez",ben:"atearentzat",cau:"atearengatik",par:"aterik",pro:"atetzat"}},
+ {stem:"leiho", the:"leihoa", en:"window", type:"inan",
+  f:{abs:"leihoa",erg:"leihoak",dat:"leihoari",gen:"leihoaren",ine:"leihoan",all:"leihora",abl:"leihotik",des:"leihorako",com:"leihoarekin",ins:"leihoz",ben:"leihoarentzat",cau:"leihoarengatik",par:"leihorik",pro:"leihotzat"}},
+ {stem:"telefono", the:"telefonoa", en:"phone", type:"inan",
+  f:{abs:"telefonoa",erg:"telefonoak",dat:"telefonoari",gen:"telefonoaren",ine:"telefonoan",all:"telefonora",abl:"telefonotik",des:"telefonorako",com:"telefonoarekin",ins:"telefonoz",ben:"telefonoarentzat",cau:"telefonoarengatik",par:"telefonorik",pro:"telefonotzat"}},
+ {stem:"kotxe", the:"kotxea", en:"car", type:"inan",
+  f:{abs:"kotxea",erg:"kotxeak",dat:"kotxeari",gen:"kotxearen",ine:"kotxean",all:"kotxera",abl:"kotxetik",des:"kotxerako",com:"kotxearekin",ins:"kotxez",ben:"kotxearentzat",cau:"kotxearengatik",par:"kotxerik",pro:"kotxetzat"}},
+ {stem:"ardo", the:"ardoa", en:"wine", type:"inan",
+  f:{abs:"ardoa",erg:"ardoak",dat:"ardoari",gen:"ardoaren",ine:"ardoan",all:"ardora",abl:"ardotik",des:"ardorako",com:"ardoarekin",ins:"ardoz",ben:"ardoarentzat",cau:"ardoarengatik",par:"ardorik",pro:"ardotzat"}},
+ {stem:"sagardo", the:"sagardoa", en:"cider", type:"inan",
+  f:{abs:"sagardoa",erg:"sagardoak",dat:"sagardoari",gen:"sagardoaren",ine:"sagardoan",all:"sagardora",abl:"sagardotik",des:"sagardorako",com:"sagardoarekin",ins:"sagardoz",ben:"sagardoarentzat",cau:"sagardoarengatik",par:"sagardorik",pro:"sagardotzat"}},
+ {stem:"garagardo", the:"garagardoa", en:"beer", type:"inan",
+  f:{abs:"garagardoa",erg:"garagardoak",dat:"garagardoari",gen:"garagardoaren",ine:"garagardoan",all:"garagardora",abl:"garagardotik",des:"garagardorako",com:"garagardoarekin",ins:"garagardoz",ben:"garagardoarentzat",cau:"garagardoarengatik",par:"garagardorik",pro:"garagardotzat"}},
+ {stem:"kafe", the:"kafea", en:"coffee", type:"inan",
+  f:{abs:"kafea",erg:"kafeak",dat:"kafeari",gen:"kafearen",ine:"kafean",all:"kafera",abl:"kafetik",des:"kaferako",com:"kafearekin",ins:"kafez",ben:"kafearentzat",cau:"kafearengatik",par:"kaferik",pro:"kafetzat"}},
+ {stem:"pintxo", the:"pintxoa", en:"pintxo", type:"inan",
+  f:{abs:"pintxoa",erg:"pintxoak",dat:"pintxoari",gen:"pintxoaren",ine:"pintxoan",all:"pintxora",abl:"pintxotik",des:"pintxorako",com:"pintxoarekin",ins:"pintxoz",ben:"pintxoarentzat",cau:"pintxoarengatik",par:"pintxorik",pro:"pintxotzat"}},
+ {stem:"pisu", the:"pisua", en:"flat", type:"inan",
+  f:{abs:"pisua",erg:"pisuak",dat:"pisuari",gen:"pisuaren",ine:"pisuan",all:"pisura",abl:"pisutik",des:"pisurako",com:"pisuarekin",ins:"pisuz",ben:"pisuarentzat",cau:"pisuarengatik",par:"pisurik",pro:"pisutzat"}},
+ {stem:"mahai", the:"mahaia", en:"table", type:"inan",
+  f:{abs:"mahaia",erg:"mahaiak",dat:"mahaiari",gen:"mahaiaren",ine:"mahaian",all:"mahaira",abl:"mahaitik",des:"mahairako",com:"mahaiarekin",ins:"mahaiz",ben:"mahaiarentzat",cau:"mahaiarengatik",par:"mahairik",pro:"mahaitzat"}},
+ {stem:"kontu", the:"kontua", en:"bill", type:"inan",
+  f:{abs:"kontua",erg:"kontuak",dat:"kontuari",gen:"kontuaren",ine:"kontuan",all:"kontura",abl:"kontutik",des:"konturako",com:"kontuarekin",ins:"kontuz",ben:"kontuarentzat",cau:"kontuarengatik",par:"konturik",pro:"kontutzat"}},
+ {stem:"lore", the:"lorea", en:"flower", type:"inan",
+  f:{abs:"lorea",erg:"loreak",dat:"loreari",gen:"lorearen",ine:"lorean",all:"lorera",abl:"loretik",des:"lorerako",com:"lorearekin",ins:"lorez",ben:"lorearentzat",cau:"lorearengatik",par:"lorerik",pro:"loretzat"}},
+ {stem:"frontoi", the:"frontoia", en:"pelota court", type:"inan",
+  f:{abs:"frontoia",erg:"frontoiak",dat:"frontoiari",gen:"frontoiaren",ine:"frontoian",all:"frontoira",abl:"frontoitik",des:"frontoirako",com:"frontoiarekin",ins:"frontoiz",ben:"frontoiarentzat",cau:"frontoiarengatik",par:"frontoirik",pro:"frontoitzat"}},
+ {stem:"hondartza", the:"hondartza", en:"beach", type:"inan",
+  f:{abs:"hondartza",erg:"hondartzak",dat:"hondartzari",gen:"hondartzaren",ine:"hondartzan",all:"hondartzara",abl:"hondartzatik",des:"hondartzarako",com:"hondartzarekin",ins:"hondartzaz",ben:"hondartzarentzat",cau:"hondartzarengatik",par:"hondartzarik",pro:"hondartzatzat"}},
+ {stem:"eliza", the:"eliza", en:"church", type:"inan",
+  f:{abs:"eliza",erg:"elizak",dat:"elizari",gen:"elizaren",ine:"elizan",all:"elizara",abl:"elizatik",des:"elizarako",com:"elizarekin",ins:"elizaz",ben:"elizarentzat",cau:"elizarengatik",par:"elizarik",pro:"elizatzat"}},
+ {stem:"plaza", the:"plaza", en:"square", type:"inan",
+  f:{abs:"plaza",erg:"plazak",dat:"plazari",gen:"plazaren",ine:"plazan",all:"plazara",abl:"plazatik",des:"plazarako",com:"plazarekin",ins:"plazaz",ben:"plazarentzat",cau:"plazarengatik",par:"plazarik",pro:"plazatzat"}},
+ {stem:"denda", the:"denda", en:"shop", type:"inan",
+  f:{abs:"denda",erg:"dendak",dat:"dendari",gen:"dendaren",ine:"dendan",all:"dendara",abl:"dendatik",des:"dendarako",com:"dendarekin",ins:"dendaz",ben:"dendarentzat",cau:"dendarengatik",par:"dendarik",pro:"dendatzat"}},
+ {stem:"azoka", the:"azoka", en:"market", type:"inan",
+  f:{abs:"azoka",erg:"azokak",dat:"azokari",gen:"azokaren",ine:"azokan",all:"azokara",abl:"azokatik",des:"azokarako",com:"azokarekin",ins:"azokaz",ben:"azokarentzat",cau:"azokarengatik",par:"azokarik",pro:"azokatzat"}},
+ {stem:"gazta", the:"gazta", en:"cheese", type:"inan",
+  f:{abs:"gazta",erg:"gaztak",dat:"gaztari",gen:"gaztaren",ine:"gaztan",all:"gaztara",abl:"gaztatik",des:"gaztarako",com:"gaztarekin",ins:"gaztaz",ben:"gaztarentzat",cau:"gaztarengatik",par:"gaztarik",pro:"gaztatzat"}},
+ {stem:"giltza", the:"giltza", en:"key", type:"inan",
+  f:{abs:"giltza",erg:"giltzak",dat:"giltzari",gen:"giltzaren",ine:"giltzan",all:"giltzara",abl:"giltzatik",des:"giltzarako",com:"giltzarekin",ins:"giltzaz",ben:"giltzarentzat",cau:"giltzarengatik",par:"giltzarik",pro:"giltzatzat"}},
+ {stem:"gela", the:"gela", en:"room", type:"inan",
+  f:{abs:"gela",erg:"gelak",dat:"gelari",gen:"gelaren",ine:"gelan",all:"gelara",abl:"gelatik",des:"gelarako",com:"gelarekin",ins:"gelaz",ben:"gelarentzat",cau:"gelarengatik",par:"gelarik",pro:"gelatzat"}},
+ {stem:"poltsa", the:"poltsa", en:"bag", type:"inan",
+  f:{abs:"poltsa",erg:"poltsak",dat:"poltsari",gen:"poltsaren",ine:"poltsan",all:"poltsara",abl:"poltsatik",des:"poltsarako",com:"poltsarekin",ins:"poltsaz",ben:"poltsarentzat",cau:"poltsarengatik",par:"poltsarik",pro:"poltsatzat"}},
+ {stem:"sagar", the:"sagarra", en:"apple", type:"inan",
+  f:{abs:"sagarra",erg:"sagarrak",dat:"sagarrari",gen:"sagarraren",ine:"sagarrean",all:"sagarrera",abl:"sagarretik",des:"sagarrerako",com:"sagarrarekin",ins:"sagarrez",ben:"sagarrarentzat",cau:"sagarrarengatik",par:"sagarrik",pro:"sagartzat"},
+  hi:{ine:"consonant stem → euphonic -e- before the ending"}},
+ {stem:"arrain", the:"arraina", en:"fish", type:"inan",
+  f:{abs:"arraina",erg:"arrainak",dat:"arrainari",gen:"arrainaren",ine:"arrainean",all:"arrainera",abl:"arrainetik",des:"arrainerako",com:"arrainarekin",ins:"arrainez",ben:"arrainarentzat",cau:"arrainarengatik",par:"arrainik",pro:"arraintzat"},
+  hi:{ine:"consonant stem → euphonic -e- before the ending"}},
+ {stem:"izen", the:"izena", en:"name", type:"inan",
+  f:{abs:"izena",erg:"izenak",dat:"izenari",gen:"izenaren",ine:"izenean",all:"izenera",abl:"izenetik",des:"izenerako",com:"izenarekin",ins:"izenez",ben:"izenarentzat",cau:"izenarengatik",par:"izenik",pro:"izentzat"},
+  hi:{ine:"consonant stem → euphonic -e- before the ending"}},
+ {stem:"abizen", the:"abizena", en:"surname", type:"inan",
+  f:{abs:"abizena",erg:"abizenak",dat:"abizenari",gen:"abizenaren",ine:"abizenean",all:"abizenera",abl:"abizenetik",des:"abizenerako",com:"abizenarekin",ins:"abizenez",ben:"abizenarentzat",cau:"abizenarengatik",par:"abizenik",pro:"abizentzat"},
+  hi:{ine:"consonant stem → euphonic -e- before the ending"}},
+ {stem:"senar", the:"senarra", en:"husband", type:"anim",
+  f:{abs:"senarra",erg:"senarrak",dat:"senarrari",gen:"senarraren",ine:"senarrarengan",all:"senarrarengana",abl:"senarrarengandik",des:"senarrarentzako",com:"senarrarekin",ins:"senarraz",ben:"senarrarentzat",cau:"senarrarengatik",par:"senarrik",pro:"senartzat"},
+  biz:{com:"senarragaz"},
+  hi:{ine:"animate → local cases use the -gan series"}},
+ {stem:"euskaldun", the:"euskalduna", en:"Basque speaker", type:"anim",
+  f:{abs:"euskalduna",erg:"euskaldunak",dat:"euskaldunari",gen:"euskaldunaren",ine:"euskaldunarengan",all:"euskaldunarengana",abl:"euskaldunarengandik",des:"euskaldunarentzako",com:"euskaldunarekin",ins:"euskaldunaz",ben:"euskaldunarentzat",cau:"euskaldunarengatik",par:"euskaldunik",pro:"euskalduntzat"},
+  biz:{com:"euskaldunagaz"},
+  hi:{ine:"animate → local cases use the -gan series"}},
+ {stem:"seme", the:"semea", en:"son", type:"anim",
+  f:{abs:"semea",erg:"semeak",dat:"semeari",gen:"semearen",ine:"semearengan",all:"semearengana",abl:"semearengandik",des:"semearentzako",com:"semearekin",ins:"semeaz",ben:"semearentzat",cau:"semearengatik",par:"semerik",pro:"semetzat"},
+  hi:{ine:"animate → local cases use the -gan series"}},
+ {stem:"emakume", the:"emakumea", en:"woman", type:"anim",
+  f:{abs:"emakumea",erg:"emakumeak",dat:"emakumeari",gen:"emakumearen",ine:"emakumearengan",all:"emakumearengana",abl:"emakumearengandik",des:"emakumearentzako",com:"emakumearekin",ins:"emakumeaz",ben:"emakumearentzat",cau:"emakumearengatik",par:"emakumerik",pro:"emakumetzat"},
+  hi:{ine:"animate → local cases use the -gan series"}},
+ {stem:"lehengusu", the:"lehengusua", en:"cousin", type:"anim",
+  f:{abs:"lehengusua",erg:"lehengusuak",dat:"lehengusuari",gen:"lehengusuaren",ine:"lehengusuarengan",all:"lehengusuarengana",abl:"lehengusuarengandik",des:"lehengusuarentzako",com:"lehengusuarekin",ins:"lehengusuaz",ben:"lehengusuarentzat",cau:"lehengusuarengatik",par:"lehengusurik",pro:"lehengusutzat"},
+  hi:{ine:"animate → local cases use the -gan series"}},
+ {stem:"neska", the:"neska", en:"girl", type:"anim",
+  f:{abs:"neska",erg:"neskak",dat:"neskari",gen:"neskaren",ine:"neskarengan",all:"neskarengana",abl:"neskarengandik",des:"neskarentzako",com:"neskarekin",ins:"neskaz",ben:"neskarentzat",cau:"neskarengatik",par:"neskarik",pro:"neskatzat"},
+  hi:{ine:"animate → local cases use the -gan series"}},
+ {stem:"ama", the:"ama", en:"mother", type:"anim",
+  f:{abs:"ama",erg:"amak",dat:"amari",gen:"amaren",ine:"amarengan",all:"amarengana",abl:"amarengandik",des:"amarentzako",com:"amarekin",ins:"amaz",ben:"amarentzat",cau:"amarengatik",par:"amarik",pro:"amatzat"},
+  hi:{ine:"animate → local cases use the -gan series"}},
+ {stem:"aita", the:"aita", en:"father", type:"anim",
+  f:{abs:"aita",erg:"aitak",dat:"aitari",gen:"aitaren",ine:"aitarengan",all:"aitarengana",abl:"aitarengandik",des:"aitarentzako",com:"aitarekin",ins:"aitaz",ben:"aitarentzat",cau:"aitarengatik",par:"aitarik",pro:"aitatzat"},
+  hi:{ine:"animate → local cases use the -gan series"}},
+ {stem:"Donostia", the:"Donostia", en:"San Sebastian (place)", type:"place",
+  f:{abs:"Donostia",erg:"Donostiak",dat:"Donostiari",gen:"Donostiaren",ine:"Donostian",all:"Donostiara",abl:"Donostiatik",des:"Donostiarako",com:"Donostiarekin",ins:"Donostiaz",ben:"Donostiarentzat",cau:"Donostiarengatik",par:"Donostiarik",pro:"Donostiatzat"},
+  hi:{abs:"proper name → no article; case attaches to the name"}},
+ {stem:"Getaria", the:"Getaria", en:"Getaria (place)", type:"place",
+  f:{abs:"Getaria",erg:"Getariak",dat:"Getariari",gen:"Getariaren",ine:"Getarian",all:"Getariara",abl:"Getariatik",des:"Getariarako",com:"Getariarekin",ins:"Getariaz",ben:"Getariarentzat",cau:"Getariarengatik",par:"Getariarik",pro:"Getariatzat"},
+  hi:{abs:"proper name → no article; case attaches to the name"}},
+ {stem:"Zarautz", the:"Zarautz", en:"Zarautz (place)", type:"place",
+  f:{abs:"Zarautz",erg:"Zarautzek",dat:"Zarautzi",gen:"Zarautzen",ine:"Zarautzen",all:"Zarautzera",abl:"Zarautzetik",des:"Zarautzerako",com:"Zarautzekin",ins:"Zarautzez",ben:"Zarautzentzat",cau:"Zarautzengatik",par:"Zarautzik",pro:"Zarautztzat"},
+  hi:{abs:"sibilant-final place name → forms need native review"}},
 ];
 
 /* ============ CASE LAB logic ============ */
@@ -1607,8 +1715,8 @@ function revealDia(btn){const val=btn.parentElement.querySelector('.dia-val');co
 function unitHasDialect(){return !!U().dialect;}
 
 /* ============ NAV ============ */
-const titles={home:'<em>Goazen</em> · Basque',unit:'',phases:'Lessons',phase:'Lesson',vocab:'Vocabulary',tools:'Grammar tools',flashcards:'Flashcards',match:'Match-up',speed:'Speed recall',backup:'Backup',caselab:'Case Lab'};
-const backMap={unit:'home',phases:'unit',phase:'phases',vocab:'unit',tools:'unit',flashcards:'vocab',match:'vocab',speed:'vocab',backup:'home',caselab:'home'};
+const titles={home:'<em>Goazen</em> · Basque',levels:'Levels',unit:'',phases:'Lessons',phase:'Lesson',vocab:'Vocabulary',tools:'Grammar tools',flashcards:'Flashcards',match:'Match-up',speed:'Speed recall',backup:'Backup',caselab:'Case Lab'};
+const backMap={levels:'home',unit:'levels',phases:'unit',phase:'phases',vocab:'unit',tools:'unit',flashcards:'vocab',match:'vocab',speed:'vocab',backup:'home',caselab:'home'};
 let curScreen='home';
 function nav(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
@@ -1616,7 +1724,7 @@ function nav(s){
   document.getElementById('appbar-title').innerHTML=(s==='unit')?('<em>'+U().title+'</em>'):(titles[s]||'Goazen');
   document.getElementById('appbar').classList.toggle('has-back',s!=='home');
   curScreen=s;window.scrollTo(0,0);
-  if(s==='home')renderUnitList();
+  if(s==='levels')renderUnitList();
   if(s==='unit')renderUnitHub();
   if(s==='phases')renderPhasesList();
   if(s==='vocab')updateFcProgText();
