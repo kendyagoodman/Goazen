@@ -217,6 +217,41 @@
   .cl-case-btn.active .cb-name{color:var(--accent)}
   .cl-review{font-size:.74rem;color:var(--ink-light);font-style:italic;margin-top:1.2rem;padding:.7rem .9rem;border:1px dashed var(--border);border-radius:9px;line-height:1.5}
 
+
+/* ---- Case Lab build drill ---- */
+.clb-head{display:flex;align-items:center;gap:12px;margin:.2rem 0 1.1rem}
+.clb-score{font-size:.82rem;color:var(--ink-light);white-space:nowrap}
+.clb-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.clb-track>i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s ease}
+.clb-card{background:var(--bg-card);border:.5px solid var(--border);border-radius:16px;padding:1.5rem 1.2rem;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.clb-kick{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-light)}
+.clb-en{font-size:1.4rem;font-weight:650;color:var(--ink);margin:.4rem 0 .15rem;line-height:1.2}
+.clb-hint{font-size:.76rem;color:var(--ink-light);margin-bottom:1.2rem}
+.clb-wb{display:flex;align-items:center;justify-content:center;gap:.45rem;margin:.3rem 0 1.3rem;flex-wrap:wrap}
+.clb-root{font-family:Georgia,serif;font-style:italic;font-size:1.55rem;color:var(--ink)}
+.clb-op{color:var(--ink-light);font-size:1.15rem}
+.clb-slot{min-width:64px;padding:.2rem .7rem;border:1.5px dashed var(--border);border-radius:10px;color:var(--ink-light);font-family:Georgia,serif;font-style:italic;font-size:1.35rem}
+.clb-slot.good{border-style:solid;border-color:var(--accent);color:var(--accent);font-style:normal;font-weight:600}
+.clb-opts{display:flex;gap:.55rem;justify-content:center;flex-wrap:wrap;margin-bottom:.4rem}
+.clb-opt{font-family:Georgia,serif;font-style:italic;font-size:1.15rem;padding:.55rem 1.15rem;border:.5px solid var(--border);border-radius:12px;background:var(--bg-card);color:var(--ink);cursor:pointer;transition:transform .08s,border-color .15s}
+.clb-opt:active{transform:scale(.96)}
+.clb-opt:hover{border-color:var(--accent)}
+.clb-opt.wrong{border-color:var(--c-doer);color:var(--c-doer);animation:clbShake .34s}
+.clb-opt:disabled{opacity:.38;cursor:default}
+@keyframes clbShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.clb-reveal{margin-top:.7rem;padding-top:1.1rem;border-top:.5px solid var(--border)}
+.clb-form{font-size:1.55rem;font-weight:700;color:var(--accent);font-family:Georgia,serif}
+.clb-qw{display:inline-block;margin-left:.55rem;font-size:.78rem;color:var(--warn);font-weight:700;vertical-align:middle}
+.clb-parts{font-size:.92rem;color:var(--ink-light);margin-top:.35rem;font-family:Georgia,serif}
+.clb-hook{font-size:.82rem;color:var(--ink-mid);max-width:42ch;margin:.55rem auto .1rem;line-height:1.5}
+.clb-big{font-size:2.7rem;font-weight:700;color:var(--accent)}
+
+.clb-chip{font-family:Georgia,serif;font-style:italic;font-size:1.35rem;color:var(--accent);cursor:pointer;border-bottom:1.5px solid var(--accent-pale);padding-bottom:1px}
+.clb-chip:hover{opacity:.55}
+.clb-form-inline{font-family:Georgia,serif;font-weight:700;font-size:1.4rem;color:var(--accent)}
+.clb-opt.used{opacity:.28}
+.clb-controls{display:flex;gap:.6rem;justify-content:center;margin-top:1.1rem}
+.clb-wb.wrong{animation:clbShake .36s}
 </style>
 </head>
 <body>
@@ -230,7 +265,7 @@
   <div class="screen active" id="screen-home">
     <div class="hero"><span class="badge">Pilot · Level 1</span><h2>Goazen</h2><p>Learn Basque — properly, and beautifully. Let's go.</p></div>
     <div class="card tap-card mode-card" onclick="nav('levels')"><div class="mode-icon bgfn-verb" style="color:var(--c-verb)">◧</div><div class="mc-body"><h3>Levels</h3><p>The course — ten units from A1 upward. Dialogue, vocabulary, grammar, and games.</p></div></div>
-    <div class="card tap-card mode-card" onclick="openCaseLab()"><div class="mode-icon bgfn-describe" style="color:var(--c-describe)">⁝</div><div class="mc-body"><h3>Case Lab</h3><p>All the Basque cases in one place — pick a word, try every ending, see the meaning. 700 forms to explore.</p></div></div>
+    <div class="card tap-card mode-card" onclick="openCaseLab()"><div class="mode-icon bgfn-describe" style="color:var(--c-describe)">⁝</div><div class="mc-body"><h3>Case Lab</h3><p>Build words a piece at a time — 15 worked examples: root, article, then case ending, tapped morpheme by morpheme, each with a hook.</p></div></div>
     <div class="footer-note"><strong>Beta testing:</strong> this is an early prototype. Notes on anything — wording, naturalness, what's confusing — are gold. All content is original and pending native-speaker review. <span class="feedback-link" onclick="nav('backup')">Export progress →</span></div>
   </div>
 
@@ -327,22 +362,11 @@
   </div>
   <!-- CASE LAB -->
   <div class="screen" id="screen-caselab">
-    <div class="hero"><span class="badge">Reference tool</span><h2>Case Lab</h2><p>Basque builds meaning by adding endings. Pick a word, tap a case, see what it becomes.</p></div>
-    <div class="cl-intro"><strong>How to read it:</strong> Basque has no "to / from / with / of" as separate words — they're all endings glued onto the noun. Each case answers a question: <b class="bq">NOR</b> (who/what), <b class="bq">NORK</b> (who does it), <b class="bq">NORI</b> (to whom), <b class="bq">NON</b> (where)… Tap around and watch the ending change.</div>
-    <div class="cl-picker-label">Choose a word</div>
-    <div class="cl-noun-row" id="cl-noun-row"></div>
-    <div class="cl-stage">
-      <div class="cl-stage-noun" id="cl-stage-noun"></div>
-      <div class="cl-form" id="cl-form"></div>
-      <div class="cl-gloss" id="cl-gloss"></div>
-      <div class="cl-casename" id="cl-casename"></div>
-      <div class="cl-nor" id="cl-nor"></div>
-      <div class="cl-note" id="cl-note"></div>
-      <div id="cl-extra"></div>
-    </div>
-    <div class="cl-picker-label">Tap a case</div>
-    <div class="cl-case-grid" id="cl-case-grid"></div>
-    <div class="cl-review">These forms are standard Batua (singular, definite). Local cases for people use the <b>-gan / -gana / -gandik</b> series, not the place endings. Plurals and indefinites follow different patterns — a later addition. Bizkaian variants are flagged, and the whole tool is pending native-speaker review.</div>
+    <div class="hero"><span class="badge">Build lab</span><h2>Case Lab</h2><p>Build the word from its parts. You get the root and the meaning — build the rest piece by piece.</p></div>
+    <div class="cl-intro"><strong>Build it a piece at a time.</strong> The root is given. Tap the article <b class="bq">-a-</b> (or the euphonic <b class="bq">-e-</b> after a consonant), then the case ending — each ending answers a question word, and that question <em>is</em> the hook. Tap a placed piece to remove it.</div>
+    <div class="clb-head"><div class="clb-score">Word <b id="clb-score">0</b> / <span id="clb-tot">15</span></div><div class="clb-track"><i id="clb-prog"></i></div></div>
+    <div id="clb-body"></div>
+    <div class="cl-review">Every target here is a verified singular-definite form drawn from the app’s own word list — no forms are invented on the fly. People (animates) take the <b>-gan / -gana / -gandik</b> series for local cases; plurals and indefinites come later. Pending native-speaker review.</div>
   </div>
 
 </div>
@@ -1640,59 +1664,66 @@ const NOUNS=[
 
 /* ============ CASE LAB logic ============ */
 let clNoun=0, clCase="abs";
-function renderCaseNouns(){
-  const row=document.getElementById('cl-noun-row');row.innerHTML='';
-  NOUNS.forEach((n,i)=>{
-    const b=document.createElement('button');b.className='cl-noun'+(i===clNoun?' active':'');
-    const typeLabel=n.type==='anim'?'person':(n.type==='place'?'place':'thing');
-    b.innerHTML=n.stem+'<span class="cl-type">'+typeLabel+'</span>';
-    b.onclick=()=>{clNoun=i;renderCaseNouns();renderCaseForm();};
-    row.appendChild(b);
-  });
-}
-function renderCaseGrid(){
-  const grid=document.getElementById('cl-case-grid');grid.innerHTML='';
-  CASES.forEach(c=>{
-    const b=document.createElement('button');b.className='cl-case-btn'+(c.id===clCase?' active':'');
-    b.innerHTML='<div class="cb-nor">'+(c.nor==='-'?'&nbsp;':c.nor)+'</div><div class="cb-name">'+c.name+'</div>';
-    b.onclick=()=>{clCase=c.id;renderCaseGrid();renderCaseForm();};
-    grid.appendChild(b);
-  });
-}
-function renderCaseForm(){
-  const n=NOUNS[clNoun];const c=CASES.find(x=>x.id===clCase);
-  const form=n.f[clCase]||'—';
-  // highlight the ending: find common prefix with the bare stem
-  let disp=form;
-  const stem=n.stem;
-  if(form.toLowerCase().startsWith(stem.toLowerCase())&&form.length>stem.length){
-    disp=form.slice(0,stem.length)+'<span class="cl-suf">'+form.slice(stem.length)+'</span>';
+const CLPOOL=[
+ {en:"the friend (subject)",root:"lagun",form:"laguna",pieces:["a"],qw:"Nor?",hook:"The base form: root + the article -a. Every other ending stacks onto this.",dis:["k", "ri", "ren"]},
+ {en:"the friend (does something)",root:"lagun",form:"lagunak",pieces:["a", "k"],qw:"Nork?",hook:"Ergative -k lands on the -a. Nork? marks the one *doing* a transitive verb.",dis:["ri", "ren", "e"]},
+ {en:"to the friend",root:"lagun",form:"lagunari",pieces:["a", "ri"],qw:"Nori?",hook:"-ri = to / for whom. The friend *receives*. Same -a foundation, new tail.",dis:["ren", "rekin", "k"]},
+ {en:"the friend's",root:"lagun",form:"lagunaren",pieces:["a", "ren"],qw:"Noren?",hook:"-ren = 's / of. Possession. Still just -a + a tail.",dis:["ri", "rekin", "k"]},
+ {en:"with the friend",root:"lagun",form:"lagunarekin",pieces:["a", "rekin"],qw:"Norekin?",hook:"-rekin = with ('kin' \u2248 with). The pattern you saw on the screenshot.",dis:["ren", "rentzat", "ri"]},
+ {en:"in the house",root:"etxe",form:"etxean",pieces:["a", "n"],qw:"Non?",hook:"-n = in / at, sitting on the -a. Vowel root, so the -a stays put.",dis:["e", "ra", "tik"]},
+ {en:"the book's (title)",root:"liburu",form:"liburuaren",pieces:["a", "ren"],qw:"Noren?",hook:"The very same -ren you met on lagun \u2014 it travels to any noun.",dis:["ri", "rekin", "k"]},
+ {en:"with a coffee",root:"kafe",form:"kafearekin",pieces:["a", "rekin"],qw:"Norekin?",hook:"-rekin again, new word. Learn the tail once, reuse it everywhere.",dis:["ren", "rentzat", "ri"]},
+ {en:"for the boy",root:"mutil",form:"mutilarentzat",pieces:["a", "rentzat"],qw:"Norentzat?",hook:"-rentzat = for the benefit of. Note it grows out of the genitive -ren.",dis:["rekin", "ren", "ri"]},
+ {en:"to the son",root:"seme",form:"semeari",pieces:["a", "ri"],qw:"Nori?",hook:"-ri once more: the son receives. The -a + -ri combo is the dative.",dis:["ren", "rekin", "k"]},
+ {en:"in the foot",root:"oin",form:"oinean",pieces:["e", "an"],qw:"Non?",hook:"Consonant root! A euphonic -e- slips in first, then the ending: oin + e + an.",dis:["a", "n", "ra"]},
+ {en:"to the foot",root:"oin",form:"oinera",pieces:["e", "ra"],qw:"Nora?",hook:"-ra = towards. After a consonant the -e- comes first, giving -era.",dis:["a", "tik", "an"]},
+ {en:"from the foot",root:"oin",form:"oinetik",pieces:["e", "tik"],qw:"Nondik?",hook:"-tik = away from. Consonant stem \u2192 -etik. (Vowel roots would just take -tik.)",dis:["a", "an", "ra"]},
+ {en:"to the foot (give it)",root:"oin",form:"oinari",pieces:["a", "ri"],qw:"Nori?",hook:"But *grammatical* cases keep -a-, not -e-: oin + a + ri. The -e- is only for local cases.",dis:["e", "ren", "rekin"]},
+ {en:"on foot",root:"oin",form:"oinez",pieces:["e", "z"],qw:"Zertaz?",hook:"-z = by means of. 'On foot.' Consonant stem, so -ez.",dis:["a", "tik", "an"]}
+];
+const CLB_SIZE=CLPOOL.length;
+let clbRound=[],clbI=0,clbScore=0,clbTiles=[],clbPlaced=[],clbDone=false;
+function clbShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function clbProg(){document.getElementById('clb-prog').style.width=(clbI/CLB_SIZE*100)+'%';}
+function clbNewRound(){clbRound=clbShuffle(CLPOOL);clbI=0;clbScore=0;document.getElementById('clb-score').textContent=0;document.getElementById('clb-tot').textContent=CLB_SIZE;clbProg();clbLoad();}
+function clbLoad(){const it=clbRound[clbI];clbTiles=clbShuffle(it.pieces.concat(it.dis)).map((l,i)=>({i:i,l:l}));clbPlaced=[];clbDone=false;clbRenderQ();}
+function clbAssembled(){const it=clbRound[clbI];return it.root+clbPlaced.map(i=>clbTiles[i].l).join('');}
+function clbRenderQ(){
+  const body=document.getElementById('clb-body');
+  if(clbI>=CLB_SIZE)return clbRoundEnd();
+  const it=clbRound[clbI];
+  const chips=clbPlaced.map(i=>`<span class="clb-op">+</span><span class="clb-chip" data-p="${i}">–${clbTiles[i].l}</span>`).join('');
+  const tail=clbDone?`<span class="clb-op">=</span><span class="clb-form-inline">${it.form}</span>`:`<span class="clb-op">+</span><span class="clb-slot">–?</span>`;
+  const wb=`<span class="clb-root">${it.root}</span>${chips}${tail}`;
+  const poolHtml=clbTiles.map(t=>{const used=clbPlaced.includes(t.i);return `<button class="clb-opt${used?' used':''}" data-t="${t.i}" ${used||clbDone?'disabled':''}>–${t.l}</button>`;}).join('');
+  const controls=clbDone?'':`<div class="clb-controls"><button class="pn-btn" id="clb-clear">Clear</button><button class="pn-btn primary" id="clb-check">Check</button></div>`;
+  const reveal=clbDone?`<div class="clb-reveal"><div class="clb-parts">${it.root} + –${it.pieces.join(' + –')}</div><div class="clb-hook">${it.hook}</div><button class="pn-btn primary" id="clb-next" style="margin-top:.9rem">${clbI===CLB_SIZE-1?'See results ›':'Next ›'}</button></div>`:'';
+  body.innerHTML=`<div class="clb-card"><div class="clb-kick">Build in Basque</div><div class="clb-en">${it.en}</div>`
+    +`<div class="clb-hint">Tap the pieces in order · tap a piece to remove it</div>`
+    +`<div class="clb-wb" id="clb-wb">${wb}${clbDone?' <span class="clb-qw">'+it.qw+'</span>':''}</div>`
+    +`<div class="clb-opts" id="clb-opts">${poolHtml}</div>${controls}${reveal}</div>`;
+  if(!clbDone){
+    document.querySelectorAll('#clb-opts .clb-opt').forEach(b=>{if(b.disabled)return;b.onclick=()=>{clbPlaced.push(+b.dataset.t);clbRenderQ();};});
+    document.querySelectorAll('#clb-wb .clb-chip').forEach(c=>{c.onclick=()=>{const p=+c.dataset.p;const k=clbPlaced.indexOf(p);if(k>-1){clbPlaced.splice(k,1);clbRenderQ();}};});
+    document.getElementById('clb-clear').onclick=()=>{clbPlaced=[];clbRenderQ();};
+    document.getElementById('clb-check').onclick=clbCheck;
+  }else{
+    document.getElementById('clb-next').onclick=()=>{clbI++;clbProg();clbLoad();};
   }
-  document.getElementById('cl-stage-noun').textContent=n.stem+' — "'+n.en+'"';
-  document.getElementById('cl-form').innerHTML=disp;
-  document.getElementById('cl-gloss').textContent='“'+glossFor(n,c)+'”';
-  document.getElementById('cl-casename').textContent=c.name+'  ·  '+c.suf;
-  document.getElementById('cl-nor').textContent=c.nor==='-'?'':c.nor+'?';
-  document.getElementById('cl-note').textContent=c.note;
-  // extras: euphonic hint + bizkaian
-  let extra='';
-  if(n.hi&&n.hi[clCase])extra+='<div class="cl-hi">↳ '+n.hi[clCase]+'</div>';
-  const biz=(n.biz&&n.biz[clCase])?('Biz · '+n.biz[clCase]):(c.biz||'');
-  if(biz)extra+='<div class="cl-biz"><span class="dia-tag"><span class="dia-flag">dialect</span>'+biz+'</span></div>';
-  document.getElementById('cl-extra').innerHTML=extra;
 }
-function glossFor(n,c){
-  // build a natural English gloss per case using the noun's English word
-  const w=n.en;
-  const the='the '+w;
-  const map={
-   abs:the, erg:the+' (as doer)', dat:'to '+the, gen:the+"'s", ine:(n.type==='anim'?'in '+the:'in '+the),
-   all:'to '+the, abl:'from '+the, des:'for '+the, com:'with '+the, ins:(w==='car'?'by car':'by/about '+the),
-   ben:'for '+the, cau:'because of '+the, par:'any '+w, pro:'as a '+w
-  };
-  return map[c.id]||the;
+function clbCheck(){
+  const it=clbRound[clbI];
+  if(clbPlaced.length && clbAssembled()===it.form){clbDone=true;clbScore++;document.getElementById('clb-score').textContent=clbScore;clbRenderQ();}
+  else{const wb=document.getElementById('clb-wb');wb.classList.add('wrong');setTimeout(()=>wb.classList.remove('wrong'),360);}
 }
-function openCaseLab(){activeUnit=activeUnit;renderCaseNouns();renderCaseGrid();renderCaseForm();nav('caselab');}
+function clbRoundEnd(){
+  document.getElementById('clb-prog').style.width='100%';
+  const s=clbScore;
+  const msg=s===CLB_SIZE?"Every word built clean. The -a-/-e- split is yours.":s>=CLB_SIZE-2?"Nearly spotless — you've got the structure.":s>=CLB_SIZE-5?"Solid. The consonant-stem -e- is the tricky bit.":"Worth a re-run — watch where -a- becomes -e-.";
+  document.getElementById('clb-body').innerHTML=`<div class="clb-card"><div class="clb-big">${s}/${CLB_SIZE}</div><p class="clb-hook">${msg}</p><button class="pn-btn primary" id="clb-again" style="margin-top:.5rem">Run the 15 again ↻</button></div>`;
+  document.getElementById('clb-again').onclick=clbNewRound;
+}
+function openCaseLab(){nav('caselab');clbNewRound();}
 
 /* ============ STORAGE (per-unit progress) ============ */
 const STORE_KEY='goazen_l1';
