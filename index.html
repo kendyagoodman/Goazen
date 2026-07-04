@@ -1,57 +1,52 @@
+<!--
+  STUDY APP TEMPLATE — read this comment block first.
+
+  This is a stripped-down, working skeleton of a language-study app: home
+  screen -> levels -> units -> (Dialogue / Vocabulary / Grammar / Quiz) tabs
+  -> a 5-question quiz per unit, with progress saved in the browser.
+
+  It ships with ONE fully-worked sample unit (basic Spanish greetings) so
+  you can see the exact data shape. Everything you need to change is in
+  the LEVELS array near the bottom of the script section, marked clearly.
+
+  If you're handing this file to Claude along with your own textbook
+  material, say: "Follow this file's structure exactly. Replace the
+  sample LEVELS data with units built from the material I'm giving you,
+  keeping the same schema for units, vocab, grammar cards and quizzes."
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F2F4F0">
-<title>Goazen — Basque, A1 to B2</title>
+<title>Study App — template</title>
 <style>
   :root{
     --bg:#F2F4F0; --bg-card:#FBFCF9; --ink:#15201D; --ink-mid:#48564F; --ink-light:#8B978F;
     --accent:#2E7D5B; --accent-pale:#DFEEE6; --border:#D6DED7;
-    --basque:#1F4A3A; --success:#2E7D5B; --success-bg:#E3F1E9; --warn:#B5762A; --warn-bg:#F4E9D6;
-    --c-a1:#2E7D5B; --c-a1-bg:#DFEEE6; --c-a2:#2F6B8A; --c-a2-bg:#DEECF2;
-    --c-b1:#7E54A3; --c-b1-bg:#ECE3F4; --c-b2:#C0504A; --c-b2-bg:#F6E3E1;
-    --c-lab:#48794F; --c-lab-bg:#E1EFE2; --err:#C0504A;
+    --lang:#1F4A3A; --success:#2E7D5B; --success-bg:#E3F1E9; --warn:#B5762A; --warn-bg:#F4E9D6;
+    --c-l1:#2E7D5B; --c-l1-bg:#DFEEE6; --err:#C0504A;
     --serif:Georgia,'Times New Roman',serif;
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     --mono:'SF Mono',SFMono-Regular,ui-monospace,Menlo,Consolas,monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;min-height:100vh}
   .wrap{max-width:680px;margin:0 auto;padding:0 20px 90px}
   button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer}
   :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:6px}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-
-  /* top bar */
   .top{display:flex;align-items:center;gap:10px;padding:16px 0 8px;min-height:56px}
   .back{display:none;align-items:center;gap:5px;color:var(--ink-mid);font-size:.9rem;padding:6px 10px 6px 4px;border-radius:8px}
-  .back:hover{color:var(--accent)}
   .top.has-back .back{display:flex}
   .crumb{font-size:.82rem;color:var(--ink-light);letter-spacing:.02em}
-  .wordmark{font-family:var(--serif);font-style:italic;font-weight:700;color:var(--basque);font-size:1.05rem;margin-left:auto}
-
-  /* hero */
+  .wordmark{font-family:var(--serif);font-style:italic;font-weight:700;color:var(--lang);font-size:1.05rem;margin-left:auto}
   .hero{padding:1.6rem 0 1.3rem}
   .hero h1,.hero h2{font-family:var(--serif);font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.12}
   .hero h1{font-size:2.5rem}.hero h2{font-size:1.8rem}
   .hero p{color:var(--ink-mid);margin-top:.5rem;max-width:46ch}
   .badge{display:inline-block;font-size:.68rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);background:var(--accent-pale);border-radius:20px;padding:.28rem .8rem;margin-bottom:.8rem}
-
-  /* signature: the morpheme line */
-  .morph{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap;margin:1.15rem 0 .2rem;font-family:var(--serif);font-size:1.5rem;min-height:2.6rem}
-  .morph .m-root{color:var(--ink);font-style:italic}
-  .morph .m-plus{color:var(--ink-light);font-size:1rem}
-  .morph .m-chip{color:var(--accent);font-style:italic;border-bottom:2px solid var(--accent-pale);padding-bottom:1px}
-  .morph .m-eq{color:var(--ink-light);font-size:1.1rem}
-  .morph .m-word{font-weight:700;color:var(--basque)}
-  .morph .m-en{font-family:var(--sans);font-size:.82rem;color:var(--ink-light);width:100%;margin-top:-2px}
-  .morph.fade{transition:opacity .45s ease}
-  .morph.out{opacity:0}
-
-  /* cards */
   .card{background:var(--bg-card);border:.5px solid var(--border);border-radius:16px;padding:1.15rem 1.2rem;margin-bottom:.85rem;box-shadow:0 1px 3px rgba(21,32,29,.03)}
   .tap-card{cursor:pointer;transition:transform .1s ease,border-color .15s ease;text-align:left;width:100%;display:block}
   .tap-card:hover{border-color:var(--accent)}
@@ -61,21 +56,14 @@
   .mc-body h3{font-size:1.05rem;font-weight:650;margin-bottom:.15rem}
   .mc-body p{font-size:.86rem;color:var(--ink-mid);line-height:1.45}
   .mc-meta{font-size:.72rem;color:var(--ink-light);margin-top:.45rem;letter-spacing:.03em}
-
-  .sec-title{font-size:.72rem;font-weight:650;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-light);margin:1.5rem 0 .7rem}
-
-  /* level cards */
   .lv-card{display:flex;gap:14px;align-items:center}
-  .lv-tag{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem;flex-shrink:0;letter-spacing:.02em}
+  .lv-tag{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem;flex-shrink:0}
   .lv-body{flex:1;min-width:0}
   .lv-body h3{font-size:1.02rem;font-weight:650}
-  .lv-body .lv-eus{font-family:var(--serif);font-style:italic;color:var(--ink-mid);font-size:.88rem}
   .lv-body p{font-size:.83rem;color:var(--ink-mid);margin-top:.15rem}
   .prog{height:5px;background:var(--border);border-radius:3px;margin-top:.55rem;overflow:hidden}
   .prog>i{display:block;height:100%;background:var(--accent);border-radius:3px;transition:width .4s ease}
   .lv-pct{font-size:.72rem;color:var(--ink-light);margin-top:.3rem}
-
-  /* unit list */
   .u-card{display:flex;gap:12px;align-items:center}
   .u-num{font-family:var(--mono);font-size:.78rem;color:var(--ink-light);width:26px;flex-shrink:0}
   .u-body{flex:1;min-width:0}
@@ -83,53 +71,37 @@
   .u-body p{font-size:.82rem;color:var(--ink-mid)}
   .u-done{font-size:.72rem;color:var(--success);background:var(--success-bg);border-radius:12px;padding:.15rem .55rem;flex-shrink:0}
   .u-todo{font-size:.72rem;color:var(--ink-light);flex-shrink:0}
-
-  /* unit hub / phases */
   .ph-tabs{display:flex;gap:6px;margin:1rem 0 1.2rem;flex-wrap:wrap}
   .ph-tab{font-size:.84rem;padding:.5rem .95rem;border:.5px solid var(--border);border-radius:22px;background:var(--bg-card);color:var(--ink-mid);transition:all .15s}
-  .ph-tab:hover{border-color:var(--accent)}
   .ph-tab.on{background:var(--ink);color:var(--bg-card);border-color:var(--ink)}
   .ph-tab .tick{color:var(--success);margin-left:4px}
   .ph-tab.on .tick{color:#9fd6bd}
-
-  /* dialogue */
   .dlg-line{display:block;width:100%;text-align:left;padding:.75rem .95rem;border:.5px solid var(--border);border-radius:14px;background:var(--bg-card);margin-bottom:.5rem;cursor:pointer}
-  .dlg-line:hover{border-color:var(--accent)}
   .dlg-s{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
-  .dlg-bq{font-family:var(--serif);font-size:1.06rem;color:var(--basque);margin-top:.1rem}
+  .dlg-bq{font-family:var(--serif);font-size:1.06rem;color:var(--lang);margin-top:.1rem}
   .dlg-en{font-size:.86rem;color:var(--ink-mid);margin-top:.25rem;display:none}
   .dlg-line.open .dlg-en{display:block}
   .dlg-tools{display:flex;gap:.6rem;margin:.4rem 0 1rem}
-
-  /* vocab */
   .vb-row{display:flex;width:100%;text-align:left;align-items:baseline;gap:12px;padding:.6rem .9rem;border:.5px solid var(--border);border-radius:12px;background:var(--bg-card);margin-bottom:.45rem;cursor:pointer}
-  .vb-bq{font-family:var(--serif);font-size:1.02rem;color:var(--basque);flex:1}
+  .vb-bq{font-family:var(--serif);font-size:1.02rem;color:var(--lang);flex:1}
   .vb-en{font-size:.86rem;color:var(--ink-mid);opacity:0;transition:opacity .15s}
   .vb-row.open .vb-en{opacity:1}
-  .vb-row:hover{border-color:var(--accent)}
-
-  /* grammar */
   .g-card{background:var(--bg-card);border:.5px solid var(--border);border-radius:16px;padding:1.15rem 1.2rem;margin-bottom:.9rem}
   .g-card h4{font-size:.98rem;font-weight:700;margin-bottom:.45rem}
   .g-card p{font-size:.89rem;color:var(--ink-mid);margin-bottom:.55rem}
-  .g-card p b,.g-card p .bq{font-family:var(--serif);color:var(--basque)}
+  .g-card p b{font-family:var(--serif);color:var(--lang)}
   table.g-tb{width:100%;border-collapse:collapse;margin:.5rem 0 .7rem;font-size:.88rem}
   .g-tb th{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);text-align:left;padding:.3rem .55rem;border-bottom:1px solid var(--border);font-weight:650}
   .g-tb td{padding:.34rem .55rem;border-bottom:.5px solid var(--border)}
-  .g-tb td:first-child{color:var(--ink-mid);font-size:.84rem}
-  .g-tb td.f{font-family:var(--serif);color:var(--basque)}
+  .g-tb td.f{font-family:var(--serif);color:var(--lang)}
   .g-ex{border-left:2.5px solid var(--accent-pale);padding:.15rem 0 .15rem .85rem;margin:.4rem 0}
-  .g-ex .bq{font-family:var(--serif);color:var(--basque);font-size:.98rem;display:block}
+  .g-ex .bq{font-family:var(--serif);color:var(--lang);font-size:.98rem;display:block}
   .g-ex .en{font-size:.82rem;color:var(--ink-light)}
-
-  /* quiz */
   .qz-card{background:var(--bg-card);border:.5px solid var(--border);border-radius:16px;padding:1.4rem 1.2rem;text-align:center}
   .qz-kick{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-light)}
   .qz-q{font-size:1.12rem;font-weight:650;margin:.5rem 0 1.1rem;line-height:1.4}
-  .qz-q .bq{font-family:var(--serif);color:var(--basque)}
   .qz-opts{display:flex;flex-direction:column;gap:.55rem;max-width:420px;margin:0 auto}
   .qz-opt{padding:.7rem 1rem;border:.5px solid var(--border);border-radius:12px;background:var(--bg);font-family:var(--serif);font-size:1rem;color:var(--ink);transition:all .12s}
-  .qz-opt:hover{border-color:var(--accent)}
   .qz-opt.good{background:var(--success-bg);border-color:var(--success);color:var(--success);font-weight:650}
   .qz-opt.bad{background:#F9ECEA;border-color:var(--err);color:var(--err);animation:shake .32s}
   .qz-opt:disabled{cursor:default;opacity:.85}
@@ -137,58 +109,18 @@
   .qz-why{font-size:.85rem;color:var(--ink-mid);margin-top:.9rem;max-width:44ch;margin-left:auto;margin-right:auto}
   .qz-score{font-size:.8rem;color:var(--ink-light);margin-bottom:.6rem;font-family:var(--mono)}
   .qz-big{font-size:2.6rem;font-weight:800;color:var(--accent);font-family:var(--serif)}
-
-  /* pn buttons */
   .pn-btn{display:inline-block;padding:.6rem 1.35rem;border-radius:12px;border:.5px solid var(--border);background:var(--bg-card);font-size:.9rem;font-weight:600;color:var(--ink-mid);transition:all .13s}
-  .pn-btn:hover{border-color:var(--accent);color:var(--accent)}
   .pn-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-  .pn-btn.primary:hover{background:#256A4C;color:#fff}
   .pn-btn.small{padding:.35rem .85rem;font-size:.8rem}
-
-  /* case lab */
-  .clb-head{display:flex;align-items:center;gap:12px;margin:.2rem 0 1.1rem}
-  .clb-score{font-size:.82rem;color:var(--ink-light);white-space:nowrap}
-  .clb-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
-  .clb-track>i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s ease}
-  .clb-card{background:var(--bg-card);border:.5px solid var(--border);border-radius:16px;padding:1.5rem 1.2rem;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.03)}
-  .clb-kick{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-light)}
-  .clb-en{font-size:1.35rem;font-weight:650;color:var(--ink);margin:.4rem 0 .15rem;line-height:1.2}
-  .clb-hint{font-size:.76rem;color:var(--ink-light);margin-bottom:1.2rem}
-  .clb-wb{display:flex;align-items:center;justify-content:center;gap:.45rem;margin:.3rem 0 1.3rem;flex-wrap:wrap}
-  .clb-root{font-family:var(--serif);font-style:italic;font-size:1.5rem;color:var(--ink)}
-  .clb-op{color:var(--ink-light);font-size:1.1rem}
-  .clb-slot{min-width:60px;padding:.2rem .7rem;border:1.5px dashed var(--border);border-radius:10px;color:var(--ink-light);font-family:var(--serif);font-style:italic;font-size:1.3rem}
-  .clb-chip{font-family:var(--serif);font-style:italic;font-size:1.3rem;color:var(--accent);cursor:pointer;border-bottom:1.5px solid var(--accent-pale);padding-bottom:1px}
-  .clb-chip:hover{opacity:.55}
-  .clb-form-inline{font-family:var(--serif);font-weight:700;font-size:1.38rem;color:var(--accent)}
-  .clb-opts{display:flex;gap:.55rem;justify-content:center;flex-wrap:wrap;margin-bottom:.4rem}
-  .clb-opt{font-family:var(--serif);font-style:italic;font-size:1.12rem;padding:.55rem 1.1rem;border:.5px solid var(--border);border-radius:12px;background:var(--bg-card);color:var(--ink);transition:transform .08s,border-color .15s}
-  .clb-opt:hover{border-color:var(--accent)}
-  .clb-opt:active{transform:scale(.96)}
-  .clb-opt.used{opacity:.28}
-  .clb-opt:disabled{cursor:default}
-  .clb-controls{display:flex;gap:.6rem;justify-content:center;margin-top:1.1rem}
-  .clb-wb.wrong{animation:shake .36s}
-  .clb-reveal{margin-top:.7rem;padding-top:1.1rem;border-top:.5px solid var(--border)}
-  .clb-parts{font-size:.92rem;color:var(--ink-light);font-family:var(--serif)}
-  .clb-qw{display:inline-block;margin-left:.55rem;font-size:.78rem;color:var(--warn);font-weight:700;vertical-align:middle}
-  .clb-hook{font-size:.84rem;color:var(--ink-mid);max-width:42ch;margin:.55rem auto .1rem;line-height:1.5}
-  .clb-big{font-size:2.6rem;font-weight:700;color:var(--accent);font-family:var(--serif)}
-  .cl-intro{background:var(--warn-bg);border-left:3px solid var(--warn);border-radius:0 12px 12px 0;padding:.85rem 1rem;font-size:.87rem;color:var(--ink-mid);margin-bottom:1.2rem}
-  .cl-intro .bq{font-family:var(--serif);color:var(--basque)}
-
-  /* review + footer */
   .review-note{font-size:.76rem;color:var(--ink-light);background:var(--bg-card);border:.5px dashed var(--border);border-radius:12px;padding:.7rem .95rem;margin:1.2rem 0}
   .footer-note{font-size:.78rem;color:var(--ink-light);margin-top:2rem;line-height:1.55}
   .footer-note .lnk{color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
   textarea.io{width:100%;min-height:130px;border:.5px solid var(--border);border-radius:12px;padding:.8rem;font-family:var(--mono);font-size:.75rem;background:var(--bg-card);color:var(--ink);resize:vertical}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg-card);font-size:.84rem;padding:.6rem 1.2rem;border-radius:24px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:50}
   .toast.show{opacity:1}
-
   .screen{display:none;animation:fadeIn .22s ease}
   .screen.active{display:block}
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-  @media (max-width:420px){.hero h1{font-size:2.05rem}.morph{font-size:1.25rem}}
 </style>
 </head>
 <body>
@@ -196,58 +128,39 @@
   <div class="top" id="topbar">
     <button class="back" id="btn-back" onclick="goBack()">&#8592; <span id="back-label">Back</span></button>
     <span class="crumb" id="crumb"></span>
-    <span class="wordmark">goazen</span>
+    <span class="wordmark">study</span>
   </div>
 
-  <!-- HOME -->
   <div class="screen active" id="screen-home">
     <div class="hero">
-      <span class="badge">A1 &#8211; B2 &#183; full course</span>
-      <h1>Goazen</h1>
-      <div class="morph fade" id="morph" aria-hidden="true"></div>
-      <p>Learn Basque properly, and beautifully &#8212; from your first <em>kaixo</em> to arguing about cider. Let&#8217;s go.</p>
+      <span class="badge">Your course name here</span>
+      <h1>Study</h1>
+      <p>Replace this tagline with a one-line description of what you're learning and why.</p>
     </div>
     <button class="card tap-card mode-card" onclick="nav('levels')">
-      <div class="mode-icon" style="background:var(--c-a1-bg);color:var(--c-a1)">A</div>
-      <div class="mc-body"><h3>Levels</h3><p>The course &#8212; four levels, nineteen units. Dialogue, vocabulary, grammar, and a quiz in every one.</p><div class="mc-meta" id="home-prog"></div></div>
+      <div class="mode-icon" style="background:var(--c-l1-bg);color:var(--c-l1)">A</div>
+      <div class="mc-body"><h3>Levels</h3><p>Replace with a short description of your course structure.</p><div class="mc-meta" id="home-prog"></div></div>
     </button>
-    <button class="card tap-card mode-card" onclick="openCaseLab()">
-      <div class="mode-icon" style="background:var(--c-lab-bg);color:var(--c-lab);font-size:1.05rem">&#8285;</div>
-      <div class="mc-body"><h3>Case Lab</h3><p>Build words a piece at a time &#8212; root, article, then case ending, tapped morpheme by morpheme, each with a hook.</p></div>
-    </button>
-    <div class="footer-note"><strong>Beta:</strong> every word of Basque here is original content pending native-speaker review &#8212; corrections are gold. <span class="lnk" onclick="nav('backup')">Export / import progress &#8594;</span></div>
+    <div class="footer-note">Original content, own vocabulary and examples built from my own material. <span class="lnk" onclick="nav('backup')">Export / import progress &#8594;</span></div>
   </div>
 
-  <!-- LEVELS -->
   <div class="screen" id="screen-levels">
-    <div class="hero"><h2>Levels</h2><p>Four levels, CEFR-shaped. Do them in order &#8212; each one leans on the last.</p></div>
+    <div class="hero"><h2>Levels</h2><p>Replace with an intro to how your levels are organised.</p></div>
     <div id="level-list"></div>
   </div>
 
-  <!-- LEVEL (units) -->
   <div class="screen" id="screen-level">
     <div class="hero" id="level-hero"></div>
     <div id="unit-list"></div>
   </div>
 
-  <!-- UNIT -->
   <div class="screen" id="screen-unit">
     <div class="hero" id="unit-hero"></div>
     <div class="ph-tabs" id="ph-tabs"></div>
     <div id="ph-body"></div>
-    <div class="review-note">Original content &#183; pending native-speaker review. Spotted something off? That&#8217;s exactly the feedback this beta needs.</div>
+    <div class="review-note">Original content built from my own material — still worth a second pair of eyes.</div>
   </div>
 
-  <!-- CASE LAB -->
-  <div class="screen" id="screen-caselab">
-    <div class="hero"><span class="badge">Build lab</span><h2>Case Lab</h2><p>You get the root and the meaning &#8212; build the rest piece by piece.</p></div>
-    <div class="cl-intro"><strong>Build it a piece at a time.</strong> The root is given. Tap the article <b class="bq">-a-</b> (or the euphonic <b class="bq">-e-</b> after a consonant), then the case ending &#8212; each ending answers a question word, and that question <em>is</em> the hook. Tap a placed piece to remove it.</div>
-    <div class="clb-head"><div class="clb-score">Word <b id="clb-score">0</b> / <span id="clb-tot">15</span></div><div class="clb-track"><i id="clb-prog"></i></div></div>
-    <div id="clb-body"></div>
-    <div class="review-note">Every target is a verified singular-definite form. People (animates) take the <b>-gan</b> series for local cases; plurals come later. Pending native-speaker review.</div>
-  </div>
-
-  <!-- BACKUP -->
   <div class="screen" id="screen-backup">
     <div class="hero"><h2>Progress</h2><p>Progress saves on this device. Copy the code below to move it elsewhere, or paste a code to restore.</p></div>
     <div class="card"><textarea class="io" id="io-box" spellcheck="false"></textarea>
@@ -259,20 +172,18 @@
 </div>
 <div class="toast" id="toast"></div>
 <script>
-/* ============ engine ============ */
+/* ============ engine (generic — you shouldn't need to touch this) ============ */
 const mem={};
 const store={
   get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return mem[k]||null}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){mem[k]=v}}
 };
-const PKEY='goazen_a1b2_v1';
-let P=store.get(PKEY)||{};       // progress: P[unitId]={d:1,v:1,g:1,q:bestScore}
+const PKEY='study_app_v1';
+let P=store.get(PKEY)||{};
 function saveP(){store.set(PKEY,P)}
-
-const titles={home:'',levels:'Levels',level:'',unit:'',caselab:'Case Lab',backup:'Progress'};
-const backMap={levels:'home',level:'levels',unit:'level',caselab:'home',backup:'home'};
+const titles={home:'',levels:'Levels',level:'',unit:'',backup:'Progress'};
+const backMap={levels:'home',level:'levels',unit:'level',backup:'home'};
 let cur='home', curLevel=null, curUnit=null;
-
 function nav(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
@@ -282,40 +193,34 @@ function nav(s){
   const backTo=backMap[s];
   document.getElementById('back-label').textContent = backTo==='home'?'Menu':(backTo==='levels'?'Levels':(backTo==='level'?(curLevel?curLevel.name:'Level'):'Back'));
   document.getElementById('crumb').textContent = s==='level'&&curLevel?curLevel.name:(s==='unit'&&curUnit?curLevel.name+' \u00b7 '+curUnit.num:titles[s]||'');
-  if(s==='home'){homeProg();}
+  if(s==='home')homeProg();
   if(s==='levels')renderLevels();
   if(s==='backup')ioFill();
   window.scrollTo({top:0});
 }
 function goBack(){const b=backMap[cur];if(!b)return;if(b==='level'&&curLevel)return openLevel(curLevel.id);nav(b)}
-
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1800)}
-
-/* -------- progress helpers -------- */
 function unitDone(u){const p=P[u.id]||{};return p.d&&p.v&&p.g&&(p.q!=null)}
 function unitParts(u){const p=P[u.id]||{};return ['d','v','g'].filter(k=>p[k]).length+(p.q!=null?1:0)}
 function levelPct(lv){const t=lv.units.length*4;let n=0;lv.units.forEach(u=>n+=unitParts(u));return Math.round(n/t*100)}
 function homeProg(){
   const done=LEVELS.reduce((a,l)=>a+l.units.filter(unitDone).length,0);
   const tot=LEVELS.reduce((a,l)=>a+l.units.length,0);
-  document.getElementById('home-prog').textContent=done?done+' of '+tot+' units complete':tot+' units \u00b7 A1 to B2';
+  document.getElementById('home-prog').textContent=done?done+' of '+tot+' units complete':tot+' units total';
 }
-
-/* -------- levels & units -------- */
 function renderLevels(){
   const el=document.getElementById('level-list');
   el.innerHTML=LEVELS.map(lv=>{
     const pct=levelPct(lv);
     return `<button class="card tap-card lv-card" onclick="openLevel('${lv.id}')">
-      <div class="lv-tag" style="background:var(--c-${lv.id}-bg);color:var(--c-${lv.id})">${lv.name}</div>
-      <div class="lv-body"><h3>${lv.title} <span class="lv-eus">\u00b7 ${lv.eus}</span></h3><p>${lv.desc}</p>
+      <div class="lv-tag" style="background:var(--c-${lv.id}-bg,var(--c-l1-bg));color:var(--c-${lv.id},var(--c-l1))">${lv.name}</div>
+      <div class="lv-body"><h3>${lv.title}</h3><p>${lv.desc}</p>
       <div class="prog"><i style="width:${pct}%"></i></div><div class="lv-pct">${pct}% \u00b7 ${lv.units.length} units</div></div></button>`;
   }).join('');
 }
 function openLevel(id){
   curLevel=LEVELS.find(l=>l.id===id);
-  document.getElementById('level-hero').innerHTML=`<span class="badge" style="background:var(--c-${id}-bg);color:var(--c-${id})">${curLevel.name} \u00b7 ${curLevel.eus}</span><h2>${curLevel.title}</h2><p>${curLevel.desc}</p>`;
+  document.getElementById('level-hero').innerHTML=`<span class="badge">${curLevel.name}</span><h2>${curLevel.title}</h2><p>${curLevel.desc}</p>`;
   document.getElementById('unit-list').innerHTML=curLevel.units.map((u,i)=>{
     const parts=unitParts(u);
     const tag=unitDone(u)?'<span class="u-done">Done \u2713</span>':(parts?`<span class="u-todo">${parts}/4</span>`:'<span class="u-todo">&#8250;</span>');
@@ -328,7 +233,7 @@ function openLevel(id){
 function openUnit(id){
   for(const lv of LEVELS){const u=lv.units.find(x=>x.id===id);if(u){curLevel=lv;curUnit=u;break}}
   curUnit.num='Unit '+(curLevel.units.indexOf(curUnit)+1);
-  document.getElementById('unit-hero').innerHTML=`<span class="badge" style="background:var(--c-${curLevel.id}-bg);color:var(--c-${curLevel.id})">${curLevel.name} \u00b7 ${curUnit.num}</span><h2>${curUnit.t}</h2><p>${curUnit.sub}</p>`;
+  document.getElementById('unit-hero').innerHTML=`<span class="badge">${curLevel.name} \u00b7 ${curUnit.num}</span><h2>${curUnit.t}</h2><p>${curUnit.sub}</p>`;
   renderTabs('d');
   nav('unit');
 }
@@ -342,24 +247,22 @@ function renderTabs(active){
   renderPhase(active);
 }
 function markDone(k){P[curUnit.id]=P[curUnit.id]||{};if(!P[curUnit.id][k]){P[curUnit.id][k]=1;saveP();}}
-
 function renderPhase(k){
   const b=document.getElementById('ph-body');
   if(k==='d'){
     b.innerHTML=`<div class="dlg-tools"><button class="pn-btn small" onclick="dlgAll(1)">Show all English</button><button class="pn-btn small" onclick="dlgAll(0)">Hide all</button></div>`
       +curUnit.d.map(l=>`<button class="dlg-line" onclick="this.classList.toggle('open')"><span class="dlg-s">${l[0]}</span><div class="dlg-bq">${l[1]}</div><div class="dlg-en">${l[2]}</div></button>`).join('')
-      +`<div style="text-align:center;margin-top:1rem"><button class="pn-btn primary" onclick="markDone('d');renderTabs('v')">Done \u2014 on to vocabulary \u203a</button></div>`;
+      +`<div style="text-align:center;margin-top:1rem"><button class="pn-btn primary" onclick="markDone('d');renderTabs('v')">Done \u2014 vocabulary \u203a</button></div>`;
   }
   if(k==='v'){
-    b.innerHTML=`<p style="font-size:.82rem;color:var(--ink-light);margin-bottom:.8rem">Tap a word to reveal the English. Say each one out loud \u2014 twice.</p>`
-      +curUnit.v.map(w=>`<button class="vb-row" onclick="this.classList.toggle('open')"><span class="vb-bq">${w[0]}</span><span class="vb-en">${w[1]}</span></button>`).join('')
-      +`<div style="text-align:center;margin-top:1rem"><button class="pn-btn primary" onclick="markDone('v');renderTabs('g')">Done \u2014 on to grammar \u203a</button></div>`;
+    b.innerHTML=curUnit.v.map(w=>`<button class="vb-row" onclick="this.classList.toggle('open')"><span class="vb-bq">${w[0]}</span><span class="vb-en">${w[1]}</span></button>`).join('')
+      +`<div style="text-align:center;margin-top:1rem"><button class="pn-btn primary" onclick="markDone('v');renderTabs('g')">Done \u2014 grammar \u203a</button></div>`;
   }
   if(k==='g'){
     b.innerHTML=curUnit.g.map(c=>{
       let h=`<div class="g-card"><h4>${c.t}</h4>`;
       if(c.p)h+=`<p>${c.p}</p>`;
-      if(c.tb){h+='<table class="g-tb">';c.tb.forEach((r,i)=>{h+='<tr>'+r.map(x=>i===0?`<th>${x}</th>`:`<td${/[a-z]/.test(x)&&r.indexOf(x)>0?' class="f"':''}>${x}</td>`).join('')+'</tr>'});h+='</table>'}
+      if(c.tb){h+='<table class="g-tb">';c.tb.forEach((r,i)=>{h+='<tr>'+r.map(x=>i===0?`<th>${x}</th>`:`<td>${x}</td>`).join('')+'</tr>'});h+='</table>'}
       if(c.p2)h+=`<p>${c.p2}</p>`;
       if(c.ex)c.ex.forEach(e=>h+=`<div class="g-ex"><span class="bq">${e[0]}</span><span class="en">${e[1]}</span></div>`);
       return h+'</div>';
@@ -369,8 +272,6 @@ function renderPhase(k){
   if(k==='q')qStart();
 }
 function dlgAll(on){document.querySelectorAll('.dlg-line').forEach(l=>l.classList.toggle('open',!!on))}
-
-/* -------- quiz -------- */
 let qI=0,qS=0,qOrder=[];
 function qShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function qStart(){qI=0;qS=0;qOrder=qShuffle(curUnit.q);qRender()}
@@ -382,7 +283,6 @@ function qRender(){
     if(best==null||qS>best){P[curUnit.id].q=qS;saveP()}
     const idx=curLevel.units.indexOf(curUnit);const next=curLevel.units[idx+1];
     b.innerHTML=`<div class="qz-card"><div class="qz-big">${qS}/${qOrder.length}</div>
-      <p class="qz-why">${qS===qOrder.length?'Bikain \u2014 perfect round.':qS>=qOrder.length-1?'Nearly perfect \u2014 one to revisit.':'Solid \u2014 the grammar tab has everything the quiz asks.'}</p>
       <div style="display:flex;gap:.6rem;justify-content:center;margin-top:1rem;flex-wrap:wrap">
       <button class="pn-btn" onclick="qStart()">Retry quiz \u21bb</button>
       ${next?`<button class="pn-btn primary" onclick="openUnit('${next.id}')">Next unit \u203a</button>`:`<button class="pn-btn primary" onclick="openLevel('${curLevel.id}')">Back to ${curLevel.name} \u203a</button>`}
@@ -417,533 +317,56 @@ function renderTabsSilent(){
     return `<button class="ph-tab${k==='q'?' on':''}" onclick="renderTabs('${k}')">${n}${done?'<span class="tick">\u2713</span>':''}</button>`;
   }).join('');
 }
-
-/* -------- morpheme hero -------- */
-const MORPHS=[
-  ['etxe',['a','ra'],'etxera','to the house'],
-  ['lagun',['a','rekin'],'lagunarekin','with the friend'],
-  ['mendi',['tik'],'menditik','from the mountain'],
-  ['hondartza',['ra'],'hondartzara','to the beach']
-];
-let mI=0;
-function morphShow(){
-  const m=MORPHS[mI%MORPHS.length];
-  const el=document.getElementById('morph');
-  el.innerHTML=`<span class="m-root">${m[0]}</span>`+m[1].map(p=>`<span class="m-plus">+</span><span class="m-chip">${p}</span>`).join('')
-    +`<span class="m-eq">=</span><span class="m-word">${m[2]}</span><span class="m-en">${m[3]}</span>`;
-}
-function morphCycle(){
-  const el=document.getElementById('morph');
-  el.classList.add('out');
-  setTimeout(()=>{mI++;morphShow();el.classList.remove('out')},460);
-}
-morphShow();
-if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){setInterval(morphCycle,4200)}
-
-/* -------- backup -------- */
 function ioFill(){document.getElementById('io-box').value=JSON.stringify(P)}
 function ioCopy(){const b=document.getElementById('io-box');b.select();try{document.execCommand('copy');toast('Copied')}catch(e){toast('Select and copy manually')}}
 function ioLoad(){try{const v=JSON.parse(document.getElementById('io-box').value);if(typeof v==='object'&&v){P=v;saveP();toast('Progress loaded');homeProg()}else{toast('Not a valid code')}}catch(e){toast('Not a valid code')}}
 
-/* ============ course data ============ */
+/* ============================================================
+   COURSE DATA — this is the only part you (or Claude) need to edit.
+   Everything above is generic engine code.
+
+   SCHEMA:
+   LEVELS = [
+     { id, name, title, desc, units:[
+       { id, t (unit title), sub (subtitle),
+         d: [ [speakerLabel, targetLanguageText, englishGloss], ... ],   // dialogue lines
+         v: [ [targetWord, englishGloss], ... ],                        // vocab
+         g: [ { t: cardTitle, p: explanationHtml,
+                 tb: [ [headerCells...], [rowCells...], ... ],  // optional table
+                 p2: extraParagraphHtml,                         // optional
+                 ex: [ [targetExample, englishGloss], ... ] },   // optional
+              ... ],
+         q: [ [questionText, [opt0,opt1,opt2], 0, explanationText], ... ] // ALWAYS 5 questions;
+              // correct answer must be written as index 0 — the engine shuffles at render time
+       }
+     ]}
+   ]
+
+   The one sample unit below (basic Spanish greetings) is SAMPLE DATA —
+   replace it with units built from your own material. Keep the exact
+   field names and array shapes.
+   ============================================================ */
 const LEVELS=[
-{id:'a1',name:'A1',eus:'Hasiberria',title:'First words, first sentences',desc:'Say who you are, count, find things, order at the bar, talk about your people and your week.',units:[
-
-{id:'a1u1',t:'Kaixo!',sub:'Greetings, izan (to be), saying who you are and where you\u2019re from',
-d:[['Miren','Kaixo! Zer moduz?','Hi! How are you?'],
-['Jon','Ondo, eskerrik asko. Eta zu?','Fine, thanks. And you?'],
-['Miren','Oso ondo. Ni Miren naiz. Nor zara zu?','Very well. I\u2019m Miren. Who are you?'],
-['Jon','Ni Jon naiz. Nongoa zara?','I\u2019m Jon. Where are you from?'],
-['Miren','Bilbokoa naiz. Eta zu?','I\u2019m from Bilbao. And you?'],
-['Jon','Ni Londreskoa naiz, baina orain Zarautzen bizi naiz.','I\u2019m from London, but I live in Zarautz now.'],
-['Miren','Oso ondo! Agur, Jon!','Great! Bye, Jon!'],
-['Jon','Ikusi arte!','See you!']],
-v:[['kaixo','hello'],['egun on','good morning'],['arratsalde on','good afternoon'],['gabon','good evening / night'],['agur','goodbye'],['ikusi arte','see you'],['zer moduz?','how are you?'],['ondo','well / fine'],['gaizki','badly'],['eskerrik asko','thank you very much'],['ez horregatik','you\u2019re welcome'],['mesedez','please'],['bai / ez','yes / no'],['barkatu','sorry / excuse me']],
+{id:'l1',name:'L1',title:'Sample level — replace me',desc:'This whole level is a worked example. Delete it once you understand the shape, or leave it as a reference while you build your own.',units:[
+{id:'l1u1',t:'Basic greetings (SAMPLE)',sub:'A worked example — replace with your own material',
+d:[['A','Hola, ¿qué tal?','Hi, how are you?'],
+['B','Muy bien, gracias. ¿Y tú?','Very well, thanks. And you?'],
+['A','Bien también. Me llamo Ana.','Well too. My name is Ana.'],
+['B','Encantado, Ana. Soy Marco.','Nice to meet you, Ana. I\u2019m Marco.']],
+v:[['hola','hello'],['adiós','goodbye'],['gracias','thank you'],['por favor','please'],['¿qué tal?','how are you?'],['me llamo\u2026','my name is\u2026'],['encantado/a','nice to meet you'],['sí / no','yes / no']],
 g:[
-{t:'Izan \u2014 to be',p:'The first verb. Basque puts the verb at the end: <b>Ni Jon naiz</b> \u2014 literally \u201cI Jon am\u201d.',
-tb:[['','izan'],['ni (I)','naiz'],['zu (you)','zara'],['hura (he/she/it)','da'],['gu (we)','gara'],['zuek (you all)','zarete'],['haiek (they)','dira']],
-ex:[['Ni Miren naiz.','I am Miren.'],['Zu irakaslea zara.','You are a teacher.'],['Gu lagunak gara.','We are friends.']]},
-{t:'Nongoa zara? \u2014 where are you from?',p:'Stick <b>-koa</b> (\u201cof/from\u201d + article) on a place: <b>Bilbo \u2192 Bilbokoa</b>. After a consonant or an \u2018s\u2019 sound it\u2019s spelt <b>-goa/-ekoa</b> in some names \u2014 learn these as words for now.',
-ex:[['Nongoa zara? \u2014 Bilbokoa naiz.','Where are you from? \u2014 I\u2019m from Bilbao.'],['Londreskoa naiz.','I\u2019m from London.']]},
-{t:'Questions and negation',p:'Questions keep the same word order \u2014 tone does the work. To negate, put <b>ez</b> before the verb and move the verb forward: <b>Ni ez naiz Jon.</b>',
-ex:[['Zu Jon zara? \u2014 Ez, ni ez naiz Jon.','Are you Jon? \u2014 No, I\u2019m not Jon.']]}],
-q:[['\u201cWe are\u201d in Basque:',['gara','zarete','dira'],0,'gu gara \u2014 we are. zarete is \u201cyou all are\u201d, dira is \u201cthey are\u201d.'],
-['How do you say \u201cI\u2019m from Bilbao\u201d?',['Bilbokoa naiz','Bilbo naiz','Bilbon naiz'],0,'-koa = \u201cfrom\u201d: Bilbokoa naiz. (Bilbon = \u201cin Bilbao\u201d \u2014 that comes in Unit 3.)'],
-['\u201cThank you very much\u201d:',['eskerrik asko','ez horregatik','mesedez'],0,'eskerrik asko. ez horregatik answers it (\u201cyou\u2019re welcome\u201d); mesedez is \u201cplease\u201d.'],
-['Negate: \u201cNi Jon naiz\u201d \u2192',['Ni ez naiz Jon','Ni Jon ez naiz','Ez ni Jon naiz'],0,'ez sits directly before the verb, and the verb moves forward: Ni ez naiz Jon.'],
-['\u201cZer moduz?\u201d means:',['How are you?','Who are you?','Where are you?'],0,'Zer moduz? = how are you / how\u2019s it going. Nor zara? = who are you.']]},
-
-{id:'a1u2',t:'Zenbakiak eta ordua',sub:'Numbers 1\u2013100 (in twenties!), telling the time',
-d:[['Ane','Barkatu, zer ordu da?','Excuse me, what time is it?'],
-['Peru','Hirurak dira.','It\u2019s three o\u2019clock.'],
-['Ane','Eskerrik asko. Eta autobusa noiz da?','Thanks. And when is the bus?'],
-['Peru','Hiruretan? Ez\u2026 lauretan da.','At three? No\u2026 it\u2019s at four.'],
-['Ane','Ordu bat, orduan!','An hour, then!'],
-['Peru','Bai. Kafe bat nahi duzu?','Yes. Do you want a coffee?'],
-['Ane','Bai, mesedez!','Yes, please!']],
-v:[['bat, bi, hiru','one, two, three'],['lau, bost, sei','four, five, six'],['zazpi, zortzi, bederatzi','seven, eight, nine'],['hamar','ten'],['hamaika','eleven'],['hamabi, hamahiru, hamalau','twelve, thirteen, fourteen'],['hamabost, hamasei','fifteen, sixteen'],['hamazazpi, hemezortzi, hemeretzi','seventeen, eighteen, nineteen'],['hogei','twenty'],['hogeita hamar','thirty (twenty-and-ten)'],['berrogei','forty (two-twenties)'],['hirurogei / laurogei','sixty / eighty'],['ehun','a hundred'],['zer ordu da?','what time is it?']],
-g:[
-{t:'Counting in twenties',p:'Basque counts in scores, like old French. 40 = <b>berrogei</b> (two-twenty), 60 = <b>hirurogei</b> (three-twenty), 80 = <b>laurogei</b> (four-twenty). In between, add with <b>-ta</b>: 31 = <b>hogeita hamaika</b> (twenty-and-eleven), 50 = <b>berrogeita hamar</b>.',
-ex:[['hogeita bost','25 \u2014 twenty-and-five'],['laurogeita hamar','90 \u2014 four-twenties-and-ten']]},
-{t:'Telling the time',p:'One o\u2019clock is singular; the rest are plural with <b>dira</b>. \u201cAt\u201d a time uses <b>-etan</b>.',
-tb:[['','time'],['1:00','Ordu bata da.'],['2:00','Ordu biak dira.'],['3:00','Hirurak dira.'],['half past 3','Hiru eta erdiak dira.'],['at 4','lauretan']],
-ex:[['Zer ordu da? \u2014 Bostak dira.','What time is it? \u2014 It\u2019s five o\u2019clock.'],['Autobusa lauretan da.','The bus is at four.']]}],
-q:[['\u201cForty\u201d is:',['berrogei','laurogei','hogeita hamar'],0,'berrogei = two twenties = 40. laurogei is 80, hogeita hamar is 30.'],
-['\u201cIt\u2019s three o\u2019clock\u201d:',['Hirurak dira','Hiru da','Hiruretan da'],0,'Times from two up are plural: hirurak dira. -etan means \u201cat\u201d a time.'],
-['25 in Basque:',['hogeita bost','berrogeita bost','hamabost'],0,'hogeita bost \u2014 twenty-and-five.'],
-['\u201cAt four\u201d (o\u2019clock):',['lauretan','laurak','lau'],0,'-etan = at: lauretan. laurak dira = it\u2019s four o\u2019clock.'],
-['18 in Basque:',['hemezortzi','hemeretzi','hogei'],0,'Standard batua: hemezortzi. (You\u2019ll hear hamazortzi in some dialects.)']]},
-
-{id:'a1u3',t:'Non dago?',sub:'egon (to be, location), where things are, your first three cases',
-d:[['Jon','Barkatu, non dago geltokia?','Excuse me, where is the station?'],
-['Ane','Hor dago, eliza atzean.','It\u2019s there, behind the church.'],
-['Jon','Eta hondartza? Urrun dago?','And the beach? Is it far?'],
-['Ane','Ez, hemen dago! Gu hondartzan gaude.','No, it\u2019s here! We\u2019re on the beach.'],
-['Jon','Egia da. Eta orain, nora zoaz?','True. And now, where are you going?'],
-['Ane','Etxera noa. Zarauztik nator, eta nekatuta nago!','I\u2019m going home. I\u2019ve come from Zarautz and I\u2019m tired!']],
-v:[['non?','where?'],['hemen / hor / han','here / there / over there'],['geltokia','the station'],['eliza','the church'],['hondartza','the beach'],['kalea','the street'],['plaza','the square'],['aurrean / atzean','in front of / behind'],['ondoan','next to'],['urrun / hurbil','far / near'],['nekatuta','tired'],['nora?','where to?'],['nondik?','where from?']],
-g:[
-{t:'Egon \u2014 to be (somewhere / in a state)',p:'Basque has two \u201cbe\u201ds. <b>izan</b> = who/what you are; <b>egon</b> = where or how you are.',
-tb:[['','egon'],['ni','nago'],['zu','zaude'],['hura','dago'],['gu','gaude'],['zuek','zaudete'],['haiek','daude']],
-ex:[['Non zaude? \u2014 Etxean nago.','Where are you? \u2014 I\u2019m at home.'],['Nekatuta nago.','I\u2019m tired.']]},
-{t:'Three location cases',p:'The Case Lab in the menu drills these hands-on. <b>-n</b> answers <b>Non?</b> (where), <b>-ra</b> answers <b>Nora?</b> (to where), <b>-tik</b> answers <b>Nondik?</b> (from where). Consonant-ending words slip in an <b>-e-</b>: <b>Zarautz \u2192 Zarautzen, Zarauztik</b>.',
-tb:[['case','example','meaning'],['-n \u00b7 Non?','hondartzan','on the beach'],['-ra \u00b7 Nora?','etxera','to the house'],['-tik \u00b7 Nondik?','Bilbotik','from Bilbao']],
-ex:[['Etxera noa.','I\u2019m going home. (noa = I go \u2014 more in B2!)']]}],
-q:[['\u201cI\u2019m tired\u201d uses which verb?',['nago','naiz','dut'],0,'States and places take egon: nekatuta nago. izan is for who/what you are.'],
-['\u201cOn the beach\u201d:',['hondartzan','hondartzara','hondartzatik'],0,'-n answers Non?: hondartzan. -ra is \u201cto\u201d, -tik is \u201cfrom\u201d.'],
-['\u201cWhere are they?\u201d',['Non daude?','Non dago?','Non zaudete?'],0,'haiek daude \u2014 they are. dago is singular, zaudete is \u201cyou all\u201d.'],
-['\u201cFrom Bilbao\u201d:',['Bilbotik','Bilbora','Bilbon'],0,'-tik answers Nondik?: Bilbotik.'],
-['\u201cBehind the church\u201d:',['eliza atzean','eliza aurrean','eliza ondoan'],0,'atzean = behind; aurrean = in front; ondoan = next to.']]},
-
-{id:'a1u4',t:'Tabernan',sub:'Ordering food and drink, nahi dut / behar dut, your first transitive verb',
-d:[['Zerbitzaria','Egun on! Zer nahi duzu?','Good morning! What would you like?'],
-['Miren','Kafe bat nahi dut, mesedez. Eta pintxo bat.','I\u2019d like a coffee, please. And a pintxo.'],
-['Zerbitzaria','Tortilla dugu, eta gazta ere bai.','We have tortilla, and cheese too.'],
-['Miren','Tortilla, mesedez. Eta lagunak ardoa nahi du.','Tortilla, please. And my friend wants wine.'],
-['Zerbitzaria','Ardo beltza edo zuria?','Red or white wine?'],
-['Miren','Beltza. Zenbat da dena?','Red. How much is everything?'],
-['Zerbitzaria','Zortzi euro dira.','That\u2019s eight euros.'],
-['Miren','Hemen duzu. Eskerrik asko!','Here you are. Thanks!']],
-v:[['taberna','the bar'],['zerbitzaria','the waiter'],['kafea','the coffee'],['ardoa','the wine'],['garagardoa','the beer'],['sagardoa','the cider'],['ura','the water'],['ogia','the bread'],['gazta','the cheese'],['pintxo bat','a pintxo'],['nahi dut','I want'],['behar dut','I need'],['zenbat?','how much / many?'],['kontua','the bill']],
-g:[
-{t:'Ukan \u2014 to have (and to do things to things)',p:'Transitive sentences (someone does something to something) need <b>ukan</b>. It\u2019s also \u201chave\u201d: <b>Kafea dut</b> \u2014 I have a coffee.',
-tb:[['','ukan'],['nik','dut'],['zuk','duzu'],['hark','du'],['guk','dugu'],['zuek','duzue'],['haiek','dute']],
-ex:[['Zer nahi duzu?','What do you want?'],['Ardoa nahi dut.','I want wine.']]},
-{t:'The -k that marks the doer',p:'Spot the pronouns above: <b>nik, zuk, hark</b>\u2026 That final <b>-k</b> (ergative \u2014 <b>Nork?</b>) marks whoever is <em>doing</em> a transitive verb. With izan/egon there\u2019s no -k: <b>ni naiz</b>, but <b>nik dut</b>.',
-ex:[['Mirenek ardoa nahi du.','Miren wants wine. (Miren + k)'],['Ni Jon naiz, baina nik kafea nahi dut.','I\u2019m Jon, but I want coffee.']]},
-{t:'nahi / behar',p:'<b>nahi dut</b> = I want; <b>behar dut</b> = I need. The thing wanted goes before: <b>Kafe bat nahi dut.</b>'}],
-q:[['\u201cThey want cider\u201d:',['Sagardoa nahi dute','Sagardoa nahi dugu','Sagardoa nahi du'],0,'haiek dute \u2014 they. dugu = we, du = he/she.'],
-['Which is correct?',['Mirenek ardoa nahi du','Miren ardoa nahi du','Mirenek ardoa nahi da'],0,'The doer of a transitive verb takes -k: Mirenek. And ukan (du), not izan (da).'],
-['\u201cHow much is everything?\u201d',['Zenbat da dena?','Zer da dena?','Non da dena?'],0,'zenbat = how much/many.'],
-['\u201cI need water\u201d:',['Ura behar dut','Ura nahi naiz','Ura behar naiz'],0,'behar + ukan: ura behar dut. naiz would be izan \u2014 wrong verb family.'],
-['\u201cthe bill\u201d:',['kontua','kontub','kontuak'],0,'kontua. (kontuak would be plural \u2014 or a very long lunch.)']]},
-
-{id:'a1u5',t:'Nire jendea',sub:'Family, possessives, plurals, having more than one thing',
-d:[['Peru','Hau nire familia da. Hau ama da, eta hau aita.','This is my family. This is mum, and this is dad.'],
-['Ane','Eta nor da mutil hau?','And who is this boy?'],
-['Peru','Nire anaia da. Junior deitzen diogu.','He\u2019s my brother. We call him Junior.'],
-['Ane','Arrebarik baduzu?','Do you have any sisters?'],
-['Peru','Ez, baina bi lehengusu ditut Donostian.','No, but I have two cousins in Donostia.'],
-['Ane','Zure gurasoak hemen bizi dira?','Do your parents live here?'],
-['Peru','Ez, haiek Bilbon bizi dira.','No, they live in Bilbao.']],
-v:[['familia','the family'],['ama / aita','mum / dad'],['gurasoak','parents'],['semea / alaba','son / daughter'],['anaia','brother (of a man)'],['neba','brother (of a woman)'],['arreba','sister (of a man)'],['ahizpa','sister (of a woman)'],['lehengusua','the cousin'],['nire / zure / bere','my / your / his\u2013her'],['gure','our'],['bizi da','lives'],['deitzen diogu','we call him/her']],
-g:[
-{t:'Possessives',p:'<b>nire</b> my, <b>zure</b> your, <b>bere</b> his/her, <b>gure</b> our, <b>zuen</b> your (pl.), <b>haien</b> their. They sit before the noun: <b>nire ama</b>.',
-ex:[['Nire anaia Bilbon bizi da.','My brother lives in Bilbao.']]},
-{t:'Plurals: -ak',p:'Swap the article <b>-a</b> for <b>-ak</b>: <b>laguna \u2192 lagunak</b>. Watch out \u2014 plural subjects switch the verb: <b>lagunak dira</b>, they are friends.',
-ex:[['Gurasoak hemen daude.','The parents are here.']]},
-{t:'Having several: ditut',p:'When what you have is plural, <b>dut</b> family becomes <b>ditut</b> family.',
-tb:[['','one thing','several'],['nik','dut','ditut'],['zuk','duzu','dituzu'],['hark','du','ditu'],['guk','dugu','ditugu'],['haiek','dute','dituzte']],
-ex:[['Bi lehengusu ditut.','I have two cousins.'],['Liburuak ditugu.','We have the books.']]},
-{t:'Brothers & sisters \u2014 who\u2019s asking?',p:'Basque splits siblings by the speaker\u2019s side: a man\u2019s brother is <b>anaia</b>, a woman\u2019s brother is <b>neba</b>; a man\u2019s sister is <b>arreba</b>, a woman\u2019s sister is <b>ahizpa</b>.'}],
-q:[['A woman says \u201cmy brother\u201d:',['nire neba','nire anaia','nire arreba'],0,'From a woman\u2019s side, brother = neba. anaia is a man\u2019s brother.'],
-['\u201cI have two cousins\u201d:',['Bi lehengusu ditut','Bi lehengusu dut','Bi lehengusua ditut'],0,'Plural object \u2192 ditut. After a number the noun stays bare: bi lehengusu.'],
-['\u201cThe friends are here\u201d:',['Lagunak hemen daude','Laguna hemen dago','Lagunak hemen dago'],0,'Plural subject, plural verb: lagunak daude.'],
-['\u201cour parents\u201d:',['gure gurasoak','nire gurasoak','zuen gurasoak'],0,'gure = our. nire = my, zuen = your (plural).'],
-['\u201cWe have the books\u201d:',['Liburuak ditugu','Liburuak dugu','Liburua ditugu'],0,'Plural object liburuak \u2192 ditugu.']]},
-
-{id:'a1u6',t:'Nire astea',sub:'Days of the week, daily habits with -tzen, saying what you like',
-d:[['Miren','Zer egiten duzu astelehenetan?','What do you do on Mondays?'],
-['Jon','Astelehenetan lan egiten dut, eta arratsaldean igeri egiten dut.','On Mondays I work, and in the afternoon I swim.'],
-['Miren','Eta asteburuan?','And at the weekend?'],
-['Jon','Larunbatetan hondartzara joaten naiz. Surf egitea gustatzen zait!','On Saturdays I go to the beach. I like surfing!'],
-['Miren','Niri ere bai! Baina igandeetan etxean gelditzen naiz.','Me too! But on Sundays I stay at home.'],
-['Jon','Zer gustatzen zaizu gehien?','What do you like most?'],
-['Miren','Musika. Eta ardo naturala!','Music. And natural wine!']],
-v:[['astelehena','Monday'],['asteartea','Tuesday'],['asteazkena','Wednesday'],['osteguna','Thursday'],['ostirala','Friday'],['larunbata','Saturday'],['igandea','Sunday'],['asteburua','the weekend'],['lan egin','to work'],['igeri egin','to swim'],['joaten naiz','I (usually) go'],['gelditzen naiz','I stay'],['gustatzen zait','I like (it pleases me)'],['gehien','most']],
-g:[
-{t:'Habits: verb + -tzen',p:'For things you do regularly, the main verb takes <b>-ten/-tzen</b> and the auxiliary does the person: <b>jan \u2192 jaten dut</b> (I eat), <b>joan \u2192 joaten naiz</b> (I go). Whether it\u2019s izan or ukan depends on the verb \u2014 movement verbs like joan take izan.',
-ex:[['Kafea edaten dut goizero.','I drink coffee every morning.'],['Larunbatetan hondartzara joaten naiz.','On Saturdays I go to the beach.']]},
-{t:'Gustatu \u2014 liking, backwards',p:'Basque says \u201cit pleases me\u201d. The liked thing is the subject; you are the dative. <b>zait</b> = to me, <b>zaizu</b> = to you, <b>zaio</b> = to him/her, <b>zaigu</b> = to us, <b>zaizue</b> = to you all, <b>zaie</b> = to them. Plural liked things: <b>zaizkit, zaizkizu\u2026</b>',
-ex:[['Musika gustatzen zait.','I like music.'],['Pintxoak gustatzen zaizkit.','I like pintxos. (plural!)']]},
-{t:'On days: -etan',p:'<b>astelehenetan</b> = on Mondays; <b>larunbatetan</b> = on Saturdays. The same -etan you met with clock times.'}],
-q:[['\u201cI like music\u201d:',['Musika gustatzen zait','Musika gustatzen dut','Musika gustatzen naiz'],0,'gustatu works backwards: the music pleases me \u2014 zait.'],
-['\u201cI like pintxos\u201d:',['Pintxoak gustatzen zaizkit','Pintxoak gustatzen zait','Pintxoak gustatzen ditut'],0,'Plural things liked \u2192 zaizkit.'],
-['\u201cOn Fridays\u201d:',['ostiraletan','ostirala','ostiralera'],0,'-etan for repeated days: ostiraletan.'],
-['\u201cI usually go\u201d:',['joaten naiz','joan naiz','joango naiz'],0,'-tzen + naiz = habit. joan naiz = I have gone; joango naiz = I will go (A2!).'],
-['Thursday is:',['osteguna','ostirala','asteazkena'],0,'osteguna = Thursday. ostirala = Friday, asteazkena = Wednesday.']]}
-]},
-{id:'a2',name:'A2',eus:'Oinarrizkoa',title:'Past, future, and other people',desc:'Tell yesterday\u2019s story, make tomorrow\u2019s plans, compare things, and give things to people.',units:[
-
-{id:'a2u1',t:'Atzo eta gaur',sub:'The past with izan and ukan \u2014 and the golden rule: the past always ends in -n',
-d:[['Ane','Non egon zinen atzo? Ez zinen tabernan egon.','Where were you yesterday? You weren\u2019t at the bar.'],
-['Peru','Donostian izan nintzen, lagun batekin.','I was in Donostia, with a friend.'],
-['Ane','Zer egin zenuten?','What did you do?'],
-['Peru','Pintxoak jan genituen eta gero zinemara joan ginen.','We ate pintxos and then we went to the cinema.'],
-['Ane','Filma ona izan zen?','Was the film good?'],
-['Peru','Ez! Baina afaria bikaina izan zen.','No! But the dinner was excellent.']],
-v:[['atzo','yesterday'],['gaur','today'],['herenegun','the day before yesterday'],['gero','then / later'],['zinema','the cinema'],['filma','the film'],['afaria','the dinner'],['bazkaria','the lunch'],['gosaria','the breakfast'],['bikaina','excellent'],['jan','to eat'],['edan','to drink'],['egin','to do / make'],['joan','to go']],
-g:[
-{t:'Izan in the past',p:'The golden rule: <b>every past-tense form ends in -n</b>. Spot it below.',
-tb:[['','present','past'],['ni','naiz','nintzen'],['zu','zara','zinen'],['hura','da','zen'],['gu','gara','ginen'],['zuek','zarete','zineten'],['haiek','dira','ziren']],
-ex:[['Atzo Donostian izan nintzen.','Yesterday I was in Donostia.']]},
-{t:'Ukan in the past',
-tb:[['','present','past'],['nik','dut','nuen'],['zuk','duzu','zenuen'],['hark','du','zuen'],['guk','dugu','genuen'],['zuek','duzue','zenuten'],['haiek','dute','zuten']],
-p2:'Plural objects go <b>nituen, zenituen, zituen, genituen, zenituzten, zituzten</b>: <b>Pintxoak jan genituen</b> \u2014 we ate (the) pintxos.',
-ex:[['Zer egin zenuen atzo?','What did you do yesterday?'],['Kafe bat hartu nuen.','I had a coffee.']]},
-{t:'Today vs yesterday',p:'For today\u2019s finished actions, present auxiliary: <b>gaur ikusi dut</b> (I\u2019ve seen it today). For yesterday and beyond, past auxiliary: <b>atzo ikusi nuen</b>.'}],
-q:[['\u201cI was\u201d:',['nintzen','naiz','zen'],0,'nintzen. And note the -n: every Basque past form ends in one.'],
-['\u201cWe went to the cinema\u201d:',['Zinemara joan ginen','Zinemara joan gara','Zinemara joan genuen'],0,'joan takes the izan family: ginen. genuen is the ukan family.'],
-['\u201cWe ate pintxos\u201d:',['Pintxoak jan genituen','Pintxoak jan genuen','Pintxoak jan ginen'],0,'Plural object in the past \u2192 genituen.'],
-['Which sentence is right for yesterday?',['Atzo ikusi nuen','Atzo ikusi dut','Atzo ikusten dut'],0,'Yesterday needs the past auxiliary: atzo ikusi nuen.'],
-['\u201cThe film was good\u201d:',['Filma ona izan zen','Filma onak izan ziren','Filma ona zuen'],0,'hura \u2192 zen. (zuen would need a doer with -k.)']]},
-
-{id:'a2u2',t:'Bihar',sub:'The future with -ko/-go, plans, and the weather',
-d:[['Jon','Zer egingo duzu bihar?','What will you do tomorrow?'],
-['Miren','Eguraldi ona egiten badu, mendira joango naiz.','If the weather\u2019s good, I\u2019ll go to the mountain.'],
-['Jon','Eta euria ari badu?','And if it\u2019s raining?'],
-['Miren','Etxean geldituko naiz eta liburu bat irakurriko dut.','I\u2019ll stay home and read a book.'],
-['Jon','Ni hondartzara joango naiz, euria edo eguzkia!','I\u2019ll go to the beach, rain or sun!'],
-['Miren','Hotz egingo du, baina\u2026 ondo pasa!','It\u2019ll be cold, but\u2026 have fun!']],
-v:[['bihar','tomorrow'],['etzi','the day after tomorrow'],['datorren astean','next week'],['eguraldia','the weather'],['euria ari du','it\u2019s raining'],['elurra ari du','it\u2019s snowing'],['eguzkia dago','it\u2019s sunny'],['hotz egiten du','it\u2019s cold'],['bero egiten du','it\u2019s hot'],['irakurri','to read'],['gelditu','to stay'],['ondo pasa!','have fun!']],
-g:[
-{t:'Future: -ko / -go',p:'Add <b>-ko</b> to the participle (\u2014 <b>-go</b> after -n) and keep the present auxiliary: <b>joan \u2192 joango naiz</b>, <b>ikusi \u2192 ikusiko dut</b>, <b>egin \u2192 egingo dut</b>, <b>jan \u2192 jango dut</b>.',
-ex:[['Bihar mendira joango naiz.','Tomorrow I\u2019ll go to the mountain.'],['Liburua irakurriko dut.','I\u2019ll read the book.']]},
-{t:'Weather small talk',p:'Weather verbs run on <b>du</b> or <b>dago</b>: <b>euria ari du</b> (it\u2019s raining \u2014 lit. \u201cit\u2019s at rain\u201d), <b>hotz egiten du</b>, <b>eguzkia dago</b>.'},
-{t:'A peek at \u201cif\u201d',p:'<b>ba-</b> glued to the verb = if: <b>eguraldi ona egiten badu</b> \u2014 if the weather is good. The full conditional machine arrives in B1; for now just recognise it.'}],
-q:[['\u201cI will go\u201d:',['joango naiz','joaten naiz','joan naiz'],0,'-go future: joango naiz. joaten = habit, joan naiz = have gone.'],
-['\u201cIt\u2019s raining\u201d:',['Euria ari du','Euria dago','Euria da'],0,'euria ari du is the idiom.'],
-['\u201cI\u2019ll read the book\u201d:',['Liburua irakurriko dut','Liburua irakurtzen dut','Liburua irakurri nuen'],0,'Future -ko + present auxiliary: irakurriko dut.'],
-['\u201cegin\u201d in the future:',['egingo','eginko','eginten'],0,'After -n the future suffix is -go: egingo.'],
-['\u201cnext week\u201d:',['datorren astean','asteburuan','atzo'],0,'datorren astean \u2014 literally \u201cin the coming week\u201d.']]},
-
-{id:'a2u3',t:'Zertan ari zara?',sub:'Right-now actions with ari izan, and where everyone was',
-d:[['Ane','(telefonoz) Kaixo! Zertan ari zara?','(on the phone) Hi! What are you doing?'],
-['Peru','Bazkaria prestatzen ari naiz. Zu non zaude?','I\u2019m making lunch. Where are you?'],
-['Ane','Azokan nago. Gazta erosten ari naiz.','I\u2019m at the market. I\u2019m buying cheese.'],
-['Peru','Bikain! Atzo deitu nizun, baina\u2026','Great! I called you yesterday, but\u2026'],
-['Ane','Barkatu! Igerilekuan nengoen.','Sorry! I was at the pool.'],
-['Peru','Lasai. Etorri etxera \u2014 ardoa hozten ari da!','No worries. Come home \u2014 the wine is chilling!']],
-v:[['zertan ari zara?','what are you doing?'],['ari naiz','I am (in the middle of)'],['prestatu','to prepare'],['erosi','to buy'],['saldu','to sell'],['azoka','the market'],['igerilekua','the swimming pool'],['deitu','to call'],['lasai','relax / no worries'],['hoztu','to chill / get cold'],['telefonoz','by phone'],['orain','now']],
-g:[
-{t:'Ari izan \u2014 the -ing machine',p:'Happening right now = verb + <b>-tzen</b> + <b>ari</b> + izan: <b>prestatzen ari naiz</b>, I\u2019m preparing. Even with a transitive verb, <b>ari</b> runs on the izan family.',
-ex:[['Gazta erosten ari naiz.','I\u2019m buying cheese.'],['Euria ari du \u2014 hori ere ari da!','It\u2019s raining \u2014 that\u2019s the same ari!']]},
-{t:'Egon in the past',
-tb:[['','present','past'],['ni','nago','nengoen'],['zu','zaude','zeunden'],['hura','dago','zegoen'],['gu','gaude','geunden'],['zuek','zaudete','zeundeten'],['haiek','daude','zeuden']],
-ex:[['Igerilekuan nengoen.','I was at the pool.']]}],
-q:[['\u201cI\u2019m buying cheese\u201d:',['Gazta erosten ari naiz','Gazta erosten dut','Gazta erosi dut'],0,'Right now = -tzen ari naiz. erosten dut = habit; erosi dut = I\u2019ve bought.'],
-['\u201cari\u201d runs with which family?',['izan (naiz)','ukan (dut)','egon (nago)'],0,'ari izan \u2014 always the izan family, even for transitive verbs.'],
-['\u201cI was at the pool\u201d:',['Igerilekuan nengoen','Igerilekuan nago','Igerilekuan zeunden'],0,'Location in the past: nengoen (egon).'],
-['\u201cShe was at home\u201d:',['Etxean zegoen','Etxean zeunden','Etxean nengoen'],0,'hura zegoen. zeunden = you were.'],
-['\u201cWhat are you doing?\u201d',['Zertan ari zara?','Zer nahi duzu?','Nongoa zara?'],0,'Zertan ari zara? \u2014 literally \u201cin what are you engaged?\u201d']]},
-
-{id:'a2u4',t:'Handiagoa, onena',sub:'Comparing things: bigger, best, and \u201cas good as\u201d',
-d:[['Miren','Denda honetan poltsak merkeagoak dira.','In this shop the bags are cheaper.'],
-['Jon','Bai, baina beste denda hura hobea da.','Yes, but that other shop is better.'],
-['Miren','Poltsa hau politena da, dudarik gabe.','This bag is the prettiest, no doubt.'],
-['Jon','Nire poltsa zurea bezain polita da!','My bag is as pretty as yours!'],
-['Miren','Ez! Zurea zaharragoa da.','No! Yours is older.'],
-['Jon','Zaharragoa, bai\u2026 baina askoz merkeagoa izan zen.','Older, yes\u2026 but it was much cheaper.']],
-v:[['handia / txikia','big / small'],['merkea / garestia','cheap / expensive'],['polita','pretty'],['zaharra / berria','old / new'],['ona / txarra','good / bad'],['hobea','better'],['onena','the best'],['bezain','as \u2026 as'],['baino','than'],['askoz','much (with comparisons)'],['dudarik gabe','without a doubt'],['denda','the shop']],
-g:[
-{t:'-ago, -ena',p:'Comparative: adjective + <b>-ago</b> (+ article): <b>handiagoa</b>, bigger. Superlative: <b>-ena</b>: <b>handiena</b>, the biggest. \u201cThan\u201d is <b>baino</b>, and it comes before: <b>zurea baino handiagoa</b> \u2014 bigger than yours.',
-ex:[['Bilbo Zarautz baino handiagoa da.','Bilbao is bigger than Zarautz.'],['Pintxo hau onena da.','This pintxo is the best.']]},
-{t:'Irregular \u201cgood\u201d',p:'<b>ona \u2192 hobea</b> (better) <b>\u2192 onena</b> (best). Like English, the everyday words cheat.'},
-{t:'bezain \u2014 as \u2026 as',ex:[['Nire poltsa zurea bezain polita da.','My bag is as pretty as yours.']]}],
-q:[['\u201cbigger\u201d:',['handiagoa','handiena','handia'],0,'-ago = comparative: handiagoa. -ena is the superlative.'],
-['\u201cBilbao is bigger than Zarautz\u201d:',['Bilbo Zarautz baino handiagoa da','Bilbo baino Zarautz handiagoa da','Bilbo Zarautz bezain handiagoa da'],0,'X Y baino \u2026-ago: the \u201cthan\u201d phrase comes before the adjective.'],
-['\u201cbetter\u201d:',['hobea','onagoa','onena'],0,'ona goes irregular: hobea.'],
-['\u201cas pretty as yours\u201d:',['zurea bezain polita','zurea baino polita','zurea askoz polita'],0,'bezain = as\u2026as.'],
-['\u201cthe cheapest\u201d:',['merkeena','merkeagoa','merkea'],0,'-ena superlative: merkeena.']]},
-
-{id:'a2u5',t:'Eman diot',sub:'Giving things to people \u2014 the three-part verb (NOR-NORI-NORK)',
-d:[['Peru','Amari loreak eman dizkiot. Urtebetetzea du gaur.','I\u2019ve given mum flowers. It\u2019s her birthday today.'],
-['Ane','Zer polita! Nik liburu bat oparitu diot.','How lovely! I\u2019ve given her a book as a present.'],
-['Peru','Aitak afaria prestatu digu denoi.','Dad has made dinner for us all.'],
-['Ane','Eta zuk zer esan diozu amari?','And what did you say to mum?'],
-['Peru','\u201cZorionak eta urte askotarako!\u201d esan diot.','I said \u201chappy birthday and many happy returns!\u201d'],
-['Ane','Niri ere tarta gorde didazu, ezta?','You\u2019ve saved me some cake too, right?']],
-v:[['eman','to give'],['oparitu','to give as a present'],['esan','to say / tell'],['gorde','to keep / save'],['erakutsi','to show'],['ekarri','to bring'],['urtebetetzea','the birthday'],['zorionak!','congratulations / happy birthday!'],['loreak','flowers'],['tarta','the cake'],['opari bat','a present'],['denoi','to us all']],
-g:[
-{t:'The three-part verb',p:'\u201cI give <em>it</em> <em>to her</em>\u201d packs three people into one auxiliary. Fix the receiver as <b>hari</b> (to him/her) and it goes:',
-tb:[['','X to him/her'],['nik','diot'],['zuk','diozu'],['hark','dio'],['guk','diogu'],['zuek','diozue'],['haiek','diote']],
-p2:'Change the receiver and the middle changes: <b>dit</b> (to me), <b>dizu</b> (to you), <b>digu</b> (to us), <b>dizue</b> (to you all), <b>die</b> (to them) \u2014 all \u201che/she \u2026 to X\u201d. Plural things given add <b>-zki-</b>: <b>dizkiot</b>, I give <em>them</em> to her.',
-ex:[['Amari loreak eman dizkiot.','I\u2019ve given mum flowers. (plural \u2192 dizkiot)'],['Zer esan diozu?','What did you say to her?']]},
-{t:'The receiver takes -ri',p:'The person receiving stands in the dative: <b>amari</b>, to mum \u2014 the same <b>-ri</b> you built in the Case Lab.'}],
-q:[['\u201cI\u2019ve given it to her\u201d:',['eman diot','eman dut','eman dizut'],0,'diot = I\u2026to him/her. dizut would be \u201cI\u2026to you\u201d.'],
-['\u201cI\u2019ve given her the flowers\u201d (plural!):',['eman dizkiot','eman diot','eman ditut'],0,'Plural things + a receiver \u2192 -zki-: dizkiot.'],
-['\u201cYou\u2019ve saved me cake\u201d \u2014 which auxiliary?',['didazu','diozu','dizut'],0,'to me + you did it = didazu. diozu = you to her; dizut = I to you.'],
-['\u201cWhat did you say to mum?\u201d',['Zer esan diozu amari?','Zer esan duzu amari?','Zer esan dizu amari?'],0,'A receiver (amari) needs the three-part verb: diozu.'],
-['\u201cHappy birthday!\u201d',['Zorionak!','Eskerrik asko!','Ondo pasa!'],0,'Zorionak! \u2014 congratulations / happy birthday.']]}
-]},
-{id:'b1',name:'B1',eus:'Tartekoa',title:'Could, would, should',desc:'Give advice, imagine other worlds, report what people said, and tell a story about the past that felt like something.',units:[
-
-{id:'b1u1',t:'Aholkuak',sub:'Advice and ability: behar, ahal, ezin \u2014 and the potential (naiteke, dezaket)',
-d:[['Jon','Euskara azkarrago ikasi nahi dut. Zer egin behar dut?','I want to learn Basque faster. What should I do?'],
-['Irakaslea','Egunero apur bat egin dezakezu \u2014 hamar minutu nahikoa da.','You can do a little every day \u2014 ten minutes is enough.'],
-['Jon','Baina ezin dut dena gogoratu!','But I can\u2019t remember everything!'],
-['Irakaslea','Lasai. Hitzak ozen esan ditzakezu, eta paseoan entzun.','Don\u2019t worry. You can say the words out loud, and listen on a walk.'],
-['Jon','Tabernan praktikatu al dezaket?','Can I practise at the bar?'],
-['Irakaslea','Noski! Hori da lekurik onena. Etor zaitezke nire klasera ere.','Of course! That\u2019s the best place. You can also come to my class.']],
-v:[['aholkua','the advice'],['behar dut','I must / need to'],['ahal dut','I can'],['ezin dut','I can\u2019t'],['gogoratu','to remember'],['ahaztu','to forget'],['praktikatu','to practise'],['ozen','out loud'],['nahikoa','enough'],['noski','of course'],['egunero','every day'],['azkarrago','faster']],
-g:[
-{t:'The everyday trio',p:'<b>behar dut</b> (must), <b>ahal dut</b> (can), <b>ezin dut</b> (can\u2019t) \u2014 all with the ordinary auxiliary: <b>Joan behar dut</b>, I have to go. <b>Ezin naiz joan</b>, I can\u2019t go (izan-family verb keeps izan).',
-ex:[['Gehiago ikasi behar dut.','I need to study more.'],['Ezin dut etorri.','I can\u2019t come.']]},
-{t:'The potential: -ke',p:'Basque also has a dedicated \u201ccan\u201d: the <b>-ke</b> forms. izan-family: <b>naiteke, zaitezke, daiteke, gaitezke, zaitezkete, daitezke</b>. ukan-family: <b>dezaket, dezakezu, dezake, dezakegu, dezakezue, dezakete</b> (plural object: <b>ditzaket\u2026</b>). The main verb shrinks to its bare root: <b>etorri \u2192 etor naiteke</b>, <b>egin \u2192 egin dezaket</b>, <b>ikusi \u2192 ikus dezaket</b>.',
-ex:[['Etor zaitezke nire klasera.','You can come to my class.'],['Hitzak ozen esan ditzakezu.','You can say the words out loud. (plural \u2192 ditzakezu)']]},
-{t:'ahal dut = dezaket',p:'Both are correct and mean the same; which one a speaker reaches for is often regional habit. Recognise both \u2014 use whichever comes out.'}],
-q:[['\u201cI can\u2019t come\u201d:',['Ezin dut etorri','Ahal dut etorri','Behar dut etorri'],0,'ezin = can\u2019t. (Ezin naiz etorri is also heard \u2014 both are correct.)'],
-['\u201cYou (zu) can come\u201d with -ke:',['etor zaitezke','etor dezakezu','etorri duzu'],0,'Coming is izan-family \u2192 zaitezke, with the bare root: etor. dezakezu is the ukan family.'],
-['\u201cI can do it\u201d with -ke:',['egin dezaket','egin naiteke','egiten dezaket'],0,'Transitive \u2192 dezaket, with the bare root egin.'],
-['\u201cI can see them\u201d (plural):',['ikus ditzaket','ikus dezaket','ikusi ditut'],0,'Plural object in the potential \u2192 ditzaket.'],
-['\u201cI have to study more\u201d:',['Gehiago ikasi behar dut','Gehiago ikasi ahal dut','Gehiago ikasi ezin dut'],0,'behar = must. ahal = can, ezin = can\u2019t.']]},
-
-{id:'b1u2',t:'Baldintzak',sub:'If-worlds: real ones with ba-, imaginary ones with balitz \u2192 litzateke',
-d:[['Miren','Dirua badugu, Getariara joango gara afaltzera.','If we have the money, we\u2019ll go to Getaria for dinner.'],
-['Peru','Eta aberatsa bazina, zer egingo zenuke?','And if you were rich, what would you do?'],
-['Miren','Etxe bat erosiko nuke hondartza ondoan.','I\u2019d buy a house next to the beach.'],
-['Peru','Nik mundua bidaiatuko nuke.','I\u2019d travel the world.'],
-['Miren','Eta euskara ahaztuko zenuke?','And would you forget your Basque?'],
-['Peru','Inoiz ez! Euskara banekien bezala hitz egingo nuke leku guztietan.','Never! I\u2019d speak Basque everywhere as if I\u2019d always known it.']],
-v:[['baldintza','the condition / if-clause'],['dirua','the money'],['aberatsa','rich'],['pobrea','poor'],['erosi','to buy'],['bidaiatu','to travel'],['mundua','the world'],['inoiz ez','never'],['leku guztietan','everywhere'],['afaltzera','(to go) for dinner'],['ondoan','next to'],['bezala','like / as']],
-g:[
-{t:'Real \u201cif\u201d: ba-',p:'Likely conditions just take <b>ba-</b> on the auxiliary: <b>dirua badugu</b>, if we have money; <b>euria ari badu</b>, if it\u2019s raining. The result is plain future.',
-ex:[['Eguraldi ona badago, hondartzara joango gara.','If the weather\u2019s good, we\u2019ll go to the beach.']]},
-{t:'Imaginary \u201cif\u201d: the past + ba-',p:'Unreal conditions grow out of the past forms you know: <b>nintzen \u2192 banintz</b> (if I were), <b>nuen \u2192 banu</b> (if I had). Full sets: <b>banintz, bazina, balitz, bagina, bazinete, balira</b>; <b>banu, bazenu, balu, bagenu, bazenute, balute</b>. The if-verb takes <b>-ko</b>: <b>joango banintz</b>, if I were to go.',
-ex:[['Aberatsa banintz\u2026','If I were rich\u2026'],['Dirua balu\u2026','If he had money\u2026']]},
-{t:'The result: -ke again',p:'The \u201cwould\u201d half uses <b>-ke</b>: <b>nuke, zenuke, luke, genuke, zenukete, lukete</b> (would do/have) and <b>nintzateke, zinateke, litzateke, ginateke, zinatekete, lirateke</b> (would be). Notice third persons start with <b>l-</b>.',
-ex:[['Etxe bat erosiko nuke.','I would buy a house.'],['Hori polita litzateke.','That would be lovely.']]}],
-q:[['\u201cIf we have money\u201d (real):',['dirua badugu','dirua bagenu','dirua dugu ba'],0,'Real condition: ba- + present \u2014 badugu. bagenu is the imaginary one.'],
-['\u201cIf I were rich\u201d:',['aberatsa banintz','aberatsa banaiz','aberatsa nintzen ba'],0,'nintzen \u2192 banintz.'],
-['\u201cI would buy it\u201d:',['erosiko nuke','erosiko dut','erosi banu'],0,'Result clause = -ko + nuke.'],
-['\u201cThat would be lovely\u201d:',['polita litzateke','polita luke','polita balitz'],0,'\u201cWould be\u201d (izan) \u2192 litzateke. luke = would have/do.'],
-['Imaginary results in the 3rd person start with:',['l-','z-','b-'],0,'litzateke, luke, lirateke \u2014 the tell-tale l-.']]},
-
-{id:'b1u3',t:'Esan zuen\u2026',sub:'Reporting speech with -(e)la, giving reasons with -(e)lako, and \u201cwhen\u201d with -(e)nean',
-d:[['Ane','Mirenek esan zuen bihar etorriko zela.','Miren said she\u2019d come tomorrow.'],
-['Peru','Zergatik ez gaur?','Why not today?'],
-['Ane','Lan asko duelako. Nekatuta dagoela esan zuen ere.','Because she has a lot of work. She also said she\u2019s tired.'],
-['Peru','Iristen denean, sagardoa irekiko dugu.','When she arrives, we\u2019ll open the cider.'],
-['Ane','Eta esango diogu afaria prest dagoela.','And we\u2019ll tell her dinner is ready.'],
-['Peru','Ez esan tarta ere badagoela \u2014 sorpresa da!','Don\u2019t say there\u2019s cake too \u2014 it\u2019s a surprise!']],
-v:[['esan zuen','he/she said'],['zergatik?','why?'],['-(e)lako','because'],['iritsi','to arrive'],['ireki','to open'],['itxi','to close'],['prest','ready'],['sorpresa','the surprise'],['galdetu','to ask'],['erantzun','to answer'],['egia','the truth'],['gezurra','the lie']],
-g:[
-{t:'Reported speech: -(e)la',p:'\u201cShe said <em>that</em>\u2026\u201d hangs <b>-(e)la</b> on the reported verb: <b>dator \u2192 datorrela</b>, <b>da \u2192 dela</b>, <b>etorriko zen \u2192 etorriko zela</b>.',
-ex:[['Nekatuta dagoela esan zuen.','She said she\u2019s tired.'],['Bihar etorriko zela esan zuen.','She said she\u2019d come tomorrow.']]},
-{t:'Because: -(e)lako',p:'Reasons take <b>-(e)lako</b>, same joint: <b>lan asko duelako</b>, because she has a lot of work. You can also front it with <b>zergatik? \u2014 \u2026-(e)lako</b> as the answer.',
-ex:[['Ez naiz joango, euria ari duelako.','I\u2019m not going, because it\u2019s raining.']]},
-{t:'When: -(e)nean',p:'<b>iristen denean</b> \u2014 when she arrives. Take the verb, add <b>-(e)n</b>, then the familiar <b>-ean</b>. One suffix chain, one idea.',
-ex:[['Etxera iristen naizenean, deituko dizut.','When I get home, I\u2019ll call you.']]}],
-q:[['\u201cShe said she\u2019s tired\u201d:',['Nekatuta dagoela esan zuen','Nekatuta dago esan zuen','Nekatuta dagoen esan zuen'],0,'Reported clause takes -(e)la: dagoela.'],
-['\u201cbecause it\u2019s raining\u201d:',['euria ari duelako','euria ari duela','euria ari duenean'],0,'-(e)lako = because. -(e)la = that; -(e)nean = when.'],
-['\u201cWhen I get home\u2026\u201d:',['iristen naizenean','iristen naizela','iristen banaiz'],0,'-(e)nean = when. banaiz would be \u201cif\u201d.'],
-['\u201cda\u201d in reported speech becomes:',['dela','dala','dena'],0,'da + -(e)la \u2192 dela: prest dagoela / polita dela.'],
-['\u201cWhy? \u2014 Because I want to.\u201d',['Zergatik? \u2014 Nahi dudalako','Zergatik? \u2014 Nahi dudala','Zergatik? \u2014 Nahi dut ba'],0,'The answer to zergatik takes -(e)lako: nahi dudalako.']]},
-
-{id:'b1u4',t:'Gustatu zitzaidan',sub:'Feelings in the past (zitzaidan), telling a trip like a story',
-d:[['Jon','Asteburuan Iruñean izan nintzen.','I was in Pamplona at the weekend.'],
-['Miren','Eta? Gustatu zitzaizun?','And? Did you like it?'],
-['Jon','Asko gustatu zitzaidan. Alde zaharra ikaragarria iruditu zitzaidan.','I liked it a lot. The old town seemed incredible to me.'],
-['Miren','Zer gustatu zitzaizun gehien?','What did you like most?'],
-['Jon','Jendea. Eta pintxoak ere bai \u2014 haiek gustatu zitzaizkidan gehien, egia esan.','The people. And the pintxos too \u2014 honestly, I liked those most of all.'],
-['Miren','Hurrengoan zurekin joango naiz!','Next time I\u2019m coming with you!']],
-v:[['asteburuan','at the weekend'],['alde zaharra','the old town'],['ikaragarria','incredible'],['iruditu','to seem'],['jendea','the people'],['egia esan','to be honest'],['hurrengoan','next time'],['gehien','most'],['ahaztu zitzaidan','I forgot (it slipped my mind)'],['galdu','to lose'],['aurkitu','to find'],['bidaia','the trip']],
-g:[
-{t:'NOR-NORI in the past',p:'The \u201cbackwards\u201d verbs (gustatu, iruditu, ahaztu\u2026) shift their auxiliary into the past: <b>zait \u2192 zitzaidan</b>. Set: <b>zitzaidan, zitzaizun, zitzaion, zitzaigun, zitzaizuen, zitzaien</b>. Plural things: <b>zitzaizkidan\u2026</b> And yes \u2014 the golden -n is there again.',
-tb:[['','present','past'],['to me','zait','zitzaidan'],['to you','zaizu','zitzaizun'],['to him/her','zaio','zitzaion'],['to us','zaigu','zitzaigun'],['to them','zaie','zitzaien']],
-ex:[['Asko gustatu zitzaidan.','I liked it a lot.'],['Pintxoak gustatu zitzaizkidan.','I liked the pintxos. (plural)']]},
-{t:'Story glue',p:'A past story leans on connectors: <b>lehenengo</b> (first), <b>gero</b> (then), <b>ondoren</b> (afterwards), <b>azkenean</b> (in the end), <b>bat-batean</b> (suddenly).'}],
-q:[['\u201cI liked it\u201d (past):',['gustatu zitzaidan','gustatzen zait','gustatu nuen'],0,'Backwards verb, past: zitzaidan.'],
-['\u201cI liked the pintxos\u201d (plural, past):',['gustatu zitzaizkidan','gustatu zitzaidan','gustatu zitzaien'],0,'Plural things \u2192 -zki-: zitzaizkidan.'],
-['\u201cIt seemed incredible to me\u201d:',['ikaragarria iruditu zitzaidan','ikaragarria iruditu nuen','ikaragarria zen niri'],0,'iruditu is a backwards verb too: iruditu zitzaidan.'],
-['\u201cDid you like it?\u201d (past):',['Gustatu zitzaizun?','Gustatu zaizu?','Gustatu zenuen?'],0,'to you, past \u2192 zitzaizun.'],
-['\u201csuddenly\u201d:',['bat-batean','azkenean','ondoren'],0,'bat-batean. azkenean = in the end; ondoren = afterwards.']]}
-]},
-{id:'b2',name:'B2',eus:'Aurreratua',title:'The engine room',desc:'One-word verbs, the full past machine, rumour and doubt particles, and how the dialects fit together.',units:[
-
-{id:'b2u1',t:'Aditz trinkoak',sub:'The one-word verbs: dakit, daukat, noa, nator, nabil, daramat',
-d:[['Ane','Badakizu non dagoen giltza? Ezin dut aurkitu.','Do you know where the key is? I can\u2019t find it.'],
-['Peru','Nik ez dakit\u2026 baina amak beti daki dena.','I don\u2019t know\u2026 but mum always knows everything.'],
-['Ane','Deituko diot. Bera orain lanera doa.','I\u2019ll call her. She\u2019s on her way to work now.'],
-['Peru','Itxaron \u2014 poltsan daukazu! Hor daramazu beti.','Wait \u2014 you have it in your bag! You always carry it there.'],
-['Ane','Arrazoi duzu. Banoa, berandu nabil!','You\u2019re right. I\u2019m off, I\u2019m running late!'],
-['Peru','Zatoz gero afaltzera \u2014 arraina dakart azokatik.','Come for dinner later \u2014 I\u2019m bringing fish from the market.']],
-v:[['jakin \u2192 dakit','to know \u2192 I know'],['eduki \u2192 daukat','to have (hold) \u2192 I have'],['joan \u2192 noa','to go \u2192 I\u2019m going'],['etorri \u2192 nator','to come \u2192 I\u2019m coming'],['ibili \u2192 nabil','to be about \u2192 I\u2019m going about'],['eraman \u2192 daramat','to carry \u2192 I\u2019m carrying'],['ekarri \u2192 dakart','to bring \u2192 I\u2019m bringing'],['giltza','the key'],['itxaron','to wait'],['arrazoi duzu','you\u2019re right'],['berandu','late'],['banoa','I\u2019m off']],
-g:[
-{t:'Why one word?',p:'A handful of very common verbs skip the auxiliary and conjugate in a single word \u2014 like <b>dago</b>, which you\u2019ve used since A1. <b>Noa</b> = I\u2019m going (right now); <b>joaten naiz</b> = I go (habitually).',
-tb:[['','jakin','eduki','joan','etorri','ibili'],['ni(k)','dakit','daukat','noa','nator','nabil'],['zu(k)','dakizu','daukazu','zoaz','zatoz','zabiltza'],['hark/hura','daki','dauka','doa','dator','dabil'],['gu(k)','dakigu','daukagu','goaz','gatoz','gabiltza'],['zue(k)','dakizue','daukazue','zoazte','zatozte','zabiltzate'],['haie(k)','dakite','daukate','doaz','datoz','dabiltza']],
-ex:[['Badakit non dagoen.','I know where it is.'],['Lanera noa.','I\u2019m going to work (now).']]},
-{t:'Carrying and bringing',p:'<b>eraman</b> (take/carry away) \u2192 <b>daramat, daramazu, darama\u2026</b>; <b>ekarri</b> (bring here) \u2192 <b>dakart, dakarzu, dakar\u2026</b> Direction decides which.',
-ex:[['Arraina dakart azokatik.','I\u2019m bringing fish from the market.'],['Poltsa hori beti daramazu.','You always carry that bag.']]},
-{t:'ba- for emphasis',p:'On synthetic verbs, <b>ba-</b> just affirms: <b>badakit</b> \u2014 I do know; <b>banoa</b> \u2014 right, I\u2019m off. (Different job from the conditional ba- \u2014 context tells you.)'}],
-q:[['\u201cI know\u201d:',['dakit','dakart','daukat'],0,'jakin \u2192 dakit. daukat = I have; dakart = I\u2019m bringing.'],
-['\u201cShe\u2019s going to work (now)\u201d:',['lanera doa','lanera joaten da','lanera joango da'],0,'Right now with a synthetic verb: doa.'],
-['\u201cI\u2019m bringing fish\u201d:',['arraina dakart','arraina daramat','arraina daukat'],0,'Bringing here = ekarri \u2192 dakart. daramat = carrying away.'],
-['\u201cyou\u2019re right\u201d:',['arrazoi duzu','arrazoi zara','egia zara'],0,'arrazoi duzu (you\u2019ll also hear arrazoi daukazu).'],
-['\u201cWe\u2019re coming!\u201d:',['bagatoz','bagoaz','badatoz'],0,'etorri \u2192 gatoz, with emphatic ba-: bagatoz. bagoaz = we\u2019re off.']]},
-
-{id:'b2u2',t:'Nion',sub:'The full past machine: gave-it-to-her verbs and plural objects in the past',
-d:[['Miren','Azkenean esan nion egia amari.','I finally told mum the truth.'],
-['Jon','Eta zer erantzun zizun?','And what did she answer you?'],
-['Miren','Barre egin zuen! Aspaldi zekiela esan zidan.','She laughed! She said she\u2019d known for ages.'],
-['Jon','Amek dena dakite. Nik behin gutun bat idatzi nion aitari\u2026','Mums know everything. I once wrote my dad a letter\u2026'],
-['Miren','Eta?','And?'],
-['Jon','Ez nion inoiz eman. Oraindik daukat. Egunen batean irakurriko dizkiot pasarte onenak.','I never gave it to him. I still have it. One day I\u2019ll read him the best bits.']],
-v:[['azkenean','finally / in the end'],['egia esan','to tell the truth'],['erantzun','to answer'],['barre egin','to laugh'],['negar egin','to cry'],['aspaldi','ages ago / for ages'],['behin','once'],['gutuna','the letter'],['idatzi','to write'],['oraindik','still'],['egunen batean','one day'],['pasartea','the passage / bit']],
-g:[
-{t:'Give-to in the past',p:'The A2 three-part verb, one tense back \u2014 and yes, ending in -n. Fixed receiver <b>hari</b> (to him/her):',
-tb:[['','present','past'],['nik','diot','nion'],['zuk','diozu','zenion'],['hark','dio','zion'],['guk','diogu','genion'],['zuek','diozue','zenioten'],['haiek','diote','zioten']],
-p2:'Other receivers, \u201che/she \u2026 to X\u201d: <b>zidan</b> (to me), <b>zizun</b> (to you), <b>zigun</b> (to us), <b>zien</b> (to them). Plural things add -zki-: <b>nizkion</b>, I gave <em>them</em> to her.',
-ex:[['Esan nion egia.','I told her the truth.'],['Zer erantzun zizun?','What did she answer you?']]},
-{t:'Plural objects, plain past',p:'From A2: <b>nuen \u2192 nituen</b> when the thing is plural. Full set: <b>nituen, zenituen, zituen, genituen, zenituzten, zituzten</b>.',
-ex:[['Liburuak irakurri nituen.','I read the books.']]}],
-q:[['\u201cI told her\u201d:',['esan nion','esan diot','esan zidan'],0,'Past, I-to-her: nion. diot is present; zidan is she-to-me.'],
-['\u201cShe said to me\u201d:',['esan zidan','esan nion','esan zion'],0,'she \u2192 to me = zidan.'],
-['\u201cWhat did she answer you?\u201d',['Zer erantzun zizun?','Zer erantzun zenion?','Zer erantzun zion?'],0,'she \u2192 to you = zizun. zenion = you \u2192 to her.'],
-['\u201cI gave them to her\u201d (plural things):',['eman nizkion','eman nion','eman nituen'],0,'Plural + receiver \u2192 -zki-: nizkion.'],
-['\u201cWe read the books\u201d:',['irakurri genituen','irakurri genuen','irakurri ginen'],0,'Plural object, past \u2192 genituen.']]},
-
-{id:'b2u3',t:'Omen, ote, al',sub:'Rumour, wonder and question particles \u2014 plus although, and turning verbs into nouns',
-d:[['Peru','Taberna berri bat ireki omen dute portuan.','They\u2019ve opened a new bar at the port, apparently.'],
-['Ane','Ona ote da? Garestia izango da, seguru.','Is it any good, I wonder? It\u2019ll be pricey, for sure.'],
-['Peru','Joango al gara? Nahiz eta garestia izan, behin probatzea merezi du.','Shall we go? Even though it\u2019s expensive, it\u2019s worth trying once.'],
-['Ane','Berandu iristea ez zait gustatzen \u2014 goazen orain.','I don\u2019t like arriving late \u2014 let\u2019s go now.'],
-['Peru','Itxaron! Euria hasi omen du.','Wait! It\u2019s started raining, they say.'],
-['Ane','Nahiz eta euria ari, goazen. Sagardoa gure zain dago.','Rain or no rain, let\u2019s go. The cider is waiting for us.']],
-v:[['omen','apparently / they say'],['ote','I wonder (doubt)'],['al','(yes/no question marker)'],['nahiz eta','even though'],['arren','although / despite'],['merezi du','it\u2019s worth it'],['probatu','to try / taste'],['portua','the port'],['seguru','for sure'],['gure zain','waiting for us'],['hasi','to begin'],['goazen!','let\u2019s go!']],
-g:[
-{t:'Three little particles',p:'They slide in just before the auxiliary. <b>omen</b> = hearsay: <b>ireki omen dute</b>, they\u2019ve opened it, <em>I\u2019m told</em>. <b>ote</b> = wondering: <b>ona ote da?</b>, is it good, <em>I wonder</em>? <b>al</b> = plain yes/no question flag: <b>joango al gara?</b>',
-ex:[['Etorri omen da.','Apparently he\u2019s come.'],['Egia ote da?','Is it true, I wonder?']]},
-{t:'Even though: nahiz eta / arren',p:'<b>nahiz eta</b> leads, <b>arren</b> trails: <b>nahiz eta garestia izan</b> = <b>garestia izan arren</b> \u2014 even though it\u2019s expensive. The verb goes bare (izan, ari, egon\u2026).',
-ex:[['Nekatuta egon arren, joango naiz.','Even though I\u2019m tired, I\u2019ll go.']]},
-{t:'Verbs as nouns: -t(z)ea',p:'Stick <b>-t(z)ea</b> on a verb and it becomes a thing you can like, hate or recommend: <b>berandu iristea</b> \u2014 arriving late; <b>probatzea merezi du</b> \u2014 it\u2019s worth trying.',
-ex:[['Goiz jaikitzea gorroto dut.','I hate getting up early.']]},
-{t:'Goazen!',p:'The name of this app: <b>goazen</b> = \u201cwe go\u201d bent into \u201clet\u2019s go\u201d. You\u2019ve been saying it since the title screen.'}],
-q:[['\u201cApparently they\u2019ve opened a bar\u201d:',['ireki omen dute','ireki ote dute','ireki al dute'],0,'Hearsay = omen. ote wonders, al just asks.'],
-['\u201cIs it true, I wonder?\u201d',['Egia ote da?','Egia omen da?','Egia al da?'],0,'Inner doubt = ote.'],
-['\u201cEven though I\u2019m tired\u201d (with arren):',['nekatuta egon arren','nahiz eta nekatuta arren','nekatuta arren egon'],0,'arren trails the bare verb: nekatuta egon arren.'],
-['\u201cArriving late\u201d as a noun:',['berandu iristea','berandu iristen','berandu iritsi'],0,'-t(z)ea nominalises: iristea.'],
-['\u201cgoazen\u201d literally is:',['we go \u2192 let\u2019s go','you all go','they went'],0,'goaz (we go) + -en \u2014 bent into \u201clet\u2019s go\u201d. Now the app name makes sense.']]},
-
-{id:'b2u4',t:'Euskalkiak',sub:'Batua and the dialects: what changes, what to listen for, and how to keep going',
-d:[['Irakaslea','Zorionak \u2014 azken unitatea da hau!','Congratulations \u2014 this is the last unit!'],
-['Jon','Baina tabernan ez dut beti dena ulertzen\u2026','But at the bar I don\u2019t always understand everything\u2026'],
-['Irakaslea','Normala da. Liburuek batua irakasten dute; kaleak euskalkiak hitz egiten ditu.','That\u2019s normal. Books teach batua; the street speaks the dialects.'],
-['Jon','Adibidez?','For example?'],
-['Irakaslea','Gipuzkoan \u201cjoan gara\u201d entzungo duzu \u2014 baina Bizkaian \u201cjoan gara\u201d beharrean \u201cjun gara\u201d bezalakoak entzun daitezke, eta hitz batzuk aldatzen dira.','In Gipuzkoa you\u2019ll hear \u201cjoan gara\u201d \u2014 but in Bizkaia you can hear things like \u201cjun gara\u201d instead, and some words change.'],
-['Jon','Orduan, zer egin behar dut?','So what should I do?'],
-['Irakaslea','Entzun, galdetu, eta lasai egon. Batua dakizu \u2014 gainerakoa musika da.','Listen, ask, and relax. You know batua \u2014 the rest is music.']],
-v:[['euskalkia','the dialect'],['euskara batua','unified/standard Basque'],['ulertu','to understand'],['adibidez','for example'],['beharrean','instead of'],['gainerakoa','the rest'],['hizkuntza','the language'],['hiztuna','the speaker'],['ahoskera','the pronunciation'],['esamoldea','the expression / idiom'],['ohitura','the custom / habit'],['jarraitu','to continue']],
-g:[
-{t:'What batua is',p:'<b>Euskara batua</b> is the standard built in the 1960s for schools, media and books \u2014 the Basque this course teaches. The dialects (Bizkaian, Gipuzkoan, Navarrese, Souletin\u2026) live happily alongside it.'},
-{t:'What actually changes',p:'Mostly surface: some verb forms (Bizkaian says <b>dot</b> where batua says <b>dut</b>; \u201cwith\u201d can be <b>-gaz</b> instead of <b>-rekin</b>), some vocabulary, and plenty of pronunciation. The grammar you\u2019ve learned is the shared skeleton.',
-ex:[['batua: lagunarekin \u00b7 Bizkaia: lagunagaz','with the friend \u2014 same idea, different coat.']]},
-{t:'hika \u2014 the intimate register',p:'You may hear very close friends and family use <b>hika</b>, an intimate \u201cyou\u201d with its own verb forms. You don\u2019t need to speak it \u2014 just know it exists so it doesn\u2019t ambush you.'},
-{t:'Keep going',p:'From here: listen daily (radio, podcasts), read short news in easy Basque, and speak \u2014 badly, happily, often. <b>Oso ondo egin duzu. Aurrera!</b>'}],
-q:[['\u201cEuskara batua\u201d is:',['the unified standard','the Gipuzkoan dialect','old Basque'],0,'batua = unified \u2014 the standard used in schools and media.'],
-['Bizkaian \u201cdot\u201d corresponds to batua:',['dut','dio','dator'],0,'Bizkaian dot = batua dut (I have/do).'],
-['Bizkaian \u201clagunagaz\u201d = batua:',['lagunarekin','lagunarentzat','lagunarengatik'],0,'-gaz is the Bizkaian comitative: with the friend.'],
-['\u201chika\u201d is:',['an intimate register with its own verb forms','a dialect of Navarre','a kind of pintxo'],0,'hika = the intimate \u201cyou\u201d, used among close friends and family.'],
-['\u201cAurrera!\u201d means:',['Onward!','Careful!','Cheers!'],0,'aurrera = forward / onward. The only way from here.']]}
+{t:'Ser vs estar (sample grammar card)',p:'This is where a plain-English explanation of a grammar point goes. Use <b>bold</b> for target-language forms.',
+tb:[['','ser (permanent)','estar (state/location)'],['yo','soy','estoy'],['tú','eres','estás']],
+ex:[['Soy Ana.','I am Ana. (identity \u2014 ser)'],['Estoy bien.','I am well. (state \u2014 estar)']]}],
+q:[
+['\u201cThank you\u201d in Spanish:',['gracias','por favor','de nada'],0,'gracias = thank you. por favor = please; de nada = you\u2019re welcome.'],
+['How do you say "my name is\u2026"?',['me llamo\u2026','soy llamado\u2026','mi nombre\u2026'],0,'me llamo is the standard everyday form.'],
+['\u201cGoodbye\u201d:',['adiós','hola','sí'],0,'adiós = goodbye.'],
+['Which verb for a temporary state (\u201cI am well\u201d)?',['estar','ser','tener'],0,'estar covers state/location: estoy bien.'],
+['\u201cNice to meet you\u201d (said by a man):',['encantado','encantada','gracias'],0,'encantado agrees with the speaker\u2019s gender; a woman would say encantada.']
+]}
 ]}
 ];
-
-/* ============ Case Lab: piece-by-piece builder ============ */
-const CLPOOL=[
- {en:"the friend (subject)",root:"lagun",form:"laguna",pieces:["a"],qw:"Nor?",hook:"The base form: root + the article -a. Every other ending stacks onto this.",dis:["k","ri","ren"]},
- {en:"the friend (does something)",root:"lagun",form:"lagunak",pieces:["a","k"],qw:"Nork?",hook:"Ergative -k lands on the -a. Nork? marks the one *doing* a transitive verb.",dis:["ri","ren","e"]},
- {en:"to the friend",root:"lagun",form:"lagunari",pieces:["a","ri"],qw:"Nori?",hook:"-ri = to / for whom. The friend *receives*. Same -a foundation, new tail.",dis:["ren","rekin","k"]},
- {en:"the friend's",root:"lagun",form:"lagunaren",pieces:["a","ren"],qw:"Noren?",hook:"-ren = 's / of. Possession. Still just -a + a tail.",dis:["ri","rekin","k"]},
- {en:"with the friend",root:"lagun",form:"lagunarekin",pieces:["a","rekin"],qw:"Norekin?",hook:"-rekin = with ('kin' \u2248 with). Five endings down \u2014 all built on the same -a.",dis:["ren","rentzat","ri"]},
- {en:"in the house",root:"etxe",form:"etxean",pieces:["a","n"],qw:"Non?",hook:"-n = in / at, sitting on the -a. Vowel root, so the -a stays put.",dis:["e","ra","tik"]},
- {en:"the book's (title)",root:"liburu",form:"liburuaren",pieces:["a","ren"],qw:"Noren?",hook:"The very same -ren you met on lagun \u2014 it travels to any noun.",dis:["ri","rekin","k"]},
- {en:"with a coffee",root:"kafe",form:"kafearekin",pieces:["a","rekin"],qw:"Norekin?",hook:"-rekin again, new word. Learn the tail once, reuse it everywhere.",dis:["ren","rentzat","ri"]},
- {en:"for the boy",root:"mutil",form:"mutilarentzat",pieces:["a","rentzat"],qw:"Norentzat?",hook:"-rentzat = for the benefit of. Note it grows out of the genitive -ren.",dis:["rekin","ren","ri"]},
- {en:"to the son",root:"seme",form:"semeari",pieces:["a","ri"],qw:"Nori?",hook:"-ri once more: the son receives. The -a + -ri combo is the dative.",dis:["ren","rekin","k"]},
- {en:"in the foot",root:"oin",form:"oinean",pieces:["e","an"],qw:"Non?",hook:"Consonant root! A euphonic -e- slips in first, then the ending: oin + e + an.",dis:["a","n","ra"]},
- {en:"to the foot",root:"oin",form:"oinera",pieces:["e","ra"],qw:"Nora?",hook:"-ra = towards. After a consonant the -e- comes first, giving -era.",dis:["a","tik","an"]},
- {en:"from the foot",root:"oin",form:"oinetik",pieces:["e","tik"],qw:"Nondik?",hook:"-tik = away from. Consonant stem \u2192 -etik. (Vowel roots would just take -tik.)",dis:["a","an","ra"]},
- {en:"to the foot (give it)",root:"oin",form:"oinari",pieces:["a","ri"],qw:"Nori?",hook:"But *grammatical* cases keep -a-, not -e-: oin + a + ri. The -e- is only for local cases.",dis:["e","ren","rekin"]},
- {en:"on foot",root:"oin",form:"oinez",pieces:["e","z"],qw:"Zertaz?",hook:"-z = by means of. 'On foot.' Consonant stem, so -ez.",dis:["a","tik","an"]}
-];
-let clI=0,clScore=0,clPlaced=[],clOpts=[],clTried=false;
-function openCaseLab(){clI=0;clScore=0;nav('caselab');clLoad()}
-function clLoad(){
-  document.getElementById('clb-tot').textContent=CLPOOL.length;
-  if(clI>=CLPOOL.length)return clEnd();
-  const it=CLPOOL[clI];
-  clPlaced=[];clTried=false;
-  clOpts=qShuffle(it.pieces.concat(it.dis)).map(p=>({p,used:false}));
-  document.getElementById('clb-score').textContent=clScore;
-  document.getElementById('clb-prog').style.width=(clI/CLPOOL.length*100)+'%';
-  clRender();
-}
-function clRender(){
-  const it=CLPOOL[clI];
-  const wb=`<span class="clb-root">${it.root}</span>`
-    +clPlaced.map((p,i)=>`<span class="clb-op">+</span><button class="clb-chip" onclick="clRemove(${i})" title="Tap to remove">${p}</button>`).join('')
-    +`<span class="clb-op">+</span><span class="clb-slot">?</span>`;
-  document.getElementById('clb-body').innerHTML=`<div class="clb-card">
-    <div class="clb-kick">Word ${clI+1} \u00b7 build it</div>
-    <div class="clb-en">\u201c${it.en}\u201d</div>
-    <div class="clb-hint">Tap the pieces in order \u00b7 tap a placed piece to remove it</div>
-    <div class="clb-wb" id="clb-wb">${wb}</div>
-    <div class="clb-opts">${clOpts.map((o,i)=>`<button class="clb-opt${o.used?' used':''}" ${o.used?'disabled':''} onclick="clPick(${i})">-${o.p}</button>`).join('')}</div>
-    <div class="clb-controls">
-      <button class="pn-btn small" onclick="clClear()">Clear</button>
-      <button class="pn-btn primary" onclick="clCheck()">Check</button>
-    </div>
-    <div id="clb-out"></div>
-  </div>`;
-}
-function clPick(i){if(clOpts[i].used)return;clOpts[i].used=true;clPlaced.push(clOpts[i].p);clRender()}
-function clRemove(i){const p=clPlaced.splice(i,1)[0];const o=clOpts.find(x=>x.p===p&&x.used);if(o)o.used=false;clRender()}
-function clClear(){clPlaced=[];clOpts.forEach(o=>o.used=false);clRender()}
-function clCheck(){
-  const it=CLPOOL[clI];
-  if(clPlaced.join('|')===it.pieces.join('|')){
-    if(!clTried)clScore++;
-    document.getElementById('clb-score').textContent=clScore;
-    document.getElementById('clb-body').innerHTML=`<div class="clb-card">
-      <div class="clb-kick">Word ${clI+1} \u00b7 built \u2713</div>
-      <div class="clb-en">\u201c${it.en}\u201d</div>
-      <div class="clb-wb"><span class="clb-form-inline">${it.form}</span></div>
-      <div class="clb-reveal">
-        <div class="clb-parts">${it.root} + ${it.pieces.join(' + ')}<span class="clb-qw">${it.qw}</span></div>
-        <p class="clb-hook">${it.hook}</p>
-      </div>
-      <div class="clb-controls"><button class="pn-btn primary" onclick="clI++;clLoad()">${clI+1<CLPOOL.length?'Next word \u203a':'Finish \u203a'}</button></div>
-    </div>`;
-    document.getElementById('clb-prog').style.width=((clI+1)/CLPOOL.length*100)+'%';
-  }else{
-    clTried=true;
-    const wb=document.getElementById('clb-wb');
-    wb.classList.remove('wrong');void wb.offsetWidth;wb.classList.add('wrong');
-  }
-}
-function clEnd(){
-  document.getElementById('clb-prog').style.width='100%';
-  document.getElementById('clb-body').innerHTML=`<div class="clb-card">
-    <div class="clb-kick">Round complete</div>
-    <div class="clb-big">${clScore}/${CLPOOL.length}</div>
-    <p class="clb-hook">${clScore===CLPOOL.length?'Bikain! Every word built first time.':clScore>=CLPOOL.length-3?'Oso ondo \u2014 the endings are sticking.':'Good round \u2014 the -a comes first, the tail answers the question word.'}</p>
-    <div class="clb-controls">
-      <button class="pn-btn" onclick="openCaseLab()">Build again \u21bb</button>
-      <button class="pn-btn primary" onclick="nav('home')">Menu \u203a</button>
-    </div>
-  </div>`;
-}
-
 homeProg();
 </script>
 </body>
